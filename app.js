@@ -13,22 +13,25 @@ var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 
 
+//Database
 
+var Schema = mongoose.Schema;  
 
-var Schema = mongoose.Schema,
-priority = ['low', 'normal', 'high', 'critical'],
-logtype = ['information', 'warning' ,'error']; 
+var Product = new Schema({  
+    title: { type: String, required: true },  
+    description: { type: String, required: true },  
+    style: { type: String, unique: true },  
+    modified: { type: Date, default: Date.now }
+});
 
+var ProductModel = mongoose.model('Product', Product);  
 
 var db = mongoose.connect('mongodb://localhost/soldhere');
 
-logItem = new Schema({
-    priority  : Number,
-    logtype   : Number,
-    datetime  : Date,
-    msg       : String
-});
-mongoose.model('logItem', logItem);
+
+
+
+//extra stuff for testing authentication
 
 
 var users = [
