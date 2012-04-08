@@ -1,0 +1,10 @@
+body.index ul.nav li:nth-child(1) > a,
+body.index ul.nav li:nth-child(1) > a:hover,
+body.support ul.nav li:nth-child(2) > a,
+body.support ul.nav li:nth-child(2) > a:hover,
+body.contact ul.nav li:nth-child(3) > a,
+body.contact ul.nav li:nth-child(3) > a:hover {
+  color: #ff9933 ab;
+  text-decoration: none;
+  background-color: #4d926f;
+}
