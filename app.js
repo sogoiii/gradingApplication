@@ -7,9 +7,28 @@ var express = require('express')
   , routes = require('./routes')
   , util = require('util')
 
+var mongoose = require('mongoose') 
+
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 
+
+
+
+var Schema = mongoose.Schema,
+priority = ['low', 'normal', 'high', 'critical'],
+logtype = ['information', 'warning' ,'error']; 
+
+
+var db = mongoose.connect('mongodb://localhost/soldhere');
+
+logItem = new Schema({
+    priority  : Number,
+    logtype   : Number,
+    datetime  : Date,
+    msg       : String
+});
+mongoose.model('logItem', logItem);
 
 
 var users = [
