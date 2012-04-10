@@ -4,8 +4,8 @@ var Schema = mongoose.Schema;
 
 
 var TeacherUserSchema = new Schema({
-    user: { type: String, required: true},
-    password: {type: String, required: true}
+    user: { type: String},
+    password: {type: String}
   });
 
  mongoose.model('TeacherUserSchema', TeacherUserSchema );

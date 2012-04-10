@@ -24,17 +24,8 @@ exports.postlogin = function(req,res){ //post
 	//function(req,res){ 
     var Document = mongoose.model('TeacherUserSchema');
     var TeacherUser = new Document();
-    TeacherUser.user = req.body.user;
+    TeacherUser.user = req.body.username; //right is from the website, left is the mongodb Schema
     TeacherUser.password = req.body.password;
-
-/*
-    TeacherUserSchema = new TeacherUserModel({
-      user: req.body.user,
-      password: req.body.password
-    });*/
-
-
-
     TeacherUser.save(function (err) {
     if (!err) {
       return console.log("created");
@@ -45,7 +36,7 @@ exports.postlogin = function(req,res){ //post
   });
 
     res.send(TeacherUser);
-	res.redirect('/');
+	//res.redirect('/');
 }
 
 
