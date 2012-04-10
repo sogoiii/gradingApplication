@@ -6,13 +6,29 @@
 var express = require('express')
   , routes = require('./routes')
   , util = require('util')
+  , fs = require('fs');
 
-var mongoose = require('mongoose') 
+var mongoose = require('mongoose');
 
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 
+
+//load all the model files for mongoose(Mongodb) 
+var models_path = __dirname + '/models'
+var model_files = fs.readdirSync(models_path)
+model_files.forEach(function(file){
+    require(models_path+'/'+file)
+})
+
+
+//var TeacherUserModel = mongoose.model('TeacherUsers', TeacherUsers);
+//var mytestUsersModel = mongoose.model('mytestUsers', mytestUsers);
+
 var app = module.exports = express.createServer();
+
+
+
 
 //Database
 
@@ -25,6 +41,7 @@ var users = [
     { id: 1, username: 'bob', password: 'secret', email: 'bob@example.com' }
   , { id: 2, username: 'joe', password: 'birthday', email: 'joe@example.com' }
 ];
+
 
 function findById(id, fn) {
   var idx = id - 1;
@@ -91,6 +108,7 @@ passport.use(new LocalStrategy(
 
 
 
+
 // Configuration
 
 app.configure(function(){
@@ -122,6 +140,15 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 */
+
+
+
+//Load all the route files 
+var controllers_path = __dirname + '/routes'
+var controller_files = fs.readdirSync(controllers_path)
+controller_files.forEach(function(file){
+  require(controllers_path+'/'+file)
+});
 
 
 
@@ -183,9 +210,17 @@ var ProductModel = mongoose.model('Product', Product);
 
 
 
+//mytest schema for my users to learn myself
+
+var mytestUsers = new Schema({
+  user: { type: String, required: true},
+  password: {type: String, required: true}
+});
+
+var mytestUsersModel = mongoose.model('mytestUsers', mytestUsers);
 
 
-/*
+
 // Routes
 app.get('/', routes.index);
 
@@ -200,7 +235,9 @@ app.get('/login', routes.getlogin);
 
 app.post('/login', 
   passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
-  routes.postlogin);
+  routes.postlogin
+  //res.redirect('/');
+);
 
 
 
@@ -208,7 +245,7 @@ app.get('/users', function(req,res){
 	res.render('users',{users:users, title: 'USERLIST!!!!!'})
 });
 
-*/
+
 
 
 
