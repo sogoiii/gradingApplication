@@ -1,4 +1,8 @@
-include _user
-h1 User List
-ul#users
-  !=patial('user', users)
+!=partial('partials/_TopBar')
+.container
+  .row
+    .span8
+      h2 users
+      ul#users
+        -  each teacher in teachers
+           li= teacher.user

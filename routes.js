@@ -34,9 +34,7 @@ app.post('/login',
 );
 
 
-app.get('/users', function(req,res){
-	res.render('users',{users:users, title: 'USERLIST!!!!!'})
-});
+app.get('/users', routes.getusers);
 
 
 

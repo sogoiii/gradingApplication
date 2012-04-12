@@ -1,8 +1,5 @@
 var mongoose = require("mongoose");
-//var TeacherUserSchema = mongoose.model('TeacherUserSchema');
-
-var db = require('../DBfunctions');
-
+var db = require('../DBfunctions'); //access to the DB and other functions 
 
 /*
  * GET home page.
@@ -15,7 +12,6 @@ exports.index = function(req, res){
 exports.about = function(req, res){
 	res.render('about', { title: 'About'})
 };
-
 
 exports.getlogin = function(req,res){
 	res.render('login', {title: 'Login', user: req.user, message: req.flash('error') });
@@ -30,16 +26,6 @@ exports.loginfailed = function(req,res){
 };
 
 
-
-
-
-
-
-
-
-
-
-
 exports.getregister = function(req,res){
   console.log("get Rigister Page");
   res.render('Register', {title: 'Register'})
@@ -48,17 +34,12 @@ exports.getregister = function(req,res){
 
 
 exports.postregister = function(req,res){
-  
-//console.log("about to create teacher schemas");
-  
   var TeacherUserSchema = mongoose.model('TeacherUserSchema');
     var TeacherUser = new TeacherUserSchema({
     user: req.body.username,
     password: req.body.password
   });
-
-
-console.log("going to save to mongodb now!");
+//console.log("going to save to mongodb now!");
 TeacherUser.save(function (err) {
     if (!err) {
       return console.log("created user");
@@ -82,6 +63,16 @@ console.log("password = " + req.body.password);
   });
 */
 }//end post register
+
+
+exports.getusers = function(req,res){
+  var TeacherUser = mongoose.model('TeacherUserSchema');
+  TeacherUser.find({}, function(err, docs){
+    res.render('users', {title: 'users' , teachers: docs});
+  });
+  //res.render('users',{username: username, password: password});
+}
+
 
 
 
