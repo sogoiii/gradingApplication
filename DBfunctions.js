@@ -29,8 +29,11 @@ passport.use(new LocalStrategy( {usernameField: 'email'},
   function(email, password, done) {
    // asynchronous verification, for effect...
     process.nextTick(function () {
-    	//var message = new String();
-      TeacherUsers.authenticateEmail(email, password, function(err, email){
+    	var messageresult = new String();
+      TeacherUsers.authenticateEmail(email, password, function(err, email, messageresult){
+      	console.log(messageresult); //this does return the right thing to console
+      	if(messageresult == 'incorrect user') {return done(null, false, { message: 'Unkown user '});}
+      	if(messageresult == 'wrong password') {return done(null, false, { message: 'Invalid password' })}
       	return done(err,email);
       });//end authenticate
     });

@@ -30,7 +30,8 @@ app.get('/login', routes.getlogin);
 
 app.post('/login', 
   passport.authenticate('local', { successRedirect: '/userlist', 
-  	                               failureRedirect: '/login' })
+  	                               failureRedirect: '/login' ,
+  	                            failureFlash: true })
 );
 
 

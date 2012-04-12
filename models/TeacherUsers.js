@@ -50,12 +50,13 @@ TeacherUserSchema.method('verifyPassword', function(password, callback) {
 
 //authenticate the teacher user 
 TeacherUserSchema.static('authenticateEmail', function(email, password, callback) {
-  this.findOne({ email: email}, function(err, user) {
+  var messageresult = new String();
+  this.findOne({ email: email}, function(err, user, messageresult ) {
       if (err) { return callback(err); }
-      if (!user) { return callback(null, false); }
+      if (!user) { return callback(null, false, 'incorrect user'); }
         user.verifyPassword(password, function(err, passwordCorrect) {
           if (err) { return callback(err); }
-          if (!passwordCorrect) { return callback(null, false)}
+          if (!passwordCorrect) { return callback(null, false, 'wrong password')}
           return callback(null, user);
         });
 
