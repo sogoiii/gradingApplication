@@ -29,7 +29,8 @@ passport.use(new LocalStrategy( {usernameField: 'email'},
   function(email, password, done) {
    // asynchronous verification, for effect...
     process.nextTick(function () {
-      TeacherUsers.authenticate(email, password, function(err, email){
+    	//var message = new String();
+      TeacherUsers.authenticateEmail(email, password, function(err, email){
       	return done(err,email);
       });//end authenticate
     });
@@ -72,7 +73,7 @@ module.exports = {
 
 
 
-/* //this function only saved the password, and the username is undefined 
+/* //this function only saved the password, and the username is undefined can remove i suppose
   //save Teacher User to DB
   SaveTeacherUser: function(userinfo,callback){
   	  //create Teacher User Variables
