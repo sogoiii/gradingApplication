@@ -9,7 +9,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var TeacherUsers = require('./models/TeacherUsers')
 
 
-//Passport Local Strategy
+/*
+//Passport Local Strategy for username authentication
 passport.use(new LocalStrategy( 
   function(user, password, done) {
    // asynchronous verification, for effect...
@@ -20,6 +21,25 @@ passport.use(new LocalStrategy(
     });
   }//end username password done 
 ));
+*/
+
+
+//Passport Local Strategy for email authentication
+passport.use(new LocalStrategy( {usernameField: 'email'},
+  function(email, password, done) {
+   // asynchronous verification, for effect...
+    process.nextTick(function () {
+      TeacherUsers.authenticate(email, password, function(err, email){
+      	return done(err,email);
+      });//end authenticate
+    });
+  }//end username password done 
+));
+
+
+
+
+
 
 //serialize user login
 passport.serializeUser(function(user, done) {
@@ -45,7 +65,7 @@ module.exports = {
     mongoose.connection.on('open', function() {
       console.log('We have connected to mongodb');
     }); 
-  }, //end of startup 
+  },//end of startup 
 
 
 
@@ -82,9 +102,21 @@ console.log("newTeacher password = " + newTeacher.password);
 */
 
 
+/*
+saveUser: function(userInfo, callback) {
+    //console.log(userInfo['fname']);
+    var newUser = new TeacherUsers ({
+      email: userInfo.email
+    , password: userInfo.password
+    });
 
-
-
+    newUser.save(function(err) {
+      if (err) {throw err;}
+      //console.log('Name: ' + newUser.name + '\nEmail: ' + newUser.email);
+      callback(null, userInfo);
+    });
+  }
+*/
 
 
 }//end module.exports

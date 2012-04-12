@@ -27,12 +27,11 @@ exports.loginfailed = function(req,res){
 
 
 exports.getregister = function(req,res){
-  console.log("get Rigister Page");
-  res.render('Register', {title: 'Register'})
+  res.render('register', {title: 'Register', message:req.flash('error')})
 }
 
 
-
+/* //older post register, coudl remove
 exports.postregister = function(req,res){
   var TeacherUserSchema = mongoose.model('TeacherUserSchema');
     var TeacherUser = new TeacherUserSchema({
@@ -50,7 +49,7 @@ TeacherUser.save(function (err) {
  });
 res.redirect('/about'); 
 
-/*//below we can call the function but the username becomes undefined 
+//below we can call the function but the username becomes undefined 
 console.log("user = " + req.body.username);
 console.log("password = " + req.body.password);
 
@@ -61,8 +60,51 @@ console.log("password = " + req.body.password);
   function(err,docs){
     res.redirect('/userlist');
   });
-*/
+
 }//end post register
+*/
+
+
+
+//add user to the databse...aka register
+exports.postregister = function(req,res){
+  var TeacherUserSchema = mongoose.model('TeacherUserSchema');
+    var TeacherUser = new TeacherUserSchema({
+    email: req.body.email,
+    password: req.body.password
+  });
+
+TeacherUser.save(function (err) {
+    if (!err) {
+      res.render('index', { title: 'Home', user: req.user});
+      //return console.log("created user");
+    } else {
+      res.render('register', {title: 'Register', message: 'Not an Email Address'});
+      //return console.log("not CREATED!!!!!");
+    }
+ });
+}//end post register
+
+
+
+/* //working btu i do not like the throw
+exports.postregister = function(req,res){
+  db.saveUser({
+      email : req.body.email
+    , password : req.body.password
+    }, function(err,docs) {
+      res.redirect('/about');
+    });
+}//end post register
+*/
+
+
+
+
+
+
+
+
 
 
 exports.getusers = function(req,res){

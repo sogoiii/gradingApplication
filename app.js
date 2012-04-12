@@ -9,6 +9,8 @@ var express = require('express')
   , fs = require('fs');
 
 var mongoose = require('mongoose');
+var mongooseTypes = require('mongoose-types');
+mongooseTypes.loadTypes(mongoose);
 
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
@@ -21,7 +23,7 @@ var models_path = __dirname + '/models'
 var model_files = fs.readdirSync(models_path)
 model_files.forEach(function(file){
     require(models_path+'/'+file)
-})
+});
 
 
 var app = module.exports = express.createServer();
