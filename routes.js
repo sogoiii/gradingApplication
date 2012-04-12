@@ -11,8 +11,6 @@ function ensureAuthenticated(req, res, next) {
 module.exports = function(app) {
 
 
-
-
 // Routes
 app.get('/', routes.index);
 
