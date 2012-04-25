@@ -36,6 +36,12 @@ app.post('/login',
 app.get('/users', routes.getusers);
 
 
+//uploading a file examples
+app.get('/uploadtest', routes.getupload);
+app.post('/uploadnew',routes.postupload);
+app.get('/file/:id', routes.getfile)
+
+
 
 
 }

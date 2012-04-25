@@ -1,5 +1,7 @@
 var mongoose = require("mongoose");
 var db = require('../DBfunctions'); //access to the DB and other functions 
+var gridfs = require("../gridfs");
+
 
 /*
  * GET home page.
@@ -29,6 +31,49 @@ exports.loginfailed = function(req,res){
 exports.getregister = function(req,res){
   res.render('register', {title: 'Register', message:req.flash('error')})
 }
+
+
+//test function for uploading to grid fs
+exports.getupload = function(req,res){
+  Application = mongoose.model("application", ApplicationSchema);
+  Application.find({}, function(err, applications) {
+      res.render("uploadtest", {
+        title: "GridFS Example",
+        applications: applications
+      });
+    });
+
+  //res.render('UploadedFiles', {title: 'Upload'})
+}
+
+
+exports.postupload = function(req,res){
+    var application, opts;
+    application = new Application();
+    application.name = req.body.name;
+    opts = {
+      content_type: req.files.file.type
+    };
+    application.addFile(req.files.file, opts, function(err, result) {
+      res.redirect("back");
+    });
+  //res.render('upload', {title: 'Register'})
+}
+
+
+ exports.getfile = function(req, res) {
+    gridfs.get(req.params.id, function(err, file) {
+      res.header("Content-Type", file.type);
+      res.header("Content-Disposition", "attachment; filename=" + file.filename);
+      return file.stream(true).pipe(res);
+    });
+  });
+
+
+
+
+
+
 
 
 /* //older post register, coudl remove

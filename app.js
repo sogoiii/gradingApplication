@@ -8,6 +8,8 @@ var express = require('express')
   , util = require('util')
   , fs = require('fs');
 
+var gridfs = require("./gridfs"); //this line may not be required here   
+
 var mongoose = require('mongoose');
 var mongooseTypes = require('mongoose-types');
 mongooseTypes.loadTypes(mongoose);

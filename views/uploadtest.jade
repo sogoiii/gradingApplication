@@ -1,0 +1,30 @@
+!=partial('partials/_TopBar')
+.container
+  .row
+    .span8
+      fieldset
+        legend Add Media
+        form(method="post", action="/uploadnew", enctype="multipart/form-data")
+          .clearfix
+            label Name
+            .input: input(name="name", type="text")
+          .clearfix`
+            label File
+            .input: input(type="file", name="file")
+          .actions
+          input.btn(type="submit")
+
+      table.table.bordered-table
+        thead
+          tr
+            th Name
+            th Filename
+            th Type
+            th Upload Date
+        - each app in applications
+          tr
+            td= app.name
+            td
+              a(href="/file/#{app.files[0]._id}")=app.files[0].filename
+            td= app.files[0].contentType
+            td= app.files[0].uploadDate

@@ -3,10 +3,12 @@ var mongoose = require('mongoose');
 var	Schema = mongoose.Schema;
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy;
+var gridfs = require("./gridfs"); //this file should be inside here 
 
 
 // Model includes
-var TeacherUsers = require('./models/TeacherUsers')
+var TeacherUsers = require('./models/TeacherUsers');
+var Application = require('./models/UploadFilesTest');
 
 
 /*
