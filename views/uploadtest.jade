@@ -25,6 +25,6 @@
           tr
             td= app.name
             td
-              a(href="/file/#{app.files[0]._id}")=app.files[0].filename
+              img(src = '/file/#{app.files[0]._id}')
             td= app.files[0].contentType
             td= app.files[0].uploadDate

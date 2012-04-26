@@ -60,18 +60,34 @@ exports.postupload = function(req,res){
   //res.render('upload', {title: 'Register'})
 }
 
-
- exports.getfile = function(req, res) {
+//file link has been clicked ('/file/:id') //this will download file directly
+ exports.getshowfile = function(req, res) {
     gridfs.get(req.params.id, function(err, file) {
       res.header("Content-Type", file.type);
       res.header("Content-Disposition", "attachment; filename=" + file.filename);
-      return file.stream(true).pipe(res);
     });
-  });
+  };
+
+//works better than above
+exports.getshowfile2 = function(req, res){
+  gridfs.getnew( function(err,file) {
+    res.writeHead('200', {'Content-Type': 'image/png'});
+     res.end(file,'binary');
+  }, req.params.id );
+};
 
 
 
+exports.getviewimages = function(req, res){
+  Application = mongoose.model("application", ApplicationSchema);
+  Application.find({}, function(err, applications) {
+      res.render("viewimages", {
+        title: "View Images",
+        applications: applications
+      });
+    });
 
+}
 
 
 

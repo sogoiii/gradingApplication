@@ -13,6 +13,7 @@
 
   ObjectID = mongoose.mongo.BSONPure.ObjectID;
 
+  //this will download the file directly
   exports.get = function(id, fn) {
     var db, store;
     db = mongoose.connection.db;
@@ -27,9 +28,30 @@
       if (("" + store.filename) === ("" + store.fileId) && store.metadata && store.metadata.filename) {
         store.filename = store.metadata.filename;
       }
+      //store.read(fn(null, store));
       return fn(null, store);
     });
   };
+
+  //allows the whole file to be found
+  exports.getnew = function(callback, id){
+    var db, store;
+    db = mongoose.connection.db;
+    store = new GridStore(db,new ObjectID(id), 'r');
+    store.open(function(err,store){
+      store.read(callback);
+   });
+
+
+  }
+
+
+
+
+
+
+
+
 
   exports.put = function() {
     var buf, db, fn, name, options, _i;
