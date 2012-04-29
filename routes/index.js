@@ -29,7 +29,7 @@ exports.loginfailed = function(req,res){
 
 
 exports.getregister = function(req,res){
-  res.render('register', {title: 'Register', message:req.flash('error')})
+  res.render('register', {title: 'Register', message: req.flash('error')})
 }
 
 
@@ -39,7 +39,8 @@ exports.getupload = function(req,res){
   Application.find({}, function(err, applications) {
       res.render("uploadtest", {
         title: "GridFS Example",
-        applications: applications
+        applications: applications,
+        message: req.flash('myerror')
       });
     });
 
@@ -47,18 +48,26 @@ exports.getupload = function(req,res){
 }
 
 
-exports.postupload = function(req,res){
-    var application, opts;
-    application = new Application();
-    application.name = req.body.name;
-    opts = {
-      content_type: req.files.file.type
-    };
-    application.addFile(req.files.file, opts, function(err, result) {
-      res.redirect("back");
-    });
-  //res.render('upload', {title: 'Register'})
-}
+  exports.postupload = function(req,res){
+    console.log(req.files.file.type);
+    if(req.files.file.type != 'application/pdf'){
+      req.flash('myerror', 'wrong file type');
+      res.redirect("back"); //back is the upload page 
+    }
+    else{
+      var application, opts;
+      application = new Application();
+      application.name = req.body.name;
+      opts = {
+        content_type: req.files.file.type
+      };
+      application.addFile(req.files.file, opts, function(err, result) {
+        req.flash('myerror', 'Thank you for uploading PDF');
+        res.redirect("back");
+      });
+    };//end of else 
+    //res.render('upload', {title: 'Register'})
+  }
 
 //file link has been clicked ('/file/:id') //this will download file directly
  exports.getshowfile = function(req, res) {
@@ -79,14 +88,10 @@ exports.getshowfile2 = function(req, res){
 
 
 exports.getviewimages = function(req, res){
-  Application = mongoose.model("application", ApplicationSchema);
-  Application.find({}, function(err, applications) {
-      res.render("viewimages", {
-        title: "View Images",
-        applications: applications
-      });
-    });
 
+      res.render("viewimages", {
+        title: "View Images"
+      });
 }
 
 

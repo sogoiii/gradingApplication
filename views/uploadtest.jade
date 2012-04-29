@@ -3,17 +3,25 @@
   .row
     .span8
       fieldset
-        legend Add Media
-        form(method="post", action="/uploadnew", enctype="multipart/form-data")
-          .clearfix
+        legend Upload Test 
+          span.label.label-warning PDF Only 
+        form.well(method="post", action="/uploadnew", enctype="multipart/form-data")
+          .control-group
             label Name
             .input: input(name="name", type="text")
-          .clearfix`
+          .control-group
             label File
             .input: input(type="file", name="file")
           .actions
-          input.btn(type="submit")
-
+          input.btn(type="submit") 
+      if(message == 'wrong file type')     
+        .alert.alert-error.alert-block
+          h4.alert-heading Warning!
+            | Please upload a PDF. 
+      if(message == 'Thank you for uploading PDF')
+        .alert.alert-success.alert-block
+          h4.alert-heading Complete!
+            | The file will be processed. 
       table.table.bordered-table
         thead
           tr
@@ -25,6 +33,8 @@
           tr
             td= app.name
             td
-              img(src = '/file/#{app.files[0]._id}')
+              img(src = "/file/#{app.files[0]._id}")
             td= app.files[0].contentType
             td= app.files[0].uploadDate
+  if(message)
+    p #{message}

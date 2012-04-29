@@ -3,4 +3,15 @@
   .row
     .span8
       h1 Image will be seen below
-        
+      form.form-horizontal
+        fieldset
+        legend Legend text
+          .control-group.error
+            label.control-label(for='input01') Text input
+            .controls
+              input#input01.input-xlarge(type='text')
+              p.help-block Supporting help text
+      .alert.alert-error.alert-block
+        a.close(data-dismiss='alert', href='#') ×
+        h4.alert-heading Warning!
+        p Best check yo self, you're not...
