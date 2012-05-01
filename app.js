@@ -11,8 +11,12 @@ var express = require('express')
 var gridfs = require("./gridfs"); //this line may not be required here   
 
 var mongoose = require('mongoose');
+var mongoStore = require('session-mongoose');
 var mongooseTypes = require('mongoose-types');
 mongooseTypes.loadTypes(mongoose);
+
+
+
 
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
@@ -46,7 +50,15 @@ app.configure(function(){
   app.use(express.cookieParser());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
-  app.use(express.session({ secret: 'keyboard cat' }));
+
+
+    var mongooseSessionStore = new mongoStore({
+      url: "mongodb://localhost/mv",
+      interval: 3600000 
+  });
+
+
+  app.use(express.session( {cookie: {maxAge: 3600000}, store: mongooseSessionStore, secret: "mv secret" }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
@@ -62,6 +74,43 @@ app.configure('development', function(){
 app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
+
+/*
+app.dynamicHelpers({
+  scripts: function(req, res){
+    return ['javascripts/jQuery.js', 'javascripts/bootstrap.min.js'];
+  }
+});
+
+app.helpers({
+  name: function(first, last){ return first + ', ' + last }
+  , firstName: 'javascripts/jQuery.js'
+  , lastName: 'javascripts/bootstrap.min.js'
+});
+
+*/
+
+app.helpers({
+  renderScriptsTags: function (all) {
+    if (all != undefined) {
+      return all.map(function(script) {
+        return '<script src="/javascripts/' + script + '"></script>';
+      }).join('\n ');
+    }
+  }
+});
+
+app.dynamicHelpers({
+    myscripts: function() {
+        //scripts to load on every page
+        return ['jQuery.js','bootstrap.min.js'];
+    }
+});
+
+
+
+
+
 
 var db = new DB.startup(dbloc);
 

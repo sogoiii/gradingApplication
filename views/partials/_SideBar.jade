@@ -1,0 +1,26 @@
+ul.nav.nav-list
+  li.nav-header Actions
+  if title == 'Overview'
+    li.active
+      a(href='/user/#{userID}/overview') Overview
+  else
+    li 
+      a(href='/user/#{userID}/overview') Overview  
+  if title == 'Tests'
+    li.active
+      a(href='/user/#{userID}/tests') Tests
+  else
+    li 
+      a(href='/user/#{userID}/tests') Tests  
+  if title == 'Questions'
+    li.active
+      a(href='/user/#{userID}/questions') Questions
+  else
+    li 
+      a(href='/user/#{userID}/questions') Questions  
+  if title == 'Statistics'
+    li.active
+      a(href='/user/#{userID}/statistics') Statistics
+  else
+    li 
+      a(href='/user/#{userID}/statistics') Statistics  

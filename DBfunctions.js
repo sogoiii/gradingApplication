@@ -32,20 +32,15 @@ passport.use(new LocalStrategy( {usernameField: 'email'},
    // asynchronous verification, for effect...
     process.nextTick(function () {
     	var messageresult = new String();
-      TeacherUsers.authenticateEmail(email, password, function(err, email, messageresult){
+      TeacherUsers.authenticateEmail(email, password, function(err, user, messageresult){ //before: 'user' was 'email'
       	console.log(messageresult); //this does return the right thing to console
       	if(messageresult == 'incorrect user') {return done(null, false, { message: 'Unkown user '});}
       	if(messageresult == 'wrong password') {return done(null, false, { message: 'Invalid password' })}
-      	return done(err,email);
+      	return done(err,user); //i use to return 'email' not 'user' 
       });//end authenticate
     });
   }//end username password done 
 ));
-
-
-
-
-
 
 //serialize user login
 passport.serializeUser(function(user, done) {

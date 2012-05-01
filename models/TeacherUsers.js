@@ -8,8 +8,8 @@ var bcrypt = require('bcrypt');
 
 //Schema Definition
 var TeacherUserSchema = new Schema({
-	email: Email,
-    user: { type: String},
+	  email: Email,
+    username: { type: String},
     //password: {type: String}
     salt: {type: String, required: true},
     hash: {type: String, required: true}

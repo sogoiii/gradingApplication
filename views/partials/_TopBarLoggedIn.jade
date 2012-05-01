@@ -1,0 +1,26 @@
+.navbar.navbar-fixed-top
+    .navbar-inner
+        .container
+          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.brand(href='/') Company
+          .nav-collapse
+            ul.nav
+              li
+                a(href='/about') About
+              li
+                a(href='/blog') Blog
+            ul.nav.pull-right
+              li.divider-vertical
+              li.dropdown
+                a.dropdown-toggle(href='#', data-toggle='dropdown') Username
+                  b.caret
+                ul.dropdown-menu
+                  li
+                    a(href='/settings') Settings
+                  li.divider
+                  li
+                    a(href='/logout') Logout
+                li.divider-vertical   

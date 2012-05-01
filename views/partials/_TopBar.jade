@@ -1,24 +1,31 @@
 .navbar.navbar-fixed-top
-    .navbar-inner
-        .container
-          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.brand(href='#')
-          .nav-collapse
-            ul.nav
-              li
-                a(href='/') Home
-              li
-                a(href='/about') About
-              li
-                a(href='/Login') Login
-              li 
-                a(href='/userlist') UserList
-              li 
-                a(href='/loginfailed') LoginFailed
-              li
-                a(href='/Register') Register
-              li
-                a(href='/uploadtest') Upload
+  .navbar-inner
+    .container
+      a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.brand(href='/') Company
+      .nav-collapse
+        ul.nav
+          if title == 'About'
+            li.active
+              a(href='/about') About
+          else     
+            li
+              a(href='/about') About
+
+          if title == 'Blog'   
+            li.active
+              a(href='/blog') Blog
+          else
+            li 
+              a(href='/blog') Blog    
+      ul.nav.pull-right
+        li.divider-vertical
+          li
+            a(href='/login') Login
+        li.divider-vertical    
+          li
+            a(href='/register') Register
+        li.divider-vertical

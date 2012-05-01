@@ -2,6 +2,8 @@ var mongoose = require("mongoose");
 var db = require('../DBfunctions'); //access to the DB and other functions 
 var gridfs = require("../gridfs");
 
+//var scripts = ['javascripts/jQuery.js', 'javascripts/bootstrap.min.js']
+
 
 /*
  * GET home page.
@@ -19,6 +21,39 @@ exports.getlogin = function(req,res){
 	res.render('login', {title: 'Login', user: req.user, message: req.flash('error') });
 }
 
+exports.postlogin = function(req, res){ //save session to cookie
+  // res.cookie('Firstcookieelement', 'firstcookies yAY!!!!!');
+  //console.log(req.session.email);
+/*req.session.loggedIn = true;
+if(req.session){
+  console.log('the session.user exists!!!');
+}
+else{
+  console.log('no session for login');
+}
+
+  console.log('session.passport.user = ' + req.session.passport.user);
+  console.log('session.lastAccess = ' + req.session.lastAccess);
+  console.log('req.user.id = ' + req.user.id);
+  req.session.useremail = req.user.email;
+  //grab the user.websiteaccount
+  console.log('Session ID = ' + req.session.id);*/
+  //redirect to their homepage with variables 
+  //console.log('already updaded session with logged in true');
+  res.redirect('/user/' + req.user._id);
+  //res.render('userindex',{title: 'Logged into user'});
+}
+
+exports.getlogout = function(req,res){ 
+  if(req.user){
+    req.session.destroy(function(err){
+    console.log('logout user = ' + req.user.id);
+    })
+  }
+  res.redirect('/');
+}//end getlogout
+
+
 exports.userlist = function(req,res){
 	res.render('userlist',{ title: 'Userlist', user: req.user})
 };
@@ -28,9 +63,84 @@ exports.loginfailed = function(req,res){
 };
 
 
-exports.getregister = function(req,res){
+exports.getregister = function(req,res){ //add a modal frame of the term of service 
   res.render('register', {title: 'Register', message: req.flash('error')})
 }
+
+
+
+
+
+/*
+  
+    USER OVERVIEW - TESTS - QUESTIONS - STATISTICS
+
+*/
+
+//this is the users start page
+exports.getuserindex = function(req,res){ //make this the overview?
+
+  //console.log('user session authenitcated = ' + req.session.loggedIn);
+ // console.log('user session email = ' + req.session.useremail)
+
+  if(req.session.loggedIn == true){
+
+    console.log('objectID aka userID = ' + req.user._id);//undefined since i never put anything in there
+    console.log('User email = ' + req.user.email);
+    req.session.user = 'user email access is = ' + req.user.email;
+    var sess = req.sessions;
+    //sess.id = req.params.id;
+    console.log('URL id = ' + req.params.id);
+    //console.log(sess.id + ' = session id');
+    //req.sessions.id = req.params.id;
+    res.render('userindex', {title: 'UserHome', 
+                             username: req.session.user,
+                             userID: req.params.id});
+  }
+  else{
+    console.log('User Is not Logged in, hence will be booted');
+    res.redirect('/');
+  } 
+
+}//end of getuserhome
+
+
+exports.getuseroverview = function(req, res){
+
+  res.render('useroverview',{title: 'Overview', userID: req.params.id})
+}//end get overview
+
+
+exports.getusertests = function(req, res){
+
+  res.render('usertests',{title: 'Tests', userID: req.params.id})
+}//end get tests
+
+
+exports.getuserquestions = function(req, res){
+
+  res.render('userquestions',{title: 'Questions', userID: req.params.id})
+}//end get questions
+
+
+exports.getuserstatistics = function(req, res){
+
+  res.render('userstatistics',{title: 'Statistics', userID: req.params.id})
+}//end get statistics
+
+
+
+
+
+
+
+
+
+/*
+  
+    USER UPLOAD
+
+*/
 
 
 //test function for uploading to grid fs
