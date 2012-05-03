@@ -28,29 +28,37 @@ module.exports = function(app) {
 
 
 // Routes
-app.get('/', routes.index);
 
+/*
+  
+    GET Static page.
+
+*/
+app.get('/', routes.index);
 app.get('/about', routes.about);
 
+
+
+
+
+/*
+  
+    Loging in and Registering 
+
+*/
+
+
 app.get('/register', routes.getregister);
-
 app.post('/register', routes.postregister); 
-
-app.get('/loginfailed', routes.loginfailed);
-
-app.get('/userlist', ensureAuthenticated,  routes.userlist);
-
 app.get('/login', routes.getlogin);
-
 app.post('/login', 
   passport.authenticate('local', { failureRedirect: '/login' , failureFlash: true }),
   routes.postlogin
 );
-
 app.get('/logout', routes.getlogout);
 
 
-app.get('/users', routes.getusers); //test version
+
 
 
 
@@ -63,14 +71,12 @@ app.get('/users', routes.getusers); //test version
 */
 
 app.get('/user/:id', ensureAuthenticated, RestirctAccess, routes.getuserindex);
-
-app.get('/user/:id/overview', ensureAuthenticated, RestirctAccess, routes.getuseroverview);
-
 app.get('/user/:id/tests', ensureAuthenticated, RestirctAccess, routes.getusertests);
-
 app.get('/user/:id/questions', ensureAuthenticated, RestirctAccess, routes.getuserquestions);
-
 app.get('/user/:id/statistics', ensureAuthenticated, RestirctAccess, routes.getuserstatistics);
+
+
+
 
 
 
@@ -81,16 +87,29 @@ app.get('/user/:id/statistics', ensureAuthenticated, RestirctAccess, routes.getu
 
 */
 
-
-
 //uploading a file examples
 app.get('/uploadtest', routes.getupload);
 app.post('/uploadnew',routes.postupload);
 app.get('/file/:id', routes.getshowfile2)
 
+
+
+
+
+
+
+
+/*
+  
+    OLDER TESTING AND LEARNING ROUTES!!! - probably not using anymore or for randome use only!!!
+
+*/
+
 app.get('/viewimages', routes.getviewimages);
-
-
+app.get('/users', routes.getusers); //test version
+app.get('/loginfailed', routes.loginfailed);
+app.get('/userlist', ensureAuthenticated,  routes.userlist);
+app.get('/user/:id/overview', ensureAuthenticated, RestirctAccess, routes.getuseroverview);
 
 }
 

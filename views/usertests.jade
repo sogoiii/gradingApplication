@@ -1,3 +1,22 @@
+script
+    $(document).ready(function () {
+      jQuery(function() {
+      jQuery('.wymeditor').wymeditor({
+        containersHtml: "",
+        classesHtml: "",
+        toolsItems:[
+          {'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'},
+          {'name': 'Italic', 'title': 'Emphasis', 'css': 'wym_tools_emphasis'},
+          {'name': 'Superscript', 'title': 'Superscript', 'css': 'wym_tools_superscript'},
+          {'name': 'Subscript', 'title': 'Subscript', 'css': 'wym_tools_subscript'},
+          {'name': 'InsertOrderedList', 'title': 'Ordered_List', 'css': 'wym_tools_ordered_list'},
+          {'name': 'InsertUnorderedList', 'title': 'Unordered_List', 'css': 'wym_tools_unordered_list'},
+        ]
+      });
+      });
+      });
+
+
 !=partial('partials/_TopBarLoggedIn')
   .container-fluid
     .row-fluid
@@ -6,3 +25,6 @@
       .span8
         h1 This is the user Tests page
           p #{title}
+          form(method='post', action='')
+            textarea.wymeditor(name='textareabox')
+            input.btn.wymupdate(type='submit')

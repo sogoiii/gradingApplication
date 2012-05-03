@@ -1,70 +1,305 @@
-.navbar.navbar-fixed-top
-    .navbar-inner
-        .container
-          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.brand(href='/') Company
-          .nav-collapse
-            ul.nav
-              li
-                a(href='/about') About
-              li
-                a(href='/blog') Blog
-            ul.nav.pull-right
-              li.divider-vertical
-              li.dropdown
-                a.dropdown-toggle(href='#', data-toggle='dropdown') Username
-                  b.caret
-                ul.dropdown-menu
-                  li
-                    a(href='/settings') Settings
-                  li.divider
-                  li
-                    a(href='logout') Logout
-
-  .container
-    .row
-      .span8
-        h1 Image will be seen below
-        form.form-horizontal
-          fieldset
-          legend Legend text
-            .control-group.error
-              label.control-label(for='input01') Text input
-              .controls
-                input#input01.input-xlarge(type='text')
-                p.help-block Supporting help text
-        .alert.alert-error.alert-block
-          a.close(data-dismiss='alert', href='#') ×
-          h4.alert-heading Warning!
-          p Best check yo self, you're not...
-
-
-  .navbar
-      .navbar-inner
-          .container
-            a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
-            a.brand(href='/') Company
-            .nav-collapse
-              ul.nav
-                li
-                  a(href='/about') About
-                li
-                  a(href='/blog') Blog
-            ul.nav.pull-right
-              li.divider-vertical
-                li
-                  a(href='/login') login
+//- .navbar.navbar-fixed-top
+//-     .navbar-inner
+//-         .container
+//-           a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+//-             span.icon-bar
+//-             span.icon-bar
+//-             span.icon-bar
+//-           a.brand(href='/') Company
+//-           .nav-collapse
+//-             ul.nav
+//-               li
+//-                 a(href='/about') About
+//-               li
+//-                 a(href='/blog') Blog
+//-             ul.nav.pull-right
+//-               li.divider-vertical
+//-               li.dropdown
+//-                 a.dropdown-toggle(href='#', data-toggle='dropdown') Profile
+//-                   b.caret
+//-                 ul.dropdown-menu
+//-                   li
+//-                     a(href='/settings') Settings
+//-                   li.divider
+//-                   li
+//-                     a(href='/logout') Logout
+//-                 li.divider-vertical   
+//- .container
+//-   .row
+//-     .span8
+//-       h1 Image will be seen below
+//-       form.form-horizontal
+//-         fieldset
+//-         legend Legend text
+//-           .control-group.error
+//-             label.control-label(for='input01') Text input
+//-             .controls
+//-               input#input01.input-xlarge(type='text')
+//-               p.help-block Supporting help text
+//-       .alert.alert-error.alert-block
+//-         a.close(data-dismiss='alert', href='#') ×
+//-         h4.alert-heading Warning!
+//-         p Best check yo self, you're not...
 
 
+//- .navbar
+//-   .navbar-inner
+//-     .container
+//-       a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+//-         span.icon-bar
+//-         span.icon-bar
+//-         span.icon-bar
+//-       a.brand(href='/') Company
+//-       .nav-collapse
+//-         ul.nav
+//-           li
+//-             a(href='/about') About
+//-           li
+//-             a(href='/blog') Blog
+
+//-         form.navbar-form.pull-right(action='/login', method='post')
+//-           input.span2(type='text', name='email', placeholder = 'email')
+//-           input.span2(type='password', name='password' ,placeholder = 'Password')
+//-           button.btn(type='submit') Log In
+                
+//- #mainmenu.navbar.navbar-fixed-top
+//-     .navbar-inner
+//-         .container
+//-           ul.nav
+//-             li#menu1.dropdown
+//-               a.dropdown-toggle(data-toggle='dropdown', href='#menu1')
+//-                 | Canada
+//-                 b.caret
+//-               ul#canada.dropdown-menu
+//-                 li
+//-                   a.can(itemscope='itemscope', itemtype='http://schema.org/Country', href='/')
+//-                     img(src='', alt='campgrounds of canada', width='200', height='55')
+//-                     h2(itemprop='name') Canada
+//-                     p
+//-                       | Back to home page
+//-                       br
+//-                       | Total listings found: 1,981
+//-             li#menu2.dropdown
+//-               a.dropdown-toggle(data-toggle='dropdown', href='#menu2')
+//-                 | About
+//-                 b.caret
+//-               ul#about.dropdown-menu
+//-                 li
+//-                   a(href='/about') About campgrounds of Canada
+//-                 li
+//-                   a(href='/about/pricing') Campground and RV Parks pricing
+//-                 li
+//-                   a(href='/about/commercial') Commercial listings
+//-                 li.divider
+//-                 li
+//-                   a(href='/about/promote-your-city') Tourism Office: Promote your city
+//-                 li
+//-                   a(href='/about/tourism-office-submit-text') Tourism Office: Text submit
+//-                 li.divider
+//-                 li
+//-                   a(href='/about/tos') Terms of Use
+//-                 li
+//-                   a(href='/about/privacy') Privacy Policy
+//-             li.active
+//-               a(href='/events') Events
+//-             li
+//-               a(href='/contact') Contact
+//-             li
+//-               a(href='/stories') Stories
+//-             li
+//-               a(href='/kids') Kids
+//-             li
+//-               a(href='http://blog.campgroundsofcanada.com/') Blog
+//-           ul.nav.pull-right
+//-             li#menu3.dropdown
+//-               a.dropdown-toggle(data-toggle='dropdown', href='#menu3')
+//-                 | Login
+//-                 b.caret
+//-               ul#login.dropdown-menu
+//-                 li
+//-                   div
+//-                     p
+//-                       b Login
+//-                       | to manage your listing.
+//-                   form#lm.lm.form-inline(name='lm', method='post', action='/login', target='_top', accept-charset='utf-8')
+//-                     input#emailadress(name='email', value='')
+//-                     label Email:
+//-                     input#lme.span2(type='text', name='a', maxlength='75', value='', placeholder='Email address', title='Enter your email address')
+//-                     label Password:
+//-                     input.span2(type='password', name='p', maxlength='16', value='', placeholder='Password', title='Enter your password')
+//-                     input#sbmt.btn.btn-primary(type='submit', value='Login')
+//-                     input(type='hidden', name='frmact', value='login')
+//-                   div
+//-                     p
+//-                       a(href='/login')
+//-                         | Forgot password?
+//-                       a(href='/login#signup')
+//-                         | No account? Sign up.
+
+
+
+//- .navbar
+//-   .navbar-inner
+//-     .container
+//-       a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+//-         span.icon-bar
+//-         span.icon-bar
+//-         span.icon-bar
+//-       a.brand(href='/') Company
+//-       .nav-collapse
+//-         ul.nav
+//-           if title == 'About'
+//-             li.active
+//-               a(href='/about') About
+//-           else     
+//-             li
+//-               a(href='/about') About
+
+//-           if title == 'Blog'   
+//-             li.active
+//-               a(href='/blog') Blog
+//-           else
+//-             li 
+//-               a(href='/blog') Blog    
+//-       ul.nav.pull-right
+//-         li.divider-vertical
+//-           li
+//-             a(href='/login') Login
+//-         li.divider-vertical    
+//-           li
+//-             a(href='/register') Register
+//-         li.divider-vertical
 
 
 
 
-        
+
+//- #myModal.modal.hide.fade
+//-   .modal-header
+//-     button.close(data-dismiss='modal') ×
+//-     h3 Login
+//-   .modal-body
+//-     form(action='/login', method='post')
+//-       input.span3(type='text', name='email', placeholder = 'email')
+//-       input.span3(type='password', name='password' ,placeholder = 'Password')
+//-       button.btn.btn-primary(type='submit') Log In
+//- a.btn.btn-primary.btn-large(data-toggle='modal', href='#myModal') Launch demo modal
+
+
+
+//- script(type='text/javascript')
+//-  (function($) {
+//-    $(document).ready(function() {
+//-      $('#wysiwyg').wysiwyg({
+//-     controls: {
+//-         strikeThrough: { visible: true },
+//-         underline: { visible: true },
+//-         subscript: { visible: true },
+//-         superscript: { visible: true }
+//-     }
+//-    });
+//-    });
+//-  })(jQuery);
+//- textarea#wysiwyg
+
+
+
+//- style
+//-   .wysiwyg-input { width: 400px; height: 150px }
+//- script(type='text/javascript')
+//-   $(document).ready(function() {
+//-     $('#wysiwyg').wysiwyg({
+//-     iFrameClass: "wysiwyg-input",
+//-     rmUnusedControls: true,
+//-     controls: {
+//-     bold: { visible: true },
+//-     italic: {visible: true},
+//-     strikeThrough: {visible: true},
+//-     underline: { visible: true },
+//-     subscript: { visible: true },
+//-     superscript: { visible: true },
+//-     insertOrderedList: {visible: true},
+//-     insertUnorderedList: {visible: true},
+//-     }
+//-     });
+//-     })(jQuery);
+
+//- p nothing is here!
+//-   h2 Example: Basic
+//-   .span8
+//-     form.well(action='/', method='POST')
+//-       textarea#wysiwyg(name='thetextboxinput', cols='80', rows='4')
+//-       input.btn(type='submit', value='Submit')
+//-   hr
+//-   a(href='/') Index
+
+
+
+script
+    $(document).ready(function () {
+      jQuery(function() {
+      jQuery('.wymeditor').wymeditor({
+        containersHtml: "",
+        classesHtml: "",
+        toolsItems:[
+          {'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'},
+          {'name': 'Italic', 'title': 'Emphasis', 'css': 'wym_tools_emphasis'},
+          {'name': 'Superscript', 'title': 'Superscript', 'css': 'wym_tools_superscript'},
+          {'name': 'Subscript', 'title': 'Subscript', 'css': 'wym_tools_subscript'},
+          {'name': 'InsertOrderedList', 'title': 'Ordered_List', 'css': 'wym_tools_ordered_list'},
+          {'name': 'InsertUnorderedList', 'title': 'Unordered_List', 'css': 'wym_tools_unordered_list'},
+        ]
+      });
+      });
+      });
+
+
+!=partial('partials/_TopBarLoggedIn')
+.container-fluid
+  .row-fluid
+    .span2
+      h1= title
+    .span8
+      p Welcome to #{title}
+      form(method='post', action='')
+        textarea.wymeditor(name='textareabox')
+        input.btn.wymupdate(type='submit')
+
+
+
+
+
+  //- .container-fluid
+  //-   .row-fluid
+  //-     .span2
+  //-       include partials/_SideBar
+  //-     .span8
+  //-       h1 This is the user Tests page
+  //-         p #{title}
+  //-         form(method='post', action='')
+  //-           textarea.wymeditor(name='textareabox')
+  //-           input.btn.wymupdate(type='submit')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -1,11 +1,13 @@
 !=partial('partials/_TopBar')
 .container
   .row
-    .span8
-      h2 Please Register
-      form.well.form-inline(action='/register', method='post')
+    .span4
+      h2 Register
+      form.well.form(action='/register', method='post')
         input.span3(type='text', name='email', placeholder = 'Email')
+        input.span3(type='text', name='confirmemail', placeholder = 'Confirm Email')
         input.span3(type='password', name='password' ,placeholder = 'Password')
+        .span1 
         button.btn(type='submit') Register
   if(message)
     p #{message}

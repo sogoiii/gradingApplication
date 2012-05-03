@@ -7,14 +7,21 @@ html
     meta(name='author', content='')
     <!-- Le styles -->
     link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap-responsive.min.css')
     link(rel='stylesheet', href="/stylesheets/style.css")
-    link(href='/stylesheets/bootstrap-responsive.min.css', rel='stylesheet')
+    //link(rel='stylesheet', href='/stylesheets/screen.css',type='text/css',  media='screen, projection')
+    //link(rel='stylesheet', href='/stylesheets/print.css', type='text/css',  media='print')
+    //link(rel='stylesheet', href='/stylesheets/jquery.wysiwyg.css', type='text/css')
+
     <!--Le fav and touch icons -->
     link(rel='shortcut icon', href='image/favicon.ico')
     link(rel='apple-touch-icon', href='image/apple-touch-icon.png')
     link(rel='apple-touch-icon', sizes='72x72', href='image/apple-touch-icon-72x72.png')
     link(rel='apple-touch-icon', sizes='114x114', href='image/apple-touch-icon-114x114.png')
 
+    script(type='text/javascript', src='/javascripts/jQuery.js')
+    script(type='text/javascript', src='/javascripts/wymeditor/jquery.wymeditor.min.js')
+    //script(type='text/javascript', src='javascripts/jquery.wysiwyg.js')
   body!= body
     include partials/_Footer
     
