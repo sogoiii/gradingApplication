@@ -2,6 +2,10 @@ var mongoose = require("mongoose");
 var db = require('../DBfunctions'); //access to the DB and other functions 
 var gridfs = require("../gridfs");
 
+var check = require('express-validator').check,
+    sanitize = require('express-validator').sanitize
+
+
 //var scripts = ['javascripts/jQuery.js', 'javascripts/bootstrap.min.js']
 
 
@@ -59,30 +63,48 @@ exports.getsetup = function(req,res){
 
 
 exports.postsetup = function(req,res){
+
+  //first check if the inputs are valid
+  // var errors = [];
+  // req.onValidationError(function(msg) {
+  //     //res.render('signup', { error: msg });
+  //     errors.push(msg);
+  // });
+
+  // var errors = [];
+  // var setError = function(msg) {
+  //   console.log('Validation error: ' + msg);
+  //   errors.push(msg);
+  // }
+
+  // req.onValidationError(setError);
+
+
+  // req.assert(req.body.ClassName, 'Alphanumeric Only').isAlphanumeric(); //classname
+  // req.assert(req.body.ClassGrade, 'Numbers Only').isInt(); //grade
+  // req.assert(req.body.ClassSubject, 'Alphanumeric Only').isAlphanumeric(); //subject
+  //req.assert(req.body.NumOfStudents, 'Numbers Only').isInt(); //grade
+  req.assert(req.body.NumOfStudents, 'Numbers Only').isInt(); //grade //test line
+  var errors = req.validationErrors();
+  console.log('errors = ' + errors.msg);
+
+  // var mappedErrors = req.validationErrors(true);
+  // console.log('errors = ' + mappedErrors.email.msg);
+
+
+
+  //inputs are valid, hence i can now add them into the DB
   var TeacherUserSchema = mongoose.model('TeacherUserSchema');
-
-  console.log('i want to find the user = ' + req.params.id);
-  
   TeacherUserSchema.findById(req.params.id, function(err, user) {
-
-        console.log('Classroom user found = ', user.email);
-        console.log('Classroom name = ', req.body.ClassName);
-        console.log('Classroom grade = ', req.body.ClassGrade);
-        console.log('Classroom subject = ', req.body.ClassSubject);
-        console.log('Classroom students = ', req.body.NumOfStudents);
-
         //making my modifications/updates to the document found
         user.classroom.subject = req.body.ClassSubject;
         user.classroom.grade = req.body.ClassGrade;
         user.classroom.classname = req.body.ClassName;
         user.classroom.numofstudents = req.body.NumOfStudents;
-
-        console.log('changed subject to = ', user.classroom.subject);
-
-        //user.email = 'second@one.com';
+        //save the changes and get errors
         user.save(function(err){
           if(err)
-              console.log('error saving the document')
+              console.log('Save Error: ClassSetup = ' + req.params.id)
           else
               console.log('saved the classroom data')
         });//end of save
