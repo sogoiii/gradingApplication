@@ -76,23 +76,55 @@ exports.postsetup = function(req,res){
   //   console.log('Validation error: ' + msg);
   //   errors.push(msg);
   // }
+  // req.onValidationError(setError); //this line must be above the assert
+  
+  req.assert('ClassName', 'ClassName: Alphanumeric Only').isAlphanumeric(); //classname
+  req.assert('ClassGrade', 'ClassGrade: Numbers Only').isInt(); //grade
+  req.assert('ClassSubject', 'ClassSubject: Alphanumeric Only').isAlphanumeric(); //subject
+  req.assert('NumOfStudents', 'NumOfStudents: Numbers Only').isInt(); //grade
+  
 
-  // req.onValidationError(setError);
-
-
-  // req.assert(req.body.ClassName, 'Alphanumeric Only').isAlphanumeric(); //classname
-  // req.assert(req.body.ClassGrade, 'Numbers Only').isInt(); //grade
-  // req.assert(req.body.ClassSubject, 'Alphanumeric Only').isAlphanumeric(); //subject
-  //req.assert(req.body.NumOfStudents, 'Numbers Only').isInt(); //grade
-  req.assert(req.body.NumOfStudents, 'Numbers Only').isInt(); //grade //test line
+  ////testing validation //the firsrt variable is the name of the field in the jade file
+  // //req.check('NumOfStudents', 'Numbers Only').isInt(); //grade //test line
+  // // //version 1 //if erros.lenght is unefiend, then i get errors. need to nest it in a check
   var errors = req.validationErrors();
-  console.log('errors = ' + errors.msg);
+  console.log('error lenght = ' + errors.length)
+  if(errors.length){
+     console.log('errors = ' + errors[0].param);
+    // console.log('errors = ' + errors[0].msg);  
+    // console.log('errors = ' + errors[0].value);
 
+
+    res.render('setupclass', {
+        title: "Class Setup",
+        userID: req.params.id,
+        valerrors: errors,
+        message: req.flash('myerror')
+      });
+  }//end of if
+
+
+  // //version 2 
   // var mappedErrors = req.validationErrors(true);
-  // console.log('errors = ' + mappedErrors.email.msg);
+  // console.log('error lenght = ' + mappedErrors.length)
+  // if(mappedErrors.length){
+  //   console.log('errors = ' + mappedErrors.NumOfStudents.param);
+  //   console.log('errors = ' + mappedErrors.NumOfStudents.msg);  
+  //   console.log('errors = ' + mappedErrors.NumOfStudents.value);
+  //   res.render('setupclass', {
+  //       title: "Class Setup",
+  //       classes: user,
+  //       userID: req.params.id,
+  //       message: req.flash('myerror')
+  //     });
+
+  // }//end of if
 
 
 
+
+
+  else {
   //inputs are valid, hence i can now add them into the DB
   var TeacherUserSchema = mongoose.model('TeacherUserSchema');
   TeacherUserSchema.findById(req.params.id, function(err, user) {
@@ -115,9 +147,11 @@ exports.postsetup = function(req,res){
         userID: req.params.id,
         message: req.flash('myerror')
       });
-    });
+    });//end of findby ID
 
-  res.render('setupclass', {title: 'Class Setup', userID: req.params.id})
+  }//end of else
+
+  //res.render('setupclass', {title: 'Class Setup', userID: req.params.id})
 }//end of postsetup
 
 

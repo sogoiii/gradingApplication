@@ -25,8 +25,16 @@
 							.controls
 								input.span3(type='text', name='NumOfStudents' ,placeholder = 'Number of Students')
 						button.btn.btn-primary(type='submit') Create Class
+				
+				- if(typeof(valerrors) != 'undefined')
+					p vall errors exists
+				- else
+					p val errros does not exist
+					
+
 			.span2 
 				h3 Mearly test content
 				p #{title}
+
 
 
