@@ -8,6 +8,9 @@ var express = require('express')
   , util = require('util')
   , fs = require('fs');
 
+var expressValidator = require('express-validator');
+
+
 var gridfs = require("./gridfs"); //this line may not be required here   
 
 var mongoose = require('mongoose');
@@ -49,6 +52,7 @@ app.configure(function(){
   app.set(express.logger());
   app.use(express.cookieParser());
   app.use(express.bodyParser());
+  app.use(expressValidator);
   app.use(express.methodOverride());
 
 
@@ -104,7 +108,8 @@ app.dynamicHelpers({
     myscripts: function() {
         //scripts to load on every page
         //return ['jQuery.js','jquery.wysiwyg.js','bootstrap.min.js'];
-        return ['jQuery.js','/wymeditor/jquery.wymeditor.min.js' ,'bootstrap.min.js'];
+        return ['jQuery.js','wymeditor/jquery.wymeditor.min.js' ,'bootstrap.min.js'];
+        //return ['jQuery.js','bootstrap.min.js'];
     }
 });
 

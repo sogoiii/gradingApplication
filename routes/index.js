@@ -53,7 +53,50 @@ TeacherUser.save(function (err) {
 }//end post register
 
 
+exports.getsetup = function(req,res){
+  res.render('setupclass', {title: 'Class Setup', userID: req.params.id})
+}//end of getsetup
 
+
+exports.postsetup = function(req,res){
+  var TeacherUserSchema = mongoose.model('TeacherUserSchema');
+
+  console.log('i want to find the user = ' + req.params.id);
+  
+  TeacherUserSchema.findById(req.params.id, function(err, user) {
+
+        console.log('Classroom user found = ', user.email);
+        console.log('Classroom name = ', req.body.ClassName);
+        console.log('Classroom grade = ', req.body.ClassGrade);
+        console.log('Classroom subject = ', req.body.ClassSubject);
+        console.log('Classroom students = ', req.body.NumOfStudents);
+
+        //making my modifications/updates to the document found
+        user.classroom.subject = req.body.ClassSubject;
+        user.classroom.grade = req.body.ClassGrade;
+        user.classroom.classname = req.body.ClassName;
+        user.classroom.numofstudents = req.body.NumOfStudents;
+
+        console.log('changed subject to = ', user.classroom.subject);
+
+        //user.email = 'second@one.com';
+        user.save(function(err){
+          if(err)
+              console.log('error saving the document')
+          else
+              console.log('saved the classroom data')
+        });//end of save
+
+        res.render('setupclass', {
+        title: "Class Setup",
+        classes: user,
+        userID: req.params.id,
+        message: req.flash('myerror')
+      });
+    });
+
+  res.render('setupclass', {title: 'Class Setup', userID: req.params.id})
+}//end of postsetup
 
 
 
@@ -130,7 +173,7 @@ exports.getuserindex = function(req,res){ //make this the overview?
     console.log('URL id = ' + req.params.id);
     //console.log(sess.id + ' = session id');
     //req.sessions.id = req.params.id;
-    res.render('userindex', {title: 'UserHome', 
+    res.render('userindex', {title: 'Overview', 
                              username: req.session.user,
                              userID: req.params.id});
   }

@@ -36,10 +36,10 @@
 //-             .controls
 //-               input#input01.input-xlarge(type='text')
 //-               p.help-block Supporting help text
-//-       .alert.alert-error.alert-block
-//-         a.close(data-dismiss='alert', href='#') ×
-//-         h4.alert-heading Warning!
-//-         p Best check yo self, you're not...
+      //- .alert.alert-error.alert-block
+      //-   a.close(data-dismiss='alert', href='#') ×
+      //-   h4.alert-heading Warning!
+      //-   p Best check yo self, you're not...
 
 
 //- .navbar
@@ -264,6 +264,20 @@ script
       form(method='post', action='')
         textarea.wymeditor(name='textareabox')
         input.btn.wymupdate(type='submit')
+
+
+      .alert.alert-error.alert-block
+        a.close(data-dismiss='alert', href='#') ×
+        h4.alert-heading Warning!
+        p Best check yo self, you're not...
+
+      .alert.alert-error.alert-block.fade.in 
+        a.close(data-dismiss='alert') ×
+        h4.alert-heading Complete Setup
+        p Create your class, then you can start!
+        button.btn.btn-danger(href='#') makethisred 
+
+
 
 
 

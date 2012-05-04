@@ -1,30 +1,47 @@
-script
-    $(document).ready(function () {
-      jQuery(function() {
-      jQuery('.wymeditor').wymeditor({
-        containersHtml: "",
-        classesHtml: "",
-        toolsItems:[
-          {'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'},
-          {'name': 'Italic', 'title': 'Emphasis', 'css': 'wym_tools_emphasis'},
-          {'name': 'Superscript', 'title': 'Superscript', 'css': 'wym_tools_superscript'},
-          {'name': 'Subscript', 'title': 'Subscript', 'css': 'wym_tools_subscript'},
-          {'name': 'InsertOrderedList', 'title': 'Ordered_List', 'css': 'wym_tools_ordered_list'},
-          {'name': 'InsertUnorderedList', 'title': 'Unordered_List', 'css': 'wym_tools_unordered_list'},
-        ]
-      });
-      });
-      });
-
-
 !=partial('partials/_TopBarLoggedIn')
-  .container-fluid
-    .row-fluid
-      .span2
-        include partials/_SideBar
-      .span8
-        h1 This is the user Tests page
-          p #{title}
-          form(method='post', action='')
-            textarea.wymeditor(name='textareabox')
-            input.btn.wymupdate(type='submit')
+	.container-fluid
+		.row-fluid
+			.span2
+				include partials/_SideBar
+			.span8
+				h1 This is the user Tests page
+				p #{title}
+				form.form-horizontal(method='post', action='')
+					fieldset
+						.control-group
+							.span2
+								select.span2(name='Class', size='1')
+									option class 1
+							.span2
+								select.span2(name='Grade', size='1')
+									option grade 1
+									option grade 2
+							.span2
+								select.span2(name='Subject', size='1')
+									option subject 1
+									option subject 2
+						.control-group			
+							textarea.wymeditor(name='textareabox')			
+						.control-group.success
+							label.control-label(for='focusedInput') Correct Answer
+							.controls
+								input(type='text')
+						.control-group.error
+							label.control-label(for='inputError') Wrong Answer
+							.controls
+								input(type='text')
+						.control-group.error
+							label.control-label(for='inputWarning') Wrong Answer
+							.controls
+								input(type='text')
+						.control-group.error
+							label.control-label(for='inputWarning') Wrong Answer
+							.controls
+								input(type='text')
+						input.btn.btn-primary.wymupdate(type='submit')
+			.span2 
+				h3 Mearly test content
+				p #{title}
+
+
+

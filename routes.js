@@ -2,6 +2,9 @@ var passport = require('passport');
 
 var routes = require('./routes/index');
 
+
+
+
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
@@ -50,6 +53,8 @@ app.get('/about', routes.about);
 
 app.get('/register', routes.getregister);
 app.post('/register', routes.postregister); 
+app.get('/setupclass/:id',ensureAuthenticated, RestirctAccess, routes.getsetup)
+app.post('/setupclass/:id',ensureAuthenticated, RestirctAccess, routes.postsetup)
 app.get('/login', routes.getlogin);
 app.post('/login', 
   passport.authenticate('local', { failureRedirect: '/login' , failureFlash: true }),
@@ -72,6 +77,7 @@ app.get('/logout', routes.getlogout);
 
 app.get('/user/:id', ensureAuthenticated, RestirctAccess, routes.getuserindex);
 app.get('/user/:id/tests', ensureAuthenticated, RestirctAccess, routes.getusertests);
+app.post('user/:id/tests', ensureAuthenticated, RestirctAccess, routes.getusertests);
 app.get('/user/:id/questions', ensureAuthenticated, RestirctAccess, routes.getuserquestions);
 app.get('/user/:id/statistics', ensureAuthenticated, RestirctAccess, routes.getuserstatistics);
 

@@ -1,0 +1,32 @@
+!=partial('partials/_TopBarLoggedIn')
+	.container-fluid
+		.row-fluid
+			.span2
+				include partials/_SideBar
+			.span8
+				h1 Create classes
+				p You can have more than one!
+				form.form-horizontal.well(method='post', action='')
+					fieldset
+						.control-group
+							label.control-label Class Name
+							.controls
+								input.span3(type='text', name='ClassName', placeholder = 'Class Name') 
+						.control-group
+							label.control-label Grade
+							.controls
+								input.span3(type='text', name='ClassGrade' ,placeholder = 'Class Grade')
+						.control-group
+							label.control-label Subject
+							.controls
+								input.span3(type='text', name='ClassSubject', placeholder = 'Class Subject')
+						.control-group
+							label.control-label Number of Students
+							.controls
+								input.span3(type='text', name='NumOfStudents' ,placeholder = 'Number of Students')
+						button.btn.btn-primary(type='submit') Create Class
+			.span2 
+				h3 Mearly test content
+				p #{title}
+
+

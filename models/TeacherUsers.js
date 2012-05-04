@@ -12,7 +12,13 @@ var TeacherUserSchema = new Schema({
     username: { type: String},
     //password: {type: String}
     salt: {type: String, required: true},
-    hash: {type: String, required: true}
+    hash: {type: String, required: true},
+    classroom: {
+      subject: {type: String},
+      grade: {type: Number},
+      classname: {type: String },
+      numofstudents: Number
+    }
   });
 
 TeacherUserSchema
