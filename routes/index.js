@@ -1,12 +1,31 @@
 var mongoose = require("mongoose");
 var db = require('../DBfunctions'); //access to the DB and other functions 
 var gridfs = require("../gridfs");
-
+var passport = require('passport');
 var check = require('express-validator').check,
     sanitize = require('express-validator').sanitize
 
 
 //var scripts = ['javascripts/jQuery.js', 'javascripts/bootstrap.min.js']
+
+
+/*
+ * Passport functions
+ */
+
+
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  console.log('the user is not authorized');
+  res.redirect('/login');
+}
+
+
+
+
+
+
 
 
 /*
@@ -38,26 +57,54 @@ exports.getregister = function(req,res){ //add a modal frame of the term of serv
 }
 
 //add user to the databse...aka register
-exports.postregister = function(req,res){
+exports.postregister = function(req,res, next){
   var TeacherUserSchema = mongoose.model('TeacherUserSchema');
     var TeacherUser = new TeacherUserSchema({
     email: req.body.email,
     password: req.body.password
   });
 
-TeacherUser.save(function (err) {
-    if (!err) {
-      res.render('index', { title: 'Home', user: req.user});
-      //return console.log("created user");
-    } else {
-      res.render('register', {title: 'Register', message: 'Not an Email Address'});
-      //return console.log("not CREATED!!!!!");
-    }
- });
+  TeacherUser.save(function (err) {
+      if (!err) {
+        console.log('registed user = ' + TeacherUser._id );
+        // if (req.headers.host.match(/^www/) !== null ) {
+        //   res.redirect('http://' + req.headers.host.replace(/^www\./, '') + req.url + '/setupclass/' + TeacherUser._id, { title: 'Home', user: req.user, userID: TeacherUser._id});
+        //   //res.redirect('/setupclass/' + TeacherUser._id, { title: 'Home', user: req.user, userID: TeacherUser._id});
+        //   //return console.log("created user");
+        // }
+        // else {
+        //     res.render('index', { title: 'Home', user: req.user, userID: TeacherUser._id});
+
+        // }
+          //res.redirect('/user/' + TeacherUser._id);
+
+          //once saved, authenticate this user so i can redirect
+
+
+          //res.redirect('/setupclass/' + TeacherUser._id, { title: 'Home', user: req.user, userID: TeacherUser._id});
+
+      } else {
+        res.render('register', {title: 'Register', message: 'Not an Email Address'});
+        //return console.log("not CREATED!!!!!");
+      }//end of else
+   });//end of save
+
+  next();
+  //passport.authenticate('local', { failureRedirect: '/about' , failureFlash: true })
+  //res.render('setupclass', { title: 'Home', user: req.user, userID: TeacherUser._id})
+  //res.redirect('/setupclass/' + TeacherUser._id, { title: 'Home', user: req.user, userID: TeacherUser._id})
 }//end post register
+
+exports.postregister2 = function(req, res){
+  res.redirect('/setupclass/' + req.user._id)
+  //res.redirect('/user/' + req.user._id);
+}//end of post register 2. 
+
+
 
 
 exports.getsetup = function(req,res){
+  console.log('req.url = ' + req.url)
   res.render('setupclass', {title: 'Class Setup', userID: req.params.id})
 }//end of getsetup
 
@@ -78,10 +125,10 @@ exports.postsetup = function(req,res){
   // }
   // req.onValidationError(setError); //this line must be above the assert
   
-  req.assert('ClassName', 'ClassName: Alphanumeric Only').isAlphanumeric(); //classname
-  req.assert('ClassGrade', 'ClassGrade: Numbers Only').isInt(); //grade
-  req.assert('ClassSubject', 'ClassSubject: Alphanumeric Only').isAlphanumeric(); //subject
-  req.assert('NumOfStudents', 'NumOfStudents: Numbers Only').isInt(); //grade
+  req.assert('ClassName', 'Class Name can only accepts alphanumeric').regex(/^[a-zA-Z0-9 -]/i); //classname
+  req.assert('ClassGrade', 'Class Grade only accepts numbers').isInt(); //grade
+  req.assert('ClassSubject', 'Class Subject only accepts alphanumeric ').regex(/^[a-zA-Z0-9 -]/i); //subject
+  req.assert('NumOfStudents', 'Number of Students only accepts numbers').isInt(); //grade
   
 
   ////testing validation //the firsrt variable is the name of the field in the jade file
@@ -93,8 +140,6 @@ exports.postsetup = function(req,res){
      console.log('errors = ' + errors[0].param);
     // console.log('errors = ' + errors[0].msg);  
     // console.log('errors = ' + errors[0].value);
-
-
     res.render('setupclass', {
         title: "Class Setup",
         userID: req.params.id,

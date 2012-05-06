@@ -4,8 +4,10 @@
 			.span2
 				include partials/_SideBar
 			.span8
-				h1 Create classes
-				p You can have more than one!
+				h1 Create class
+				.alert.alert-warning.alert-block
+					h4.alert-heading Warning!
+					p Currently you can only have 1 class. Changing these values between test will cause problems.
 				form.form-horizontal.well(method='post', action='')
 					fieldset
 						.control-group
@@ -27,13 +29,18 @@
 						button.btn.btn-primary(type='submit') Create Class
 				
 				- if(typeof(valerrors) != 'undefined')
-					p vall errors exists
-				- else
-					p val errros does not exist
-					
+					each err in valerrors
+						each val,key in err
+							- if(key == 'msg')
+								.alert.alert-error.alert-block
+									a.close(data-dismiss='alert', href='#') ×
+									h4.alert-heading Error!
+									p #{val}
+				
+				
 
 			.span2 
-				h3 Mearly test content
+				h3 Placeholder Data
 				p #{title}
 
 

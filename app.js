@@ -136,9 +136,10 @@ require('./routes')(app);
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
-
+/*this function is not used here, its in routes.js*/
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
+  console.log('the user is not authorized');
   res.redirect('/login')
 }
 

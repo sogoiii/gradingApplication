@@ -13,6 +13,7 @@ var TeacherUserSchema = new Schema({
     //password: {type: String}
     salt: {type: String, required: true},
     hash: {type: String, required: true},
+    createdclassroom: {type: Boolean, default: 0},
     classroom: {
       subject: {type: String},
       grade: {type: Number},
