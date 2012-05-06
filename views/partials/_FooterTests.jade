@@ -1,4 +1,5 @@
-- scrips.push('wymeditor/jquery.wymeditor.min.js')
+- myscripts.push('wymeditor/jquery.wymeditor.min.js')
+!= renderScriptsTags(myscripts)
 script
     $(function () {
       jQuery(function() {
@@ -13,7 +14,10 @@ script
           {'name': 'Subscript', 'title': 'Subscript', 'css': 'wym_tools_subscript'},
           {'name': 'InsertOrderedList', 'title': 'Ordered_List', 'css': 'wym_tools_ordered_list'},
           {'name': 'InsertUnorderedList', 'title': 'Unordered_List', 'css': 'wym_tools_unordered_list'},
-        ]
+        ],
+        postInit: function(wym) {
+         $(wym._iframe).css('height', '150px');
+        }
       });
       });
       });

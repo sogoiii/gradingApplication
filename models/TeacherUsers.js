@@ -8,7 +8,7 @@ var bcrypt = require('bcrypt');
 
 //Schema Definition
 var TeacherUserSchema = new Schema({
-	  email: Email,
+	  email: {type: Email, unique: true },
     username: { type: String},
     //password: {type: String}
     salt: {type: String, required: true},
@@ -63,7 +63,7 @@ TeacherUserSchema.static('authenticateEmail', function(email, password, callback
       if (!user) { return callback(null, false, 'incorrect user'); }
         user.verifyPassword(password, function(err, passwordCorrect) {
           if (err) { return callback(err); }
-          if (!passwordCorrect) { return callback(null, false, 'wrong password')}
+          if (!passwordCorrect) { return callback(null, false, 'wrong password')} //this gets send to console when the unique error is passed
           return callback(null, user);
         });
 

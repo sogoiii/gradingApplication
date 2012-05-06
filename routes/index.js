@@ -57,7 +57,7 @@ exports.getregister = function(req,res){ //add a modal frame of the term of serv
 }
 
 //add user to the databse...aka register
-exports.postregister = function(req,res, next){
+exports.postregister = function(req,res,next){
   var TeacherUserSchema = mongoose.model('TeacherUserSchema');
     var TeacherUser = new TeacherUserSchema({
     email: req.body.email,
@@ -66,40 +66,25 @@ exports.postregister = function(req,res, next){
 
   TeacherUser.save(function (err) {
       if (!err) {
-        console.log('registed user = ' + TeacherUser._id );
-        // if (req.headers.host.match(/^www/) !== null ) {
-        //   res.redirect('http://' + req.headers.host.replace(/^www\./, '') + req.url + '/setupclass/' + TeacherUser._id, { title: 'Home', user: req.user, userID: TeacherUser._id});
-        //   //res.redirect('/setupclass/' + TeacherUser._id, { title: 'Home', user: req.user, userID: TeacherUser._id});
-        //   //return console.log("created user");
-        // }
-        // else {
-        //     res.render('index', { title: 'Home', user: req.user, userID: TeacherUser._id});
-
-        // }
-          //res.redirect('/user/' + TeacherUser._id);
-
-          //once saved, authenticate this user so i can redirect
-
-
-          //res.redirect('/setupclass/' + TeacherUser._id, { title: 'Home', user: req.user, userID: TeacherUser._id});
-
+        //console.log('registed user = ' + TeacherUser._id );
+        //passport.authenticate('local', { failureRedirect: '/about' , failureFlash: true });
+        //ensureAuthenticated
+        //res.redirect('/setupclass/' + TeacherUser._id);
       } else {
-        res.render('register', {title: 'Register', message: 'Not an Email Address'});
+        console.log('err.errors.email = ' + err);
+        //console.log('err.errors.email.message = ' + err.errors.email.message);
+        res.render('register', {title: 'Register', message: 'Not an Email Address or users already exists'}); //input was not an email or it exists in db. change error output
         //return console.log("not CREATED!!!!!");
       }//end of else
    });//end of save
 
+  //must be next: else it redirects to login. This is an ansycn issue, need to find out how to do it sync in this function npm Step?
   next();
-  //passport.authenticate('local', { failureRedirect: '/about' , failureFlash: true })
-  //res.render('setupclass', { title: 'Home', user: req.user, userID: TeacherUser._id})
-  //res.redirect('/setupclass/' + TeacherUser._id, { title: 'Home', user: req.user, userID: TeacherUser._id})
 }//end post register
 
 exports.postregister2 = function(req, res){
-  res.redirect('/setupclass/' + req.user._id)
-  //res.redirect('/user/' + req.user._id);
+  res.redirect('/setupclass/' + req.user._id) //after authentication is done, enter user setupclass 
 }//end of post register 2. 
-
 
 
 
@@ -291,8 +276,7 @@ exports.getuserindex = function(req,res){ //make this the overview?
 
 
 exports.getusertests = function(req, res){
-
-  res.render('usertests',{title: 'Tests', userID: req.params.id})
+  res.render('usertests',{title: 'Tests', userID: req.params.id, wymeditor: true})
 }//end get tests
 
 

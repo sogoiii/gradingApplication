@@ -34,7 +34,7 @@ passport.use(new LocalStrategy( {usernameField: 'email'},
     	var messageresult = new String();
       TeacherUsers.authenticateEmail(email, password, function(err, user, messageresult){ //before: 'user' was 'email'
       	console.log(messageresult); //this does return the right thing to console
-      	if(messageresult == 'incorrect user') {return done(null, false, { message: 'Unkown user '});}
+      	if(messageresult == 'incorrect user') {return done(null, false, { message: 'Unkown user '});} //left side is the output of the teacher users function, the right side is what is sent to the login page
       	if(messageresult == 'wrong password') {return done(null, false, { message: 'Invalid password' })}
       	return done(err,user); //i use to return 'email' not 'user' 
       });//end authenticate

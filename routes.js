@@ -53,8 +53,7 @@ app.get('/about', routes.about);
 
 
 app.get('/register', routes.getregister);
-app.post('/register', routes.postregister, passport.authenticate('local', { failureRedirect: '/about' , failureFlash: true }), routes.postregister2); 
-//app.get('registerinterm')
+app.post('/register', routes.postregister, passport.authenticate('local', { failureRedirect: '/register' , failureFlash: true }), routes.postregister2); 
 app.get('/setupclass/:id', ensureAuthenticated, RestirctAccess, routes.getsetup)
 app.post('/setupclass/:id', ensureAuthenticated, RestirctAccess, routes.postsetup)
 app.get('/login', routes.getlogin);
