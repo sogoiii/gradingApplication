@@ -70,16 +70,25 @@ exports.postregister = function(req,res,next){
         //passport.authenticate('local', { failureRedirect: '/about' , failureFlash: true });
         //ensureAuthenticated
         //res.redirect('/setupclass/' + TeacherUser._id);
+        next();
       } else {
-        console.log('err.errors.email = ' + err);
-        //console.log('err.errors.email.message = ' + err.errors.email.message);
-        res.render('register', {title: 'Register', message: 'Not an Email Address or users already exists'}); //input was not an email or it exists in db. change error output
-        //return console.log("not CREATED!!!!!");
-      }//end of else
+        //console.log('err.errors.email = ' + err);
+        if(err == 'MongoError: E11000 duplicate key error index: ecomm_database.teacheruserschemas.$email_1  dup key: { : "' + req.body.email +'" }'){
+            //console.log('err has the user exists error hence send different message')
+            res.render('register', {title: 'Register', message: 'Email exists: please log in'}); //user exists, may not want ot say this,i could be attacked to check who exists in DB.
+        
+        }
+        else{
+            //console.log('err has returned and this means the entry was not an email.')
+            res.render('register', {title: 'Register', message: 'Not a valid email address'}); //input was not an email
+        
+        }
+
+      }//end of !err else
    });//end of save
 
   //must be next: else it redirects to login. This is an ansycn issue, need to find out how to do it sync in this function npm Step?
-  next();
+ // next();
 }//end post register
 
 exports.postregister2 = function(req, res){
