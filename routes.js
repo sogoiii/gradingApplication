@@ -54,8 +54,7 @@ app.get('/about', routes.about);
 
 app.get('/register', routes.getregister);
 app.post('/register', routes.postregister, passport.authenticate('local', { failureRedirect: '/register' , failureFlash: true }), routes.postregister2); 
-app.get('/setupclass/:id', ensureAuthenticated, RestirctAccess, routes.getsetup)
-app.post('/setupclass/:id', ensureAuthenticated, RestirctAccess, routes.postsetup)
+
 app.get('/login', routes.getlogin);
 app.post('/login', 
   passport.authenticate('local', { failureRedirect: '/login' , failureFlash: true }),
@@ -75,6 +74,8 @@ app.get('/logout', routes.getlogout);
     USER OVERVIEW - TESTS - QUESTIONS - STATISTICS
 
 */
+app.get('/user/:id/setupclass', ensureAuthenticated, RestirctAccess, routes.getsetup)
+app.post('/user/:id/setupclass', ensureAuthenticated, RestirctAccess, routes.postsetup)
 
 app.get('/user/:id', ensureAuthenticated, RestirctAccess, routes.getuserindex);
 app.get('/user/:id/tests', ensureAuthenticated, RestirctAccess, routes.getusertests);

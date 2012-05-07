@@ -120,7 +120,11 @@ app.dynamicHelpers({
 });
 
 
-
+app.dynamicHelpers({
+  userID: function(req,res) {
+      return req.params.id;
+  }
+});
 
 
 

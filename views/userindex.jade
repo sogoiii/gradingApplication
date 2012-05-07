@@ -6,11 +6,11 @@
       .span8
         h1 This is the user index page
           p #{username}
-          .alert.alert-error.alert-block
+          .alert.alert-success.alert-block
             a.close(data-dismiss='alert', href='#') ×
-            h4.alert-heading Complete Setup
-              p Complete your setup by creating your class.
-              a.btn.btn-danger(href='#') Setup
+            h4.alert-heading Welcome! 
+            p Setup you class if you have not! 
+            a.btn.btn-success(href='/user/#{userID}/setupclass') Setup
       .span2 
         h3 Placeholder Data
         p #{title}

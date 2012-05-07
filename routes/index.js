@@ -92,7 +92,7 @@ exports.postregister = function(req,res,next){
 }//end post register
 
 exports.postregister2 = function(req, res){
-  res.redirect('/setupclass/' + req.user._id) //after authentication is done, enter user setupclass 
+  res.redirect('/user/' + req.user._id +'/setupclass') //after authentication is done, enter user setupclass 
 }//end of post register 2. 
 
 
@@ -136,7 +136,6 @@ exports.postsetup = function(req,res){
     // console.log('errors = ' + errors[0].value);
     res.render('setupclass', {
         title: "Class Setup",
-        userID: req.params.id,
         valerrors: errors,
         message: req.flash('myerror')
       });
@@ -183,7 +182,6 @@ exports.postsetup = function(req,res){
         res.render('setupclass', {
         title: "Class Setup",
         classes: user,
-        userID: req.params.id,
         message: req.flash('myerror')
       });
     });//end of findby ID
@@ -255,22 +253,15 @@ exports.getlogout = function(req,res){
 //this is the users start page
 exports.getuserindex = function(req,res){ //make this the overview?
 
-  //console.log('user session authenitcated = ' + req.session.loggedIn);
- // console.log('user session email = ' + req.session.useremail)
-
   if(req.session.loggedIn == true){
 
     console.log('objectID aka userID = ' + req.user._id);//undefined since i never put anything in there
     console.log('User email = ' + req.user.email);
     req.session.user = 'user email access is = ' + req.user.email; //temporary line, only for debugging remove once in production
-    var sess = req.sessions;
-    //sess.id = req.params.id;
+
     console.log('URL id = ' + req.params.id);
-    //console.log(sess.id + ' = session id');
-    //req.sessions.id = req.params.id;
     res.render('userindex', {title: 'Overview', 
-                             username: req.session.user,
-                             userID: req.params.id});
+                             username: req.session.user}); //username: is a debug variable, this will have to be removed too.
   }
   else{
     console.log('User Is not Logged in, hence will be booted');
@@ -285,19 +276,19 @@ exports.getuserindex = function(req,res){ //make this the overview?
 
 
 exports.getusertests = function(req, res){
-  res.render('usertests',{title: 'Tests', userID: req.params.id, wymeditor: true})
+  res.render('usertests',{title: 'Tests', wymeditor: true})
 }//end get tests
 
 
 exports.getuserquestions = function(req, res){
 
-  res.render('userquestions',{title: 'Questions', userID: req.params.id})
+  res.render('userquestions',{title: 'Questions'})
 }//end get questions
 
 
 exports.getuserstatistics = function(req, res){
 
-  res.render('userstatistics',{title: 'Statistics', userID: req.params.id})
+  res.render('userstatistics',{title: 'Statistics'})
 }//end get statistics
 
 

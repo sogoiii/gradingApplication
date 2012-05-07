@@ -1,18 +1,18 @@
-if(DynsessionLoggedIn == false)
+if(DynsessionLoggedIn != true)
   !=partial('partials/_TopBar')
 else
   !=partial('partials/_TopBarLoggedIn')
-    .container
-      //
-         Main hero unit for a primary marketing message or call to action 
-      .hero-unit
-        h1 Hello, world!
-        p
-          | This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
-        p
-          a.btn.btn-primary.btn-large Learn more »
-      hr
-      footer
-        p © Company 2012
-    //
+.container
+  //
+     Main hero unit for a primary marketing message or call to action 
+  .hero-unit
+    h1 Hello, world!
+    p
+      | This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
+    p
+      a.btn.btn-primary.btn-large Learn more »
+  hr
+  footer
+    p © Company 2012
+//
        /container 
