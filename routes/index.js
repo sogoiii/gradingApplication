@@ -262,7 +262,7 @@ exports.getuserindex = function(req,res){ //make this the overview?
 
     console.log('objectID aka userID = ' + req.user._id);//undefined since i never put anything in there
     console.log('User email = ' + req.user.email);
-    req.session.user = 'user email access is = ' + req.user.email;
+    req.session.user = 'user email access is = ' + req.user.email; //temporary line, only for debugging remove once in production
     var sess = req.sessions;
     //sess.id = req.params.id;
     console.log('URL id = ' + req.params.id);

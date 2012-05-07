@@ -105,13 +105,21 @@ app.helpers({
 });
 
 app.dynamicHelpers({
-    myscripts: function() {
-        //scripts to load on every page
-        //return ['jQuery.js','wymeditor/jquery.wymeditor.min.js' ,'bootstrap.min.js'];
-        return ['jQuery.js','bootstrap.min.js'];
-        //return ['jQuery.js','bootstrap.min.js'];
-    }
+  myscripts: function() {
+      //scripts to load on every page
+      //return ['jQuery.js','wymeditor/jquery.wymeditor.min.js' ,'bootstrap.min.js'];
+      return ['jQuery.js','bootstrap.min.js'];
+      //return ['jQuery.js','bootstrap.min.js'];
+  }
 });
+
+app.dynamicHelpers({
+  DynsessionLoggedIn: function(req,res) {
+      return req.session.loggedIn;
+  }
+});
+
+
 
 
 

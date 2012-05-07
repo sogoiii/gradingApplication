@@ -1,4 +1,7 @@
-!=partial('partials/_TopBar')
+if(DynsessionLoggedIn == false)
+  !=partial('partials/_TopBar')
+else
+  !=partial('partials/_TopBarLoggedIn')
 .container
   .row
     .span4
