@@ -5,6 +5,11 @@ mongooseTypes.loadTypes(mongoose, "email");
 var Email = mongoose.SchemaTypes.Email;
 var bcrypt = require('bcrypt');
 
+//var TestS = require('mongoose').model('TestSchema');
+//var QuestionSchema = require('mongoose').model('QuestionSchema');
+var TestSchema = require('./Test');
+
+
 
 //Schema Definition
 var TeacherUserSchema = new Schema({
@@ -16,11 +21,18 @@ var TeacherUserSchema = new Schema({
     createdclassroom: {type: Boolean, default: 0},
     classroom: {
       subject: {type: String},
-      grade: {type: Number},
+      gradeyear: {type: Number},
       classname: {type: String },
       numofstudents: Number
-    }
+    },
+    Tests: [TestSchema],
+    UserCreated: {type: Date, default: Date.now}
   });
+
+
+
+
+
 
 TeacherUserSchema
 .virtual('password')

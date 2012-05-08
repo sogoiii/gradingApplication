@@ -78,6 +78,8 @@ app.get('/user/:id/setupclass', ensureAuthenticated, RestirctAccess, routes.gets
 app.post('/user/:id/setupclass', ensureAuthenticated, RestirctAccess, routes.postsetup)
 
 app.get('/user/:id', ensureAuthenticated, RestirctAccess, routes.getuserindex);
+app.get('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.getusercreatetest);
+app.post('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.postusercreatetest);
 app.get('/user/:id/tests', ensureAuthenticated, RestirctAccess, routes.getusertests);
 app.post('user/:id/tests', ensureAuthenticated, RestirctAccess, routes.postusertests);
 app.get('/user/:id/questions', ensureAuthenticated, RestirctAccess, routes.getuserquestions);

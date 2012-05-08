@@ -8,7 +8,9 @@ var gridfs = require("./gridfs"); //this file should be inside here
 
 // Model includes
 var TeacherUsers = require('./models/TeacherUsers');
-var Application = require('./models/UploadFilesTest');
+var Tests = require('./models/Test');
+var Question = require('./models/Questions');
+var Application = require('./models/UploadFilesTest'); //this was for uploading files, example
 
 
 /*
@@ -70,6 +72,41 @@ module.exports = {
 
 
 
+
+
+  //insert question from the create test page
+  InsertQuestion: function(userinfo, callback){
+
+    console.log('userinfo = ' + userinfo);
+    console.log('question html IN DB = ' + userinfo.QuestionHTML);
+    console.log('Correct Answer IN DB = ' + userinfo.CorrectAnswer);
+
+    var newQuestion = new Question({
+      Questionhtml: userinfo.QuestionHTML,
+      CorrectAnswertext: userinfo.CorrectAnswer
+    })//end of question
+
+    // var WA1 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer1})//wrong answer 1
+    // var WA2 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer2})//wrong answer 2
+    // var WA3 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer3})//wrong answer 3
+    // newQuestion.WrongAnswers.push(WA1);
+    // newQuestion.WrongAnswers.push(WA2);
+    // newQuestion.WrongAnswers.push(WA3);
+
+    newQuestion.save(function(err){
+      if(err){
+        console.log('Save Error: NewQuetion');
+        console.log('QHTML = ' + err.errors.Questionhtml)
+        console.log('CAT = ' + err.errors.CorrectAnswertext)
+        //callback(err,done);//return back to the routes index.js with err and done 
+      }
+      else
+        console.log('Saved New Question To DB')
+    });//end of NewQuestion.Save
+
+
+
+  }, // end of InsertNewQuestion
 
 
 

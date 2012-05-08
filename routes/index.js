@@ -119,9 +119,9 @@ exports.postsetup = function(req,res){
   // }
   // req.onValidationError(setError); //this line must be above the assert
   
-  req.assert('ClassName', 'Class Name can only accepts alphanumeric').regex(/^[a-zA-Z0-9 -]/i); //classname
+  req.assert('ClassName', 'Class Name can only accepts alphanumeric').regex(/^[a-zA-Z0-9 -]$/i); //classname
   req.assert('ClassGrade', 'Class Grade only accepts numbers').isInt(); //grade
-  req.assert('ClassSubject', 'Class Subject only accepts alphanumeric ').regex(/^[a-zA-Z0-9 -]/i); //subject
+  req.assert('ClassSubject', 'Class Subject only accepts alphanumeric ').regex(/^[a-zA-Z0-9 -]$/i); //subject
   req.assert('NumOfStudents', 'Number of Students only accepts numbers').isInt(); //grade
   
 
@@ -168,7 +168,7 @@ exports.postsetup = function(req,res){
   TeacherUserSchema.findById(req.params.id, function(err, user) {
         //making my modifications/updates to the document found
         user.classroom.subject = req.body.ClassSubject;
-        user.classroom.grade = req.body.ClassGrade;
+        user.classroom.gradeyear = req.body.ClassGrade;
         user.classroom.classname = req.body.ClassName;
         user.classroom.numofstudents = req.body.NumOfStudents;
         //save the changes and get errors
@@ -270,6 +270,26 @@ exports.getuserindex = function(req,res){ //make this the overview?
 
 }//end of getuserhome
 
+
+
+exports.getusercreatetest = function(req, res){
+  res.render('createtest',{title: 'Create Tests', wymeditor: true})
+}
+
+exports.postusercreatetest = function(req, res){
+  //req.body.CorrectAnswer QuestionHTML WrongAnswer1,2,3
+
+  console.log('QHTML = ' + req.body.QuestionHTML)
+  console.log('CAT = ' + req.body.CorrectAnswer)
+
+  db.InsertQuestion(req.body, function(err,done){ 
+
+  });//end of insertQuestion
+
+
+
+  res.render('createtest',{title: 'Create Tests', wymeditor: true})
+}
 
 
 
