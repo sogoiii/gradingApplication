@@ -11,6 +11,28 @@
             h4.alert-heading Welcome! 
             p Setup you class if you have not! 
             a.btn.btn-success(href='/user/#{userID}/setupclass') Setup
+            form.form-horizontal(method='post', action='')
+        fieldset
+          .alert.alert-success.alert-block.control-group.navbar-form.form-inline.well
+            .span3
+              input.span3(type='text', name='TestName', placeholder = 'Test Name')
+            .span2
+              select.span2(name='Class', size='1')
+                - if(typeof(classinfo) != 'undefined')
+                  each val,key in classinfo
+                    - if(key == 'classname')
+                      option #{val}
+            .span2
+              button.btn.btn-success.span2(type='submit') Create Test        
+            //- .span2
+            //-   select.span2(name='Grade', size='1')
+            //-     option grade 1
+            //-     option grade 2
+            //- .span2
+            //-   select.span2(name='Subject', size='1')
+            //-     option subject 1
+            //-     option subject 2
+          .control-group    
       .span2 
         h3 Placeholder Data
         p #{title}

@@ -11,6 +11,7 @@ var TeacherUsers = require('./models/TeacherUsers');
 var Test = require('./models/Test');
 var Question = require('./models/Questions');
 var Application = require('./models/UploadFilesTest'); //this was for uploading files, example
+var WrongAnswer = require('./models/WrongAnswers');
 
 
 /*
@@ -97,21 +98,18 @@ module.exports = {
 
   //insert question from the create test page
   InsertQuestion: function(userinfo, callback){
-
-    // console.log('question html IN DB = ' + userinfo.QuestionHTML);
-    // console.log('Correct Answer IN DB = ' + userinfo.CorrectAnswer);
-
     var newQuestion = new Question({
       Questionhtml: userinfo.QuestionHTML,
       CorrectAnswertext: userinfo.CorrectAnswer
     })//end of question
 
-    // var WA1 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer1})//wrong answer 1
-    // var WA2 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer2})//wrong answer 2
-    // var WA3 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer3})//wrong answer 3
-    // newQuestion.WrongAnswers.push(WA1);
-    // newQuestion.WrongAnswers.push(WA2);
-    // newQuestion.WrongAnswers.push(WA3);
+    //var WrongAnswerSchema = mongoose.model('WrongAnswerSchema').WrongAnswerSchema;
+    var WA1 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer1})//wrong answer 1
+    var WA2 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer2})//wrong answer 2
+    var WA3 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer3})//wrong answer 3
+     newQuestion.WrongAnswers.push(WA1);
+     newQuestion.WrongAnswers.push(WA2);
+     newQuestion.WrongAnswers.push(WA3);
 
     // newQuestion.save(function(err){
     //   if(err){

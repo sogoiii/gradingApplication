@@ -149,9 +149,9 @@ exports.postsetup = function(req,res){
   // }
   // req.onValidationError(setError); //this line must be above the assert
   
-  req.assert('ClassName', 'Class Name can only accepts alphanumeric').regex(/^[a-zA-Z0-9 -]$/i); //classname
+  req.assert('ClassName', 'Class Name can only accepts alphanumeric');//.regex(/^[a-zA-Z0-9 -]$/i); //classname
   req.assert('ClassGrade', 'Class Grade only accepts numbers').isInt(); //grade
-  req.assert('ClassSubject', 'Class Subject only accepts alphanumeric ').regex(/^[a-zA-Z0-9 -]$/i); //subject
+  req.assert('ClassSubject', 'Class Subject only accepts alphanumeric ');//.regex(/^[a-zA-Z0-9 -]$/i); //subject
   req.assert('NumOfStudents', 'Number of Students only accepts numbers').isInt(); //grade
   
 
@@ -282,21 +282,46 @@ exports.getlogout = function(req,res){
 
 //this is the users start page
 exports.getuserindex = function(req,res){ //make this the overview?
-
-  if(req.session.loggedIn == true){
+  //if(req.session.loggedIn == true){
 
     console.log('objectID aka userID = ' + req.user._id);//undefined since i never put anything in there
     console.log('User email = ' + req.user.email);
     req.session.user = 'user email access is = ' + req.user.email; //temporary line, only for debugging remove once in production
 
     console.log('URL id = ' + req.params.id);
-    res.render('userindex', {title: 'Overview', 
+  var TeacherUserSchema = mongoose.model('TeacherUserSchema');
+  TeacherUserSchema.findById(req.params.id, function(err, user) {
+    if(!err){
+      var classinfo = user.classroom;
+      console.log('found the user!');
+          res.render('userindex', {title: 'Overview', 
+                             username: req.session.user,
+                             classinfo: classinfo}); //username: is a debug variable, this will have to be removed too.
+
+
+    }//end of !err if
+    else{
+      console.log('did not find user?!');
+          res.render('userindex', {title: 'Overview', 
                              username: req.session.user}); //username: is a debug variable, this will have to be removed too.
-  }
-  else{
-    console.log('User Is not Logged in, hence will be booted');
-    res.redirect('/');
-  } 
+
+
+    }//end of !err else
+  });//end of findByID
+
+
+    // res.render('userindex', {title: 'Overview', 
+    //                          username: req.session.user
+    //                          classinfo: classinfo}); //username: is a debug variable, this will have to be removed too.
+  
+
+
+
+//  }//end of session logged in 
+  //else{
+   // console.log('User Is not Logged in, hence will be booted');
+   // res.redirect('/');
+ // }//end of else 
 
 }//end of getuserhome
 

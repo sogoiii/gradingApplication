@@ -2,15 +2,11 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
+var WrongAnswerSchema = require('./WrongAnswers').WrongAnswerSchema;
 
 
-var WrongAnswer = new Schema ({
-	WrongAnswertext: {type: String, required: true, match:/^[a-zA-Z0-9 -"]/ },
-	NumberOfTimesSelected: {type: Number},
-	NumberOfTimesUsed: {type: Number}
-});//end of wrong answer
 
-var StandardMet = new Schema ({
+var StandardMetSchema = new Schema ({
 	StandardMet: {type: String},
 	Percentage: {type: Number}
 })// end of standardMet
@@ -25,8 +21,8 @@ var QuestionSchema = new Schema({
 	Questionhtml: {type: String, required: true, match: /[a-zA-Z0-9;& ]/ },
 	//Questiontext: {type: String, match: /^[a-zA-Z0-9 -]$/ },
 	CorrectAnswertext: {type: String, required: true, max: 140, match:/^[a-zA-Z0-9 -"]/ },
-	//WrongAnswers: [WrongAnswer],
-	//StandardMet: [StandardMet],
+	WrongAnswers: [WrongAnswerSchema],
+	//StandardMet: [StandardMetSchema],
 
 	//NumberOfTimesQuestionUsed: {type: Number}, //this number will be updated every time it is used/ must be atomic - performance hit here
 });//end of QuestionSchema
@@ -34,3 +30,6 @@ var QuestionSchema = new Schema({
 
 
  module.exports = mongoose.model('QuestionSchema', QuestionSchema );
+
+ //module.exports = mongoose.model('WrongAnswerSchema', WrongAnswerSchema);
+ //module.exports = mongoose.model('StandardMetSchema', StandardMetSchema);
