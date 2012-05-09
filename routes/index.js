@@ -2,11 +2,41 @@ var mongoose = require("mongoose");
 var db = require('../DBfunctions'); //access to the DB and other functions 
 var gridfs = require("../gridfs");
 var passport = require('passport');
-var check = require('express-validator').check,
-    sanitize = require('express-validator').sanitize
-
+// var check = require('express-validator').check,
+//     sanitize = require('express-validator').sanitize
+var check = require('validator').check,
+    sanitize = require('validator').sanitize
 
 //var scripts = ['javascripts/jQuery.js', 'javascripts/bootstrap.min.js']
+
+
+/*
+ * escape HTML for user input 
+ */
+
+
+function htmlspecialchars(str) {
+ if (typeof(str) == "string") {
+  str = str.replace(/&/g, "&amp;"); /* must do &amp; first */
+  str = str.replace(/"/g, "&quot;");
+  str = str.replace(/'/g, "&#039;");
+  str = str.replace(/</g, "&lt;");
+  str = str.replace(/>/g, "&gt;");
+  }
+ return str;
+ }
+
+ function rhtmlspecialchars(str) {
+ if (typeof(str) == "string") {
+  str = str.replace(/&gt;/ig, ">");
+  str = str.replace(/&lt;/ig, "<");
+  str = str.replace(/&#039;/g, "'");
+  str = str.replace(/&quot;/ig, '"');
+  str = str.replace(/&amp;/ig, '&'); /* must do &amp; last */
+  }
+ return str;
+ }
+
 
 
 /*
@@ -272,27 +302,85 @@ exports.getuserindex = function(req,res){ //make this the overview?
 
 
 
+
+
+
+
+
+
+
+/*
+ * CREATE TESTS
+ */
+
+
+
 exports.getusercreatetest = function(req, res){
-  res.render('createtest',{title: 'Create Tests', wymeditor: true})
+    var TeacherUserSchema = mongoose.model('TeacherUserSchema');
+    TeacherUserSchema.findById(req.params.id, function(err,user){
+      if(err){
+        console.log('GET USER error = ' + user.Tests._id); 
+        res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'DID not find user by ID'})
+      }        
+      else{
+        console.log('GET USER no errror = ' + user.Tests._id);
+        res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'User Exists in DB'})
+      }
+    })//end of findbyID
+  //res.render('createtest',{title: 'Create Tests', wymeditor: true})
 }
 
+
+
+
+
 exports.postusercreatetest = function(req, res){
-  //req.body.CorrectAnswer QuestionHTML WrongAnswer1,2,3
+  //req.body.CorrectAnswer QuestionHTML WrongAnswer1,2,3 //user text input names
 
-  console.log('QHTML = ' + req.body.QuestionHTML)
-  console.log('CAT = ' + req.body.CorrectAnswer)
+  // //Remove XSS from user input
+  // req.body.QuestionHTML = req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
+  // //console.log('XSS - QHTML = ' + req.body.QuestionHTML)
+  // //encode the now XSS sanitized variable
+  // req.body.EncodedQuestionHTML = sanitize(req.body.QuestionHTML).entityEncode(); //entitiy.Decode() for dispalying later
+  // console.log('Encoded 1 = ' + req.body.EncodedQuestionHTML);
 
+
+  //Remove XSS from user input
+  req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
+  //console.log('XSS - QHTML = ' + req.body.QuestionHTML)
+  //encode the now XSS sanitized variable
+  req.sanitize('QuestionHTML').entityEncode(); //entitiy.Decode() for dispalying later
+  //console.log('Encoded 1 = ' + req.body.QuestionHTML);
+
+
+
+
+  // req.assert('CorrectAnswer', 'CorrectAnwer alphanumeric').isAlphanumeric();
+  // var errors = req.validationErrors();
+  // console.log('error lenght = ' + errors.length)
+  // if(errors.length){
+  //    console.log('errors = ' + errors[0].param);
+  //   // console.log('errors = ' + errors[0].msg);  
+  //   // console.log('errors = ' + errors[0].value);
+  // }//end of if
+
+  req.body.userID = req.params.id;
   db.InsertQuestion(req.body, function(err,done){ 
 
   });//end of insertQuestion
 
 
-
-  res.render('createtest',{title: 'Create Tests', wymeditor: true})
+  res.redirect('/user/' + req.params.id +'/createtest');
+  //res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'just came from post'})
 }
 
 
 
+
+
+/*
+ * GET USER TESTS
+ */
 
 
 exports.getusertests = function(req, res){
@@ -300,11 +388,24 @@ exports.getusertests = function(req, res){
 }//end get tests
 
 
+
+
+
+/*
+ * GET USER QUESTIONS
+ */
+
 exports.getuserquestions = function(req, res){
 
   res.render('userquestions',{title: 'Questions'})
 }//end get questions
 
+
+
+
+/*
+ * GET USER STATISTICS
+ */
 
 exports.getuserstatistics = function(req, res){
 

@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+var ObjectId = Schema.ObjectId;
 
 
 
 var WrongAnswer = new Schema ({
-	WrongAnswertext: {type: String, required: true, match:/^[a-zA-Z0-9 -]$/i },
+	WrongAnswertext: {type: String, required: true, match:/^[a-zA-Z0-9 -"]/ },
 	NumberOfTimesSelected: {type: Number},
 	NumberOfTimesUsed: {type: Number}
 });//end of wrong answer
@@ -21,13 +21,14 @@ var StandardMet = new Schema ({
 
 //this schema will have its own unique _id for every instance that is created
 var QuestionSchema = new Schema({
-	Questionhtml: {type: String, required: true, match: /^[a-zA-Z0-9 -<>]$/i },
-	Questiontext: {type: String, match: /^[a-zA-Z0-9 -]$/ },
-	CorrectAnswertext: {type: String, required: true, match:/^[a-zA-Z0-9 -]$/i },
-	WrongAnswers: [WrongAnswer],
-	StandardMet: [StandardMet],
+	//id: {type: ObjectId},
+	Questionhtml: {type: String, required: true, match: /[a-zA-Z0-9;& ]/ },
+	//Questiontext: {type: String, match: /^[a-zA-Z0-9 -]$/ },
+	CorrectAnswertext: {type: String, required: true, max: 140, match:/^[a-zA-Z0-9 -"]/ },
+	//WrongAnswers: [WrongAnswer],
+	//StandardMet: [StandardMet],
 
-	NumberOfTimesQuestionUsed: {type: Number}, //this number will be updated every time it is used/ must be atomic - performance hit here
+	//NumberOfTimesQuestionUsed: {type: Number}, //this number will be updated every time it is used/ must be atomic - performance hit here
 });//end of QuestionSchema
 
 

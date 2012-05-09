@@ -39,6 +39,11 @@
 							.controls
 								input(type='text', name= 'WrongAnswer3')
 						input.btn.btn-primary.wymupdate(type='submit') 
+				if(message)		
+					.alert.alert-error.alert-block
+						a.close(data-dismiss='alert', href='#') ×
+						h4.alert-heading Question
+						p #{message}
 			.span2 
 				h3 Mearly test content
 				p #{title}

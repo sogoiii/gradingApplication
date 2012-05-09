@@ -7,7 +7,7 @@ var bcrypt = require('bcrypt');
 
 //var TestS = require('mongoose').model('TestSchema');
 //var QuestionSchema = require('mongoose').model('QuestionSchema');
-var TestSchema = require('./Test');
+var TestSchema = require('./Test').TestSchema;
 
 
 

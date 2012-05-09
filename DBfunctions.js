@@ -8,7 +8,7 @@ var gridfs = require("./gridfs"); //this file should be inside here
 
 // Model includes
 var TeacherUsers = require('./models/TeacherUsers');
-var Tests = require('./models/Test');
+var Test = require('./models/Test');
 var Question = require('./models/Questions');
 var Application = require('./models/UploadFilesTest'); //this was for uploading files, example
 
@@ -58,6 +58,27 @@ passport.deserializeUser(function(id, done) {
 
 
 
+function escapeHtml(unsafe) {
+  return unsafe
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 //export DB functions ADD BELOW
 module.exports = {
 
@@ -77,9 +98,8 @@ module.exports = {
   //insert question from the create test page
   InsertQuestion: function(userinfo, callback){
 
-    console.log('userinfo = ' + userinfo);
-    console.log('question html IN DB = ' + userinfo.QuestionHTML);
-    console.log('Correct Answer IN DB = ' + userinfo.CorrectAnswer);
+    // console.log('question html IN DB = ' + userinfo.QuestionHTML);
+    // console.log('Correct Answer IN DB = ' + userinfo.CorrectAnswer);
 
     var newQuestion = new Question({
       Questionhtml: userinfo.QuestionHTML,
@@ -93,20 +113,87 @@ module.exports = {
     // newQuestion.WrongAnswers.push(WA2);
     // newQuestion.WrongAnswers.push(WA3);
 
-    newQuestion.save(function(err){
+    // newQuestion.save(function(err){
+    //   if(err){
+    //     console.log('Save Error: NewQuetion');
+    //     console.log('QHTML = ' + err.errors.Questionhtml)
+    //     console.log('CAT = ' + err.errors.CorrectAnswertext)
+    //     //callback(err,done);//return back to the routes index.js with err and done 
+    //   }
+    //   else
+    //     console.log('Saved New Question To DB')
+    // });//end of NewQuestion.Save
+
+    var newTest = new Test({
+      TestName: 'Testing Debug name'
+    })
+
+    newTest.Questions.push(newQuestion);
+
+    newTest.save(function(err){
       if(err){
-        console.log('Save Error: NewQuetion');
-        console.log('QHTML = ' + err.errors.Questionhtml)
-        console.log('CAT = ' + err.errors.CorrectAnswertext)
-        //callback(err,done);//return back to the routes index.js with err and done 
+        console.log('error saving new test');
       }
-      else
-        console.log('Saved New Question To DB')
-    });//end of NewQuestion.Save
+      else{
+        console.log('saved test')
+      }
+
+    })//end of myTestSave
+
+
+    console.log('user id = ' +userinfo.userID )
+    TeacherUsers.findById(userinfo.userID, function(err,user){
+        user.Tests.push(newTest);
+        user.save(function(saveerr){});
+
+        if(err){
+          console.log('DBFUNCTIONS NO USER TO SAVE ');
+        }
+        else {
+          console.log('DBFUNCTIONS found user = ' +  user.email);
+        }
+        
+    })//end of findbyID
+
+
+
+
 
 
 
   }, // end of InsertNewQuestion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
