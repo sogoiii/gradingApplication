@@ -225,30 +225,13 @@ exports.postsetup = function(req,res){
 
 exports.getlogin = function(req,res){
 	res.render('login', {title: 'Login', user: req.user, message: req.flash('error') });
-}
+}//end getlogin
 
 exports.postlogin = function(req, res){ //save session to cookie
   // res.cookie('Firstcookieelement', 'firstcookies yAY!!!!!');
-  //console.log(req.session.email);
-/*req.session.loggedIn = true;
-if(req.session){
-  console.log('the session.user exists!!!');
-}
-else{
-  console.log('no session for login');
-}
 
-  console.log('session.passport.user = ' + req.session.passport.user);
-  console.log('session.lastAccess = ' + req.session.lastAccess);
-  console.log('req.user.id = ' + req.user.id);
-  req.session.useremail = req.user.email;
-  //grab the user.websiteaccount
-  console.log('Session ID = ' + req.session.id);*/
-  //redirect to their homepage with variables 
-  //console.log('already updaded session with logged in true');
   res.redirect('/user/' + req.user._id);
-  //res.render('userindex',{title: 'Logged into user'});
-}
+}//end post login
 
 exports.getlogout = function(req,res){ 
   if(req.user){
@@ -282,50 +265,17 @@ exports.getlogout = function(req,res){
 
 //this is the users start page
 exports.getuserindex = function(req,res){ //make this the overview?
-  //if(req.session.loggedIn == true){
+  //console.log('req.session.CTE = ' + req.session.CTE);
 
-    console.log('objectID aka userID = ' + req.user._id);//undefined since i never put anything in there
-    console.log('User email = ' + req.user.email);
-    req.session.user = 'user email access is = ' + req.user.email; //temporary line, only for debugging remove once in production
-
-    console.log('URL id = ' + req.params.id);
-  var TeacherUserSchema = mongoose.model('TeacherUserSchema');
-  TeacherUserSchema.findById(req.params.id, function(err, user) {
+  db.GetClassInfo(req.params.id,function(err,classinfo){
     if(!err){
-      var classinfo = user.classroom;
-      console.log('found the user!');
-          res.render('userindex', {title: 'Overview', 
-                             username: req.session.user,
-                             classinfo: classinfo}); //username: is a debug variable, this will have to be removed too.
-
-
-    }//end of !err if
+      res.render('userindex', {title: 'Overview', TestNameError: req.session.CTE, classinfo: classinfo}); 
+    }
     else{
-      console.log('did not find user?!');
-          res.render('userindex', {title: 'Overview', 
-                             username: req.session.user}); //username: is a debug variable, this will have to be removed too.
-
-
-    }//end of !err else
-  });//end of findByID
-
-
-    // res.render('userindex', {title: 'Overview', 
-    //                          username: req.session.user
-    //                          classinfo: classinfo}); //username: is a debug variable, this will have to be removed too.
-  
-
-
-
-//  }//end of session logged in 
-  //else{
-   // console.log('User Is not Logged in, hence will be booted');
-   // res.redirect('/');
- // }//end of else 
-
+      //do something with inablility to find user
+    }
+  })//end of GetClassInfo
 }//end of getuserhome
-
-
 
 
 
@@ -337,6 +287,69 @@ exports.getuserindex = function(req,res){ //make this the overview?
 /*
  * CREATE TESTS
  */
+
+
+//this route is called to create a test only and redirect to /user/#{userID}/EditTest/#{testID}
+exports.postcreatetest = function(req,res) {
+  //grab form variables //req.body //if empty reeturn and do not create test
+  //create test in DB
+  //add the testID to the ActiveTestVariable in TeacherSchema
+  //when it returns redirect to the url above.
+
+  req.body.userID = req.params.id; //need to include user ID so to ActiveTests array
+  if(!req.body.TestName || !req.body.ClassName){
+      if(!req.body.TestName){req.session.CTE = 'IncludeTestName';}
+      //if(!req.body.ClassName){req.session.CTECN = 'IncludeClassName';}
+      res.redirect('back'); //
+    }//end of req.body.TestName if
+  else{
+      req.session.CTE = ''; //since testname was included reset the error in the dom.
+      req.session.CTCN = ''; //since class name was selected 
+    db.CreateTest(req.body, function(err,test){ 
+      if(!err){
+        console.log('the new test ID = ' + test);
+        req.body.testID = test;
+        req.body.userID = req.params.id;
+        db.AddTestToTeacher(req.body, function(saverr, done){
+
+
+        })//end of save to teacher
+      }//end of if
+      else{ //do stuff with err
+        //console.log('error saving = ' + err);
+      }//end of else
+    });//end of CreateTest 
+
+
+  }//end of req.body.Testname Else
+
+res.redirect('/user/' + req.params.id + '/edittest/' + req.body.testID);
+
+}//end of postcreatetest
+
+
+
+exports.getedittest = function(req,res){ //i know the test ID, i should have associated data to the test already
+
+
+
+
+  res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'User Exists in DB'})
+
+  //   TeacherUserSchema.findById(req.params.id, function(err,user){
+  //   if(err){
+  //     console.log('GET USER error = ' + user.Tests._id); 
+  //     res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'DID not find user by ID'})
+  //   }        
+  //   else{
+  //     console.log('GET USER no errror = ' + user.Tests._id);
+  //     res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'User Exists in DB'})
+  //   }
+  // })//end of findbyID
+}//end of getedittest
+
+
+
 
 
 
@@ -403,12 +416,17 @@ exports.postusercreatetest = function(req, res){
 
 
 
+
+
 /*
  * GET USER TESTS
  */
 
 
 exports.getusertests = function(req, res){
+
+
+
   res.render('usertests',{title: 'Tests', wymeditor: true})
 }//end get tests
 

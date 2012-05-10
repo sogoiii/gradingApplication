@@ -5,23 +5,31 @@
         include partials/_SideBar
       .span8
         h1 This is the user index page
-          p #{username}
           .alert.alert-success.alert-block
             a.close(data-dismiss='alert', href='#') ×
             h4.alert-heading Welcome! 
             p Setup you class if you have not! 
             a.btn.btn-success(href='/user/#{userID}/setupclass') Setup
             form.form-horizontal(method='post', action='')
-        fieldset
-          .alert.alert-success.alert-block.control-group.navbar-form.form-inline.well
+          h4 Create Test!
+          - if(typeof(TestNameError) != 'undefined' && TestNameError == 'IncludeTestName')
+            .control-group.error
+              label.control-label Enter Class Name and Select Class
+        fieldset.well.form-inline
+          form.control-group(action='/user/#{userID}/createtest', method='post')
             .span3
-              input.span3(type='text', name='TestName', placeholder = 'Test Name')
+              .control-group
+                .controls
+                  input.span3(type='text', name='TestName', placeholder = 'Enter Test Name') 
             .span2
-              select.span2(name='Class', size='1')
-                - if(typeof(classinfo) != 'undefined')
-                  each val,key in classinfo
-                    - if(key == 'classname')
-                      option #{val}
+              .control-group
+                .controls
+                  select.span2(name='ClassName', size='1')
+                    option Select Class
+                    - if(typeof(classinfo) != 'undefined')
+                      each val,key in classinfo
+                        - if(key == 'classname')
+                          option #{val}
             .span2
               button.btn.btn-success.span2(type='submit') Create Test        
             //- .span2

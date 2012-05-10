@@ -59,45 +59,157 @@ passport.deserializeUser(function(id, done) {
 
 
 
-function escapeHtml(unsafe) {
-  return unsafe
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-}
+function GetWholeTeacherUserByID(userinfo, callback){
+    //userinfo = userid
+    TeacherUsers.findById(userinfo, function(err,user){
+      if(!err){
+        //console.log('foundnd user '+ userinfo);
+        return callback(null,user);
+      }//end of if
+      else {
+        //console.log('did not find user');
+        return callback(err,null);
+      }//end of else
+    })
+  }//end of get Teacher User by ID
 
-
-
-
-
-
-
-
-
-
+function htmlspecialchars(str) {
+ if (typeof(str) == "string") {
+  str = str.replace(/&/g, "&amp;"); /* must do &amp; first */
+  str = str.replace(/"/g, "&quot;");
+  str = str.replace(/'/g, "&#039;");
+  str = str.replace(/</g, "&lt;");
+  str = str.replace(/>/g, "&gt;");
+  }
+ return str;
+ }
 
 
 
 //export DB functions ADD BELOW
-module.exports = {
+//module.exports = {
 
   // initialize DB
-  startup: function(dbToUse) {
+  exports.startup = function(dbToUse) {
     mongoose.connect(dbToUse);
     // Check connection to mongoDB
     mongoose.connection.on('open', function() {
       console.log('We have connected to mongodb');
     }); 
-  },//end of startup 
+  }//end of startup 
 
+
+
+  //create test instance for a specific user 
+  exports.CreateTest = function(userinfo, callback){
+    //put variabels into my newly created test
+    var newTest = new Test({
+      TestName: userinfo.TestName,
+      Class: userinfo.ClassName
+    })
+    newTest.save(function(err){
+      if(err){
+        console.log('did not save test');
+        return callback(err, null);//save error into callback 
+      }//end of if err
+      else{
+        console.log('saved test');
+        return callback(null,newTest.id);
+      }//end of else err
+    })//end of save
+
+  }//end of CreateTest
+
+
+  exports.AddTestToTeacher = function(userinfo, callback){ //seeing if can call a function in here
+    //userinfo = userID, testID
+
+    GetWholeTeacherUserByID(userinfo.userID, function(err,user){
+      if(!err){
+        user.ActiveTests.push(userinfo.testID);
+        user.save(function(saverr){
+          if(!saverr){console.log('saved objectID in ActiveTests')}
+          else{console.log('error adding ObjectID into ActiveTests')}  
+        })//end of save
+      }//end of if
+      else{
+
+      }//end of else
+    })//end of getwholeteacherUserbyID
+  }//end of AddTestToTeacher
+
+
+
+
+  exports.CreateTestAddToTeacher = function(userinfo,callback){ //Ill just keep it as two functions for now
+
+  }//end of CreateTestAddToTeacher
+
+
+
+  // exports.AddTestToTeacher = function(userinfo, callback){//intermediate functions //for testing purposes
+  //   astring = 'whats up in here?'
+  //   var outstring = htmlspecialchars(astring);
+  //   TeacherUsers.findById(userinfo.userID, function(err,user){
+  //     if(!err){
+  //       user.ActiveTests.push(userinfo.testID)
+  //       user.save(function(saverr){
+  //         if(!saverr){
+  //             console.log('saved test to user')
+  //         }
+  //         else{
+  //             console.log('failed to save test to user')
+  //         }
+  //       console.log('found user')
+
+  //       })//end of save
+  //       //return callback(null,user);
+  //     }//end of if
+  //     else {
+  //       console.log('Failed to find user');
+  //       //return callback(err,null);
+  //     }//end of else
+  //   })
+
+  // }//end testtoteacher
+
+
+
+  // exports.GetWholeTeacherUserByID = function(userinfo, callback){
+  //   //userinfo = userid
+  //   TeacherUsers.findByID(userinfo, function(err,user){
+  //     if(!err){
+  //       //console.log('Did not find user '+ userinfo);
+  //       return callback(null,user);
+  //     }//end of if
+  //     else {
+  //       //console.log('Found User ID for GetClassInfo');
+  //       return callback(err,null);
+  //     }//end of else
+  //   })
+  // }//end of get Teacher User by ID
+
+
+
+
+  exports.GetClassInfo =  function(userinfo, callback){
+    TeacherUsers.findById(userinfo, function(err,user){
+        if(err){
+          console.log('Did not find user '+ userinfo);
+          return callback(err,null);
+        }
+        else {
+          //console.log('Found User ID for GetClassInfo');
+          return callback(null,user.classroom);
+        }
+    })//end of findbyID
+  }//end of GetClassInfo
 
 
 
 
   //insert question from the create test page
-  InsertQuestion: function(userinfo, callback){
+  exports.InsertQuestion =  function(userinfo, callback){
     var newQuestion = new Question({
       Questionhtml: userinfo.QuestionHTML,
       CorrectAnswertext: userinfo.CorrectAnswer
@@ -153,13 +265,7 @@ module.exports = {
         
     })//end of findbyID
 
-
-
-
-
-
-
-  }, // end of InsertNewQuestion
+  } // end of InsertNewQuestion
 
 
 
@@ -242,7 +348,7 @@ saveUser: function(userInfo, callback) {
 */
 
 
-}//end module.exports
+//}//end module.exports
 
 
 
