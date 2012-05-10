@@ -305,20 +305,41 @@ exports.postcreatetest = function(req,res) {
   else{
       req.session.CTE = ''; //since testname was included reset the error in the dom.
       req.session.CTCN = ''; //since class name was selected 
-    db.CreateTest(req.body, function(err,test){ 
-      if(!err){
-        console.log('the new test ID = ' + test);
-        req.body.testID = test;
-        req.body.userID = req.params.id;
-        db.AddTestToTeacher(req.body, function(saverr, done){
+
+      // db.CreateTest(req.body, function(err,test){ 
+      //   if(!err){
+      //     console.log('the new test ID = ' + test);
+      //     req.body.testID = test;
+      //     req.body.userID = req.params.id;
+      //     db.AddTestToTeacher(req.body, function(saverr, done){
 
 
-        })//end of save to teacher
-      }//end of if
-      else{ //do stuff with err
-        //console.log('error saving = ' + err);
-      }//end of else
-    });//end of CreateTest 
+      //     })//end of save to teacher
+      //   }//end of if
+      //   else{ //do stuff with err
+      //     //console.log('error saving = ' + err);
+      //   }//end of else
+      // });//end of CreateTest 
+
+      console.log('postcreate = ' + req.body.TestName);
+      db.FindTeacherCreateTestAddAssociateTest(req.body, function(err,teacher){
+
+        console.log('I exited the DB functions what next?')
+
+
+      })//end of find teahcer by ID
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   }//end of req.body.Testname Else

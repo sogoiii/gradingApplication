@@ -73,16 +73,31 @@ function GetWholeTeacherUserByID(userinfo, callback){
     })
   }//end of get Teacher User by ID
 
-function htmlspecialchars(str) {
- if (typeof(str) == "string") {
-  str = str.replace(/&/g, "&amp;"); /* must do &amp; first */
-  str = str.replace(/"/g, "&quot;");
-  str = str.replace(/'/g, "&#039;");
-  str = str.replace(/</g, "&lt;");
-  str = str.replace(/>/g, "&gt;");
-  }
- return str;
- }
+
+
+  function CreateTest(userinfo, pageinfo, callback){ //userinfo is actually the tearcherSchema, pageinfo is from post information
+    //put variabels into my newly created test
+    console.log('Create Test = ' + pageinfo.TestName);
+    var newTest = new Test({
+      TestName: pageinfo.TestName,
+      Class: userinfo.classroom.classname,
+      NumberOfStudents: userinfo.classroom.numofstudents,
+      Gradeyear: userinfo.classroom.gradeyear,
+      Subject: userinfo.classroom.subject
+    })
+    newTest.save(function(err){
+      if(err){
+        console.log('did not save test');
+        console.log(err);
+        return callback(err, null);//save error into callback 
+      }//end of if err
+      else{
+        console.log('saved test');
+        return callback(null,newTest.id);
+      }//end of else err
+    })//end of save
+
+  }//end of CreateTest
 
 
 
@@ -141,9 +156,30 @@ function htmlspecialchars(str) {
 
 
 
-  exports.CreateTestAddToTeacher = function(userinfo,callback){ //Ill just keep it as two functions for now
+  exports.FindTeacherCreateTestAddAssociateTest = function(pageinfo,callback){ //Ill just keep it as two functions for now
+    //find teacher
+    //creat test and add user variables
+    //save test and associate test
 
-  }//end of CreateTestAddToTeacher
+    GetWholeTeacherUserByID(pageinfo.userID, function(err,user){
+      if(!err){
+        CreateTest(user,pageinfo, function(CTerr, testid){ //with user info ill save test, output is the testID
+          if(!CTerr){
+            user.ActiveTests.push(testid);
+            user.save(function(saverr){
+            if(!saverr){console.log('saved objectID in ActiveTests')}
+              else{console.log('error adding ObjectID into ActiveTests')}  
+            })//end of save
+          }//end of !CTerr
+          else{console.log('error saving test')}
+        })//end of Create Test
+      }//end of if !err
+      else{
+
+      }//end of else
+    })//end of getwholeteacherUserbyID
+
+  }//end of FindTeacherCreateTestAddAssociateTest
 
 
 
