@@ -305,69 +305,66 @@ exports.postcreatetest = function(req,res) {
   else{
       req.session.CTE = ''; //since testname was included reset the error in the dom.
       req.session.CTCN = ''; //since class name was selected 
-
-      // db.CreateTest(req.body, function(err,test){ 
-      //   if(!err){
-      //     console.log('the new test ID = ' + test);
-      //     req.body.testID = test;
-      //     req.body.userID = req.params.id;
-      //     db.AddTestToTeacher(req.body, function(saverr, done){
-
-
-      //     })//end of save to teacher
-      //   }//end of if
-      //   else{ //do stuff with err
-      //     //console.log('error saving = ' + err);
-      //   }//end of else
-      // });//end of CreateTest 
-
       console.log('postcreate = ' + req.body.TestName);
       db.FindTeacherCreateTestAddAssociateTest(req.body, function(err,teacher){
-
-        console.log('I exited the DB functions what next?')
-
-
+        if(!err){
+          res.redirect('/user/' + req.params.id + '/edittest/' + req.body.testID);
+        }
+        else{
+          res.redirect('back');
+        }
       })//end of find teahcer by ID
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   }//end of req.body.Testname Else
-
-res.redirect('/user/' + req.params.id + '/edittest/' + req.body.testID);
-
 }//end of postcreatetest
+
+
+function decodeQuestionHtml(Questions){
+  console.log('num of questions = ' + Questions.length);
+  for(i = 0; i<Questions.length; i++){
+    var QuestionDecoded = sanitize(Questions[i].Questionhtml).entityDecode();
+    Questions[i].Questionhtml = QuestionDecoded;
+  }//end of for loop
+  return Questions
+}//end of decodeQuestionHtml
 
 
 
 exports.getedittest = function(req,res){ //i know the test ID, i should have associated data to the test already
-
-
-
-
-  res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'User Exists in DB'})
-
-  //   TeacherUserSchema.findById(req.params.id, function(err,user){
-  //   if(err){
-  //     console.log('GET USER error = ' + user.Tests._id); 
-  //     res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'DID not find user by ID'})
-  //   }        
-  //   else{
-  //     console.log('GET USER no errror = ' + user.Tests._id);
-  //     res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'User Exists in DB'})
-  //   }
-  // })//end of findbyID
+  //Check test and grab all questions to be displayed
+  db.ReturnTestQuestions(req.params.testid, function(err,results){
+    if(!err){
+      results = decodeQuestionHtml(results); //i encoded the html so i can now decode it. (SERCURITY ISSUE POSSIBLE!!!!)
+      res.render('edittest',{title: 'Edit Test', wymeditor: true, message: 'Found Questions: Look Below', Questions: results})
+    }//if
+    else{
+      res.render('edittest',{title: 'Edit Test', wymeditor: true, message: 'Failed to find questions'})
+    }//end of else
+  });//end of ReturnTestQuestions
 }//end of getedittest
+
+
+exports.putedittest = function(req,res){//user is looking at test and adds questions to test
+  //Check all variables exist
+  //sanitize and encode variables
+  //Create Question and embedd into test
+
+  console.log('inside put edit test!!')
+  req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
+  req.sanitize('QuestionHTML').entityEncode(); //entitiy.Decode() for dispalying later
+  req.body.testID = req.params.testid;
+  db.InsertQuestionToTest(req.body, function(err,done){ 
+    if(!err){
+      res.redirect('/user/' + req.params.id +'/edittest/' + req.params.testid);
+    }//end of if
+    else{
+      res.redirect('/user/' + req.params.id +'/edittest/' + req.params.testid);
+    }//end of else
+  });//end of insertQuestion
+
+}//end of putedittest
+
+
+
 
 
 

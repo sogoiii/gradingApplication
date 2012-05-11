@@ -80,8 +80,8 @@ app.post('/user/:id/setupclass', ensureAuthenticated, RestirctAccess, routes.pos
 app.get('/user/:id', ensureAuthenticated, RestirctAccess, routes.getuserindex);
 
 app.post('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.postcreatetest);
-app.get('/user/:id/edittest/:testid', ensureAuthenticated, RestirctAccess, routes.getedittest )
-
+app.get('/user/:id/edittest/:testid', ensureAuthenticated, RestirctAccess, routes.getedittest);
+app.put('/user/:id/edittest/:testid', ensureAuthenticated, RestirctAccess, routes.putedittest);
 // app.get('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.getusercreatetest);
 // app.post('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.postusercreatetest);
 

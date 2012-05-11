@@ -244,6 +244,77 @@ function GetWholeTeacherUserByID(userinfo, callback){
 
 
 
+exports.InsertQuestionToTest = function(userinfo, callback){//user put a question into a specific test
+  //userinfo.testID 
+  var newQuestion = new Question({
+    Questionhtml: userinfo.QuestionHTML,
+    CorrectAnswertext: userinfo.CorrectAnswer
+  })//end of question
+
+  //create wrong answers
+  var WA1 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer1})//wrong answer 1
+  var WA2 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer2})//wrong answer 2
+  var WA3 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer3})//wrong answer 3
+  newQuestion.WrongAnswers.push(WA1);
+  newQuestion.WrongAnswers.push(WA2);
+  newQuestion.WrongAnswers.push(WA3);
+
+  newQuestion.save(function(Qerr){
+    if(!Qerr){
+      console.log('Saved Single Question Instance')
+      Test.findById(userinfo.testID,function(err,test){
+        if(!err){
+          test.Questions.push(newQuestion);
+          test.save(function(saverr){
+            if(!saverr){
+              console.log('saved question to test instance');
+              callback(null,test);
+            }//end of if !saverr
+            else{
+              callback(saverr, null);
+              console.log('Failed saving question to test instance');
+            }//end of else
+          })//end of save question to test
+        }//end of if !err
+        else{
+          callback(err,null);
+          console.log('Could not find the testID');
+        }//end of else
+      })//end of test.findbyid
+    }
+    else{
+      callback(Qerr,null);
+      console.log('Error Saving Single Question Instance')
+    }
+  })//end of newQuestion.save
+
+
+}//end of InsertQuestionToTest
+
+
+
+
+
+exports.ReturnTestQuestions = function(userinfo, callback){
+  //userinfo = req.params.testid
+
+  Test.findById(userinfo, function(err,questions){
+    if(!err){
+      console.log('grabed all questions for this test')
+      //console.log('questions = ' + questions.Questions)
+      callback(null,questions.Questions);
+    }//end of if
+    else{
+      console.log('could not find testID')
+      callback(err,null);
+    }//end of else
+  })//end of find by id
+}//end of ReturnTestQuestions
+
+
+
+
+
   //insert question from the create test page
   exports.InsertQuestion =  function(userinfo, callback){
     var newQuestion = new Question({
@@ -261,7 +332,7 @@ function GetWholeTeacherUserByID(userinfo, callback){
 
     // newQuestion.save(function(err){
     //   if(err){
-    //     console.log('Save Error: NewQuetion');
+    //     console.log('Save Error: NewQuestion');
     //     console.log('QHTML = ' + err.errors.Questionhtml)
     //     console.log('CAT = ' + err.errors.CorrectAnswertext)
     //     //callback(err,done);//return back to the routes index.js with err and done 
