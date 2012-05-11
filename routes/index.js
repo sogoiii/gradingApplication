@@ -281,11 +281,8 @@ exports.getuserindex = function(req,res){ //make this the overview?
 
 
 
-
-
-
 /*
- * CREATE TESTS
+ * CREATE TEST
  */
 
 
@@ -296,8 +293,10 @@ exports.postcreatetest = function(req,res) {
   //add the testID to the ActiveTestVariable in TeacherSchema
   //when it returns redirect to the url above.
 
+
+
   req.body.userID = req.params.id; //need to include user ID so to ActiveTests array
-  if(!req.body.TestName || !req.body.ClassName){
+  if(!req.body.TestName || req.body.ClassName == 'Select Class'){
       if(!req.body.TestName){req.session.CTE = 'IncludeTestName';}
       //if(!req.body.ClassName){req.session.CTECN = 'IncludeClassName';}
       res.redirect('back'); //
@@ -311,7 +310,7 @@ exports.postcreatetest = function(req,res) {
           res.redirect('/user/' + req.params.id + '/edittest/' + req.body.testID);
         }
         else{
-          res.redirect('back');
+          res.redirect('/user/' + req.params.id);
         }
       })//end of find teahcer by ID
   }//end of req.body.Testname Else
@@ -441,7 +440,18 @@ exports.postusercreatetest = function(req, res){
  */
 
 
-exports.getusertests = function(req, res){
+exports.getusertests = function(req, res){ //i want this to show all current and older tests 
+
+  db.GetAllTests(req.params.id, function(err, done){
+    if(!err){
+      console.log('test returned');
+      //console.log(done)
+      console.log(done[0][0].TestName)
+    }//end of if
+    else{
+      console.log('get all tests error')
+    }//end of else
+  })//end of GetAllTests
 
 
 

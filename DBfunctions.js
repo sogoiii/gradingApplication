@@ -167,15 +167,25 @@ function GetWholeTeacherUserByID(userinfo, callback){
           if(!CTerr){
             user.ActiveTests.push(testid);
             user.save(function(saverr){
-            if(!saverr){console.log('saved objectID in ActiveTests')}
-              else{console.log('error adding ObjectID into ActiveTests')}  
+            if(!saverr){
+              console.log('saved objectID in ActiveTests')
+              callback(null, user)
+            }
+            else{
+              console.log('error adding ObjectID into ActiveTests')
+              callback(saverr, null)
+            }  
             })//end of save
           }//end of !CTerr
-          else{console.log('error saving test')}
+          else{
+            console.log('error saving test')
+            callback(CTerr, null)
+          }
         })//end of Create Test
       }//end of if !err
-      else{
-
+      else{ 
+        console.log('could not find user');
+        callback(err, null)
       }//end of else
     })//end of getwholeteacherUserbyID
 
@@ -213,7 +223,7 @@ function GetWholeTeacherUserByID(userinfo, callback){
 
   // exports.GetWholeTeacherUserByID = function(userinfo, callback){
   //   //userinfo = userid
-  //   TeacherUsers.findByID(userinfo, function(err,user){
+  //   TeacherUsers.findById(userinfo, function(err,user){
   //     if(!err){
   //       //console.log('Did not find user '+ userinfo);
   //       return callback(null,user);
@@ -224,6 +234,59 @@ function GetWholeTeacherUserByID(userinfo, callback){
   //     }//end of else
   //   })
   // }//end of get Teacher User by ID
+
+
+
+function JSONToArray(theJSON){
+
+
+
+
+}//end of JSONToArray
+
+
+
+
+ exports.GetAllTests = function(userinfo, callback){ //userinfo is the Teacher ID
+    //find the user
+    //find & aggergate every test linked to this user into a variable
+        var AllTests = ["4fab3cc9f2cdd40000000003" , 
+     "4fab4547f2cdd40000000016" , 
+     "4fab48cceac87a000000003f" ];
+
+    
+
+    
+     //console.log('jasontext = ' + jasontext)
+
+     // AllTests.forEach(function(aerr){
+     //  console.log('test')
+     // })
+     //  console.log('All Tests = ' + AllTests)
+     AllTests = [];
+     var count = 0;
+    TeacherUsers.find({_id: userinfo}, {'ActiveTests': 1}).execFind(function(err, AT) {
+      AT[0].ActiveTests.forEach(function(element) {  
+        //console.warn('active tests element = ' + element)
+        //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
+        Test.find({_id: element}).execFind(function(secerr, atest){
+          AllTests.push(atest);
+          //console.warn('size of all tests found = ' + AllTests.length)
+          if(AllTests.length == AT[0].ActiveTests.length){
+            callback(null, AllTests);
+          }
+        })//end second find
+      })
+    })//end of find teacherusers
+
+
+
+  }//end of GetAllTests
+
+
+
+
+
 
 
 
