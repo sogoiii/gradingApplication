@@ -5,11 +5,11 @@
         include partials/_SideBar
       .span8
         h1 This is the user index page
-          .alert.alert-success.alert-block
+          .alert.alert-warning.alert-block
             a.close(data-dismiss='alert', href='#') ×
             h4.alert-heading Welcome! 
             p Setup you class if you have not! 
-            a.btn.btn-success(href='/user/#{userID}/setupclass') Setup
+            a.btn.btn-warning(href='/user/#{userID}/setupclass') Setup
             form.form-horizontal(method='post', action='')
           h4 Create Test!
           - if(typeof(TestNameError) != 'undefined' && TestNameError == 'IncludeTestName')

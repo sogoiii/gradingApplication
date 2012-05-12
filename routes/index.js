@@ -305,9 +305,9 @@ exports.postcreatetest = function(req,res) {
       req.session.CTE = ''; //since testname was included reset the error in the dom.
       req.session.CTCN = ''; //since class name was selected 
       console.log('postcreate = ' + req.body.TestName);
-      db.FindTeacherCreateTestAddAssociateTest(req.body, function(err,teacher){
+      db.FindTeacherCreateTestAddAssociateTest(req.body, function(err,testid){
         if(!err){
-          res.redirect('/user/' + req.params.id + '/edittest/' + req.body.testID);
+          res.redirect('/user/' + req.params.id + '/edittest/' + testid);
         }
         else{
           res.redirect('/user/' + req.params.id);
@@ -444,18 +444,22 @@ exports.getusertests = function(req, res){ //i want this to show all current and
 
   db.GetAllTests(req.params.id, function(err, done){
     if(!err){
-      console.log('test returned');
-      //console.log(done)
-      console.log(done[0][0].TestName)
+       //console.log('Done returned');
+       console.log(done)
+      // console.log(done[1].TestName)
+      // console.log(done[2].TestName)
+      res.render('usertests',{title: 'Tests', wymeditor: true, AllTests: done})
+
     }//end of if
     else{
       console.log('get all tests error')
+      res.render('usertests',{title: 'Tests', wymeditor: true})
     }//end of else
   })//end of GetAllTests
 
 
 
-  res.render('usertests',{title: 'Tests', wymeditor: true})
+ // res.render('usertests',{title: 'Tests', wymeditor: true})
 }//end get tests
 
 

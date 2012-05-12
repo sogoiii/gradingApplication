@@ -6,6 +6,30 @@
 			.span8
 				h1 This page will return all existing tests 
 				p #{title}
+					- if(typeof(AllTests) != 'undefined')
+						each test in AllTests
+							.alert.alert-success.alert-block
+								.row-fluid
+									.row-fluid
+										.span6
+											h4.alert-heading #{test.Class} 
+											p #{test.TestName}
+										.span6
+											.btn-group.pull-right
+												button.btn.btn-success.dropdown-toggle(data-toggle='dropdown')
+													| Actions
+													.span.caret
+												ul.dropdown-menu
+													li 
+														a(href='#') Upload
+													li
+														a(href='#') Review
+													li.divider
+													li
+														a(href='#') Edit		
+
+											
+
 			.span2 
 				h3 Mearly test content
 				p #{title}

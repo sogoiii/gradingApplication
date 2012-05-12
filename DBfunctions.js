@@ -169,7 +169,7 @@ function GetWholeTeacherUserByID(userinfo, callback){
             user.save(function(saverr){
             if(!saverr){
               console.log('saved objectID in ActiveTests')
-              callback(null, user)
+              callback(null,testid)
             }
             else{
               console.log('error adding ObjectID into ActiveTests')
@@ -250,37 +250,26 @@ function JSONToArray(theJSON){
  exports.GetAllTests = function(userinfo, callback){ //userinfo is the Teacher ID
     //find the user
     //find & aggergate every test linked to this user into a variable
-        var AllTests = ["4fab3cc9f2cdd40000000003" , 
-     "4fab4547f2cdd40000000016" , 
-     "4fab48cceac87a000000003f" ];
-
-    
-
-    
-     //console.log('jasontext = ' + jasontext)
-
-     // AllTests.forEach(function(aerr){
-     //  console.log('test')
-     // })
-     //  console.log('All Tests = ' + AllTests)
-     AllTests = [];
-     var count = 0;
+    var AllTests = [];
     TeacherUsers.find({_id: userinfo}, {'ActiveTests': 1}).execFind(function(err, AT) {
-      AT[0].ActiveTests.forEach(function(element) {  
-        //console.warn('active tests element = ' + element)
-        //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
-        Test.find({_id: element}).execFind(function(secerr, atest){
-          AllTests.push(atest);
-          //console.warn('size of all tests found = ' + AllTests.length)
-          if(AllTests.length == AT[0].ActiveTests.length){
-            callback(null, AllTests);
-          }
-        })//end second find
-      })
+      if(!err){
+        AT[0].ActiveTests.forEach(function(element) {  
+            //console.warn('active tests element = ' + element)
+            //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
+            Test.find({_id: element}).execFind(function(secerr, atest){
+              //console.log('found test = ' + atest)
+              AllTests.push(atest[0]);
+              //console.warn('size of all tests found = ' + AllTests.length)
+              if(AllTests.length == AT[0].ActiveTests.length){
+                callback(null, AllTests);
+              }
+            })//end second find
+        })//end of ForEach AT[0]
+      }//end of if !err
+      else{
+        callback(err,null);
+      }//end of else
     })//end of find teacherusers
-
-
-
   }//end of GetAllTests
 
 
