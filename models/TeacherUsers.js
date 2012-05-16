@@ -25,7 +25,7 @@ var TeacherUserSchema = new Schema({
       classname: {type: String },
       numofstudents: Number
     },
-    ActiveTests: [{type: Schema.ObjectId}],
+    ActiveTests: [{type: Schema.ObjectId, ref: 'TestSchema'}],
     Tests: [TestSchema],
     UserCreated: {type: Date, default: Date.now}
   });

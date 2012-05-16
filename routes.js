@@ -82,6 +82,8 @@ app.get('/user/:id', ensureAuthenticated, RestirctAccess, routes.getuserindex);
 app.post('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.postcreatetest);
 app.get('/user/:id/edittest/:testid', ensureAuthenticated, RestirctAccess, routes.getedittest);
 app.put('/user/:id/edittest/:testid', ensureAuthenticated, RestirctAccess, routes.putedittest);
+app.del('/user/:id/testdelete/:testid', ensureAuthenticated, RestirctAccess, routes.deltest);
+
 // app.get('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.getusercreatetest);
 // app.post('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.postusercreatetest);
 
@@ -126,6 +128,11 @@ app.get('/users', routes.getusers); //test version
 app.get('/loginfailed', routes.loginfailed);
 app.get('/userlist', ensureAuthenticated,  routes.userlist);
 app.get('/user/:id/overview', ensureAuthenticated, RestirctAccess, routes.getuseroverview);
+
+app.del('/user/testajaxpost', routes.testajaxpost)
+app.post('/user/testajaxpost', routes.testajaxpost2)
+
+
 
 }
 

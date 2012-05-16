@@ -1,1 +1,94 @@
 != renderScriptsTags(myscripts)
+script
+	$(document).ready(function () {
+		// $('#myModal').bind('show', function () {
+		// document.getElementById("xlInput").value = document.title;
+		// });
+		$('#myModal').on('show', function (event) {
+			var name = $(this).data('modal').options.person
+			$('.person').html(name); 
+			//$('#myModal').find('.alink').text('newlinktest')
+			//$(this).find('.person').html(name)
+		});
+		// $('#myID').click(function(e){
+		// 	alert('called from click functions')
+		// })//end of uniqID
+		// jQuery('#myID').click(function(event){
+		// 	alert()
+		// })
+		// $('a#myID').click(function(event){
+		// 	event.preventDefault();
+		// 	var url = $(this).attr('href');
+		// 	var confirm_box = confirm('Are you sure you want to click this link?');
+		// 	if (confirm_box) {
+		// 		window.location = url;
+		// 	}
+		// })//end of a#myID
+		$('#modal-from-dom').bind('show', function() {
+			var id = $(this).data('id'),
+			removeBtn = $(this).find('.danger'),
+			href = removeBtn.attr('href');
+			removeBtn.attr('href', href.replace(/ref=\\d*/, '&ref=' + id));
+		})
+		$('.confirm-delete').click(function(e) {
+			e.preventDefault();
+			var id = $(this).data('id');
+			$('#modal-from-dom').data('id', id).modal('show');
+		});
+		});//end of ready function
+		// function closeDialog() {
+		// $('#myModal').modal('hide');
+		// };
+		// var id;
+		// function openModal() {
+		// $('#myModal').modal('show');
+		// }
+		// function DoAction(id){
+		// 	alert(id)
+		// }
+		// function okClicked() {
+		// document.title = document.getElementById("xlInput").value;
+		// closeDialog();
+		// }
+		// function sendAjax(id){
+		// $.ajax({
+		// url: '/user/testajaxpost',
+		// type: 'DELETE',
+		// data: id,
+		// cache: false,
+		// success: function(html){
+		// 	//alert('deleted test')
+		// 	window.location.reload()
+		// },
+		// error: function(html){
+		// 	//alert('error deleting, try again later')
+		// 	location.reload()
+		// }
+		// })
+		// };
+		// $('.abutton').click()
+		// function testalert(){
+		// 	alert('a simple test alert only')
+		// }
+		// function sendform(){
+		// 	var element = $(this),
+		// 		form = $('<form></form>');
+		// 	form.attr({
+		// 		method: 'POST',
+		// 		action: '/user/testajaxpost'
+		// 		})
+		// 	.end()
+		// 	.submit();
+		// }
+		// function sendpostonly(){
+		// 	$.post('/user/testajaxpost',{
+		// 		stuff: {'foo' : 'bar'}
+		// 		}, callback,'json')
+		// }
+		// function ConfirmDelete(){
+		// 	var url = find().attr('href');
+		// 	var confirm_box = confirm('Are you sure you want to click this link?' + url);
+		// 	if (confirm_box) {
+		// 		window.location = url;
+		// 	}
+		// }

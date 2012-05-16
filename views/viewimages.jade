@@ -235,47 +235,47 @@
 
 
 
-script
-    $(document).ready(function () {
-      jQuery(function() {
-      jQuery('.wymeditor').wymeditor({
-        containersHtml: "",
-        classesHtml: "",
-        toolsItems:[
-          {'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'},
-          {'name': 'Italic', 'title': 'Emphasis', 'css': 'wym_tools_emphasis'},
-          {'name': 'Superscript', 'title': 'Superscript', 'css': 'wym_tools_superscript'},
-          {'name': 'Subscript', 'title': 'Subscript', 'css': 'wym_tools_subscript'},
-          {'name': 'InsertOrderedList', 'title': 'Ordered_List', 'css': 'wym_tools_ordered_list'},
-          {'name': 'InsertUnorderedList', 'title': 'Unordered_List', 'css': 'wym_tools_unordered_list'},
-        ]
-      });
-      });
-      });
+//- script
+//-     $(document).ready(function () {
+//-       jQuery(function() {
+//-       jQuery('.wymeditor').wymeditor({
+//-         containersHtml: "",
+//-         classesHtml: "",
+//-         toolsItems:[
+//-           {'name': 'Bold', 'title': 'Strong', 'css': 'wym_tools_strong'},
+//-           {'name': 'Italic', 'title': 'Emphasis', 'css': 'wym_tools_emphasis'},
+//-           {'name': 'Superscript', 'title': 'Superscript', 'css': 'wym_tools_superscript'},
+//-           {'name': 'Subscript', 'title': 'Subscript', 'css': 'wym_tools_subscript'},
+//-           {'name': 'InsertOrderedList', 'title': 'Ordered_List', 'css': 'wym_tools_ordered_list'},
+//-           {'name': 'InsertUnorderedList', 'title': 'Unordered_List', 'css': 'wym_tools_unordered_list'},
+//-         ]
+//-       });
+//-       });
+//-       });
 
 
-!=partial('partials/_TopBarLoggedIn')
-.container-fluid
-  .row-fluid
-    .span2
-      h1= title
-    .span8
-      p Welcome to #{title}
-      form(method='post', action='')
-        textarea.wymeditor(name='textareabox')
-        input.btn.wymupdate(type='submit')
+//- !=partial('partials/_TopBarLoggedIn')
+//- .container-fluid
+//-   .row-fluid
+//-     .span2
+//-       h1= title
+//-     .span8
+//-       p Welcome to #{title}
+//-       form(method='post', action='')
+//-         textarea.wymeditor(name='textareabox')
+//-         input.btn.wymupdate(type='submit')
 
 
-      .alert.alert-error.alert-block
-        a.close(data-dismiss='alert', href='#') ×
-        h4.alert-heading Warning!
-        p Best check yo self, you're not...
+//-       .alert.alert-error.alert-block
+//-         a.close(data-dismiss='alert', href='#') ×
+//-         h4.alert-heading Warning!
+//-         p Best check yo self, you're not...
 
-      .alert.alert-error.alert-block.fade.in 
-        a.close(data-dismiss='alert') ×
-        h4.alert-heading Complete Setup
-        p Create your class, then you can start!
-        button.btn.btn-danger(href='#') makethisred 
+//-       .alert.alert-error.alert-block.fade.in 
+//-         a.close(data-dismiss='alert') ×
+//-         h4.alert-heading Complete Setup
+//-         p Create your class, then you can start!
+//-         button.btn.btn-danger(href='#') makethisred 
 
 
 
@@ -299,21 +299,25 @@ script
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+!=partial('partials/_TopBarLoggedIn')
+.container-fluid
+  .row-fluid
+    .span2
+      h1= title
+    .span8
+      p Welcome to #{title}
+      h2 Live demo
+        p Toggle a modal via javascript by clicking the button below. It will slide down and fade in from the top of the page.
+          #myModal.modal.hide.fade
+            .modal-header
+              button.close(data-dismiss='modal') ×
+              h3 Are You Sure You Want Delete This Test?
+            .modal-body
+              p You will have to recreate it to bring it back.
+            .modal-footer
+              form.control-group(action='/user/#{userID}/testdelete', method='post')
+                button.btn(data-dismiss='modal') No!
+                input(type='hidden', name='_method', value='delete')
+                button.btn.btn-primary(type='submit') Yes Delete
+          a.btn.btn-primary.btn-large(data-toggle='modal', href='#myModal') Launch demo modal
+        

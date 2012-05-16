@@ -445,15 +445,15 @@ exports.getusertests = function(req, res){ //i want this to show all current and
   db.GetAllTests(req.params.id, function(err, done){
     if(!err){
        //console.log('Done returned');
-       console.log(done)
+       //console.log('tests function returned = ' + done)
       // console.log(done[1].TestName)
       // console.log(done[2].TestName)
-      res.render('usertests',{title: 'Tests', wymeditor: true, AllTests: done})
+      res.render('usertests',{title: 'Tests', AllTests: done})
 
     }//end of if
     else{
       console.log('get all tests error')
-      res.render('usertests',{title: 'Tests', wymeditor: true})
+      res.render('usertests',{title: 'Tests'})
     }//end of else
   })//end of GetAllTests
 
@@ -461,6 +461,22 @@ exports.getusertests = function(req, res){ //i want this to show all current and
 
  // res.render('usertests',{title: 'Tests', wymeditor: true})
 }//end get tests
+
+
+/*
+ * DEL Specific USER Test
+ */
+
+
+
+exports.deltest = function(req,res){
+
+  console.log('test to be deleted = ' + req.params.testid)
+
+  res.redirect('back');
+
+}//end of deltest
+
 
 
 
@@ -643,6 +659,18 @@ exports.getuseroverview = function(req, res){
 }//end get overview
 
 
+exports.testajaxpost = function(req,res){ //note to self: if this is from an ajax call, the render or redirect will not work
+  console.log('testajax was called from client')
+  //console.log('the test id i got was = ' + req.params.data)
+  //res.render("viewimages", { title: "View Images" });
+  //res.redirect('/about', { title: 'About'})
+}
+
+exports.testajaxpost2 = function(req,res){
+  console.log('testajax POST VERSION')
+  //res.render("viewimages", { title: "View Images" });
+  //res.redirect('/about', { title: 'About'})
+}
 
 
 
