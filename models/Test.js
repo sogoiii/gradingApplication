@@ -18,8 +18,8 @@ var TestSchema = new Schema({
 	Gradeyear: {type: Number}, //this could be a string becaue countries have primary and secondary without levels in between
 	Subject: {type: String},
 	Class: {type: String},
-	Teacheremail: {type: Email}
-	//TestCreated: {type: Date, default: Date.now}
+	Teacheremail: {type: Email},
+	TestCreated: {type: Date, default: Date.now}
 
 
 });

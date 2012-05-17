@@ -6,12 +6,14 @@
 	.modal-body
 		p.person old person text that i should not see EVER EVER EVER
 		a.btn(href='something') .person
+		a.testid(href='linktotestwithtestid') testinformation that should not be seen
 		a.alink(href='alink') alink
 	.modal-footer
-		form.control-group(action='/user/#{userID}/testdelete', method='post')
-		button.btn(data-dismiss='modal') No!
-		input(type='hidden', name='_method', value='delete')
-		button.btn.btn-primary(type='submit') Yes Delete
+		form.confirmdelete.control-group(action='', method='post')
+			button.btn(data-dismiss='modal') No!
+			input(type='hidden', name='_method', value='delete')
+			input.hiddentest(type='hidden', name='testtodelete')
+			button.btn.btn-primary(type='submit') Yes Delete
 
 #modal-from-dom.modal.hide.fade
 	.modal-header
@@ -54,140 +56,14 @@
 													li 
 														a(href='/user/#{userID}/edittest/#{test._id}') Edit
 													li.divider
-													form(action='/user/#{userID}/testdelete/#{test._id}', method='post')
-														li
-															//- a(data-person='Zim', data-toggle='modal', data-target='#myModal') Launch demo modal
-															//- a(data-toggle='modal', data-person='Zim', onclick='DoAction(\'#{test._id}\');') Launch demo modal
-															//- #myModal.modal.hide.fade	
-															//- 	.modal-header
-															//- 		button.close(data-dismiss='modal') ×
-															//- 		h3 Are You Sure You Want Delete This Test?
-															//- 	.modal-body
-															//- 		p You will have to recreate it to bring it back.	
-															//- 	.modal-footer
-															//- 		form.control-group(action='/user/#{userID}/testdelete/#{test._id}', method='post')
-															//- 		button.btn(data-dismiss='modal') No!
-															//- 		input(type='hidden', name='_method', value='delete')
-															//- 		button.btn.btn-primary(type='submit') Yes Delete
-															//a(data-toggle='modal', onclick='openModal();') Delete Test	
+													li
+														a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#myModal') Delete Test
 															
-															input(type='hidden', name='_method', value='delete')
-															input#submit(type='submit') Submit
-															a#uniqID(onclick = 'sendAjax(\'#{test._id}\');') sendAjax
-															a#myID(href='#', href'http://www.grimmdude.com/contact/') myID test
-															a(onclick = 'sendform()', href='#') sendform()
-															a(onclick = 'sendpostonly()') sendpostonly()
-															a#fire(href='#', title='submit form') Fire
-												button.btn.btn-danger(onclick='ConfirmDelete()', href='areftoaplace') Delete Test			
-
-
- 
-
-											
-
 			.span2 
 				h3 Mearly test content
 				p #{title}
-				a.confirm-delete(href='#', data-id='23') Delete
-				br
-				a.confirm-delete(href='#', data-id='54') Delete
-				br
-				a(data-person='Zim', data-toggle='modal', data-target='#myModal') Zim LInk
-				br
-				a(data-person='Dib', data-toggle='modal', data-target='#myModal') Dib LInk
 
-//- script
-//- 	$(document).ready(function () {
-//- 		// $('#myModal').bind('show', function () {
-//- 		// document.getElementById("xlInput").value = document.title;
-//- 		// });
-//- 		// $('#myModal').on('show', function (event) {
-//- 		// 	name = $(this).data('modal').options.person
-//- 		// 	$(this).find('p').replaceWith('<span class='red'>Hello <b>Again</b></span>')
-//- 		// });
-//- 		// $('#myID').click(function(e){
-//- 		// 	alert('called from click functions')
-//- 		// })//end of uniqID
-//- 		// jQuery('#myID').click(function(event){
-//- 		// 	alert()
-//- 		// })
-//- 		// $('a#myID').click(function(event){
-//- 		// 	event.preventDefault();
-//- 		// 	var url = $(this).attr('href');
-//- 		// 	var confirm_box = confirm('Are you sure you want to click this link?');
-//- 		// 	if (confirm_box) {
-//- 		// 		window.location = url;
-//- 		// 	}
-//- 		// })//end of a#myID
-//- 		$('#modal-from-dom').bind('show', function() {
-//- 		var id = $(this).data('id'),
-//- 		removeBtn = $(this).find('.danger'),
-//- 		href = removeBtn.attr('href');
-//- 		removeBtn.attr('href', href.replace(/&ref=\\d*/, '&ref=' + id));
-//- 		})
-//- 		.modal({ backdrop: true });
-//- 		$('.confirm-delete').click(function(e) {
-//- 		e.preventDefault();
-//- 		var id = $(this).data('id');
-//- 		$('#modal-from-dom').data('id', id).modal('show');
-//- 		});
-//- 		});//end of ready function
-//- 		function closeDialog() {
-//- 		$('#myModal').modal('hide');
-//- 		};
-//- 		var id;
-//- 		function openModal() {
-//- 		$('#myModal').modal('show');
-//- 		}
-//- 		function DoAction(id){
-//- 			alert(id)
-//- 		}
-//- 		function okClicked() {
-//- 		document.title = document.getElementById("xlInput").value;
-//- 		closeDialog();
-//- 		}
-//- 		function sendAjax(id){
-//- 		$.ajax({
-//- 		url: '/user/testajaxpost',
-//- 		type: 'DELETE',
-//- 		data: id,
-//- 		cache: false,
-//- 		success: function(html){
-//- 			//alert('deleted test')
-//- 			window.location.reload()
-//- 		},
-//- 		error: function(html){
-//- 			//alert('error deleting, try again later')
-//- 			location.reload()
-//- 		}
-//- 		})
-//- 		};
-//- 		$('.abutton').click()
-//- 		function testalert(){
-//- 			alert('a simple test alert only')
-//- 		}
-//- 		function sendform(){
-//- 			var element = $(this),
-//- 				form = $('<form></form>');
-//- 			form.attr({
-//- 				method: 'POST',
-//- 				action: '/user/testajaxpost'
-//- 				})
-//- 			.end()
-//- 			.submit();
-//- 		}
-//- 		function sendpostonly(){
-//- 			$.post('/user/testajaxpost',{
-//- 				stuff: {'foo' : 'bar'}
-//- 				}, callback,'json')
-//- 		}
-//- 		function ConfirmDelete(){
-//- 			var url = find().attr('href');
-//- 			var confirm_box = confirm('Are you sure you want to click this link?' + url);
-//- 			if (confirm_box) {
-//- 				window.location = url;
-//- 			}
-//- 		}
+
 
 
 

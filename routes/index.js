@@ -128,38 +128,21 @@ exports.postregister2 = function(req, res){
 
 
 exports.getsetup = function(req,res){
-  console.log('req.url = ' + req.url)
+  //console.log('req.url = ' + req.url)
   res.render('setupclass', {title: 'Class Setup', userID: req.params.id})
 }//end of getsetup
 
 
 exports.postsetup = function(req,res){
 
-  //first check if the inputs are valid
-  // var errors = [];
-  // req.onValidationError(function(msg) {
-  //     //res.render('signup', { error: msg });
-  //     errors.push(msg);
-  // });
-
-  // var errors = [];
-  // var setError = function(msg) {
-  //   console.log('Validation error: ' + msg);
-  //   errors.push(msg);
-  // }
-  // req.onValidationError(setError); //this line must be above the assert
-  
+  //first check if the inputs are valid  
   req.assert('ClassName', 'Class Name can only accepts alphanumeric');//.regex(/^[a-zA-Z0-9 -]$/i); //classname
   req.assert('ClassGrade', 'Class Grade only accepts numbers').isInt(); //grade
   req.assert('ClassSubject', 'Class Subject only accepts alphanumeric ');//.regex(/^[a-zA-Z0-9 -]$/i); //subject
   req.assert('NumOfStudents', 'Number of Students only accepts numbers').isInt(); //grade
   
-
-  ////testing validation //the firsrt variable is the name of the field in the jade file
-  // //req.check('NumOfStudents', 'Numbers Only').isInt(); //grade //test line
-  // // //version 1 //if erros.lenght is unefiend, then i get errors. need to nest it in a check
   var errors = req.validationErrors();
-  console.log('error lenght = ' + errors.length)
+  //console.log('error lenght = ' + errors.length)
   if(errors.length){
      console.log('errors = ' + errors[0].param);
     // console.log('errors = ' + errors[0].msg);  
@@ -170,55 +153,18 @@ exports.postsetup = function(req,res){
         message: req.flash('myerror')
       });
   }//end of if
-
-
-  // //version 2 
-  // var mappedErrors = req.validationErrors(true);
-  // console.log('error lenght = ' + mappedErrors.length)
-  // if(mappedErrors.length){
-  //   console.log('errors = ' + mappedErrors.NumOfStudents.param);
-  //   console.log('errors = ' + mappedErrors.NumOfStudents.msg);  
-  //   console.log('errors = ' + mappedErrors.NumOfStudents.value);
-  //   res.render('setupclass', {
-  //       title: "Class Setup",
-  //       classes: user,
-  //       userID: req.params.id,
-  //       message: req.flash('myerror')
-  //     });
-
-  // }//end of if
-
-
-
-
-
   else {
   //inputs are valid, hence i can now add them into the DB
-  var TeacherUserSchema = mongoose.model('TeacherUserSchema');
-  TeacherUserSchema.findById(req.params.id, function(err, user) {
-        //making my modifications/updates to the document found
-        user.classroom.subject = req.body.ClassSubject;
-        user.classroom.gradeyear = req.body.ClassGrade;
-        user.classroom.classname = req.body.ClassName;
-        user.classroom.numofstudents = req.body.NumOfStudents;
-        //save the changes and get errors
-        user.save(function(err){
-          if(err)
-              console.log('Save Error: ClassSetup = ' + req.params.id)
-          else
-              console.log('saved the classroom data')
-        });//end of save
-
-        res.render('setupclass', {
-        title: "Class Setup",
-        classes: user,
-        message: req.flash('myerror')
-      });
-    });//end of findby ID
-
+    db.SetupAClass(userinfo.userid, function(err, result){
+      if(!err){
+        res.redirect('/user/' + req.params.id)
+      }//end of !err
+      else{
+        res.redirect('/about/')
+      }//end of !err else
+    })
   }//end of else
 
-  //res.render('setupclass', {title: 'Class Setup', userID: req.params.id})
 }//end of postsetup
 
 
@@ -445,7 +391,7 @@ exports.getusertests = function(req, res){ //i want this to show all current and
   db.GetAllTests(req.params.id, function(err, done){
     if(!err){
        //console.log('Done returned');
-       //console.log('tests function returned = ' + done)
+       console.log('tests function returned = ' + done)
       // console.log(done[1].TestName)
       // console.log(done[2].TestName)
       res.render('usertests',{title: 'Tests', AllTests: done})
@@ -470,11 +416,20 @@ exports.getusertests = function(req, res){ //i want this to show all current and
 
 
 exports.deltest = function(req,res){
+  //testtodelete is the testID that i want to delete. Return back to the original page
+  console.log('test to be deleted = ' + req.body.testtodelete)
+  req.body.userid = req.params.id;
+  db.DeleteThisTest(req.body,function(err,done){
+    if(!err){
+      //console.log('Deleted items: ' + done)
+      res.redirect('back');
+    }
+    else{
+      res.redirect('back');
+    }
+  })//end of DeleteThisTest
 
-  console.log('test to be deleted = ' + req.params.testid)
-
-  res.redirect('back');
-
+//res.redirect('back')
 }//end of deltest
 
 
@@ -662,8 +617,9 @@ exports.getuseroverview = function(req, res){
 exports.testajaxpost = function(req,res){ //note to self: if this is from an ajax call, the render or redirect will not work
   console.log('testajax was called from client')
   //console.log('the test id i got was = ' + req.params.data)
+  console.log('test i want to delete = ' + req.body.testtodelete)
   //res.render("viewimages", { title: "View Images" });
-  //res.redirect('/about', { title: 'About'})
+  res.redirect('back');
 }
 
 exports.testajaxpost2 = function(req,res){

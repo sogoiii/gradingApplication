@@ -1,6 +1,7 @@
 // Module Dependencies
 var mongoose = require('mongoose');
 var	Schema = mongoose.Schema;
+//var ObjectId = require('mongoose').Types.ObjectId;
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy;
 var gridfs = require("./gridfs"); //this file should be inside here 
@@ -98,7 +99,6 @@ function GetWholeTeacherUserByID(userinfo, callback){
     })//end of save
 
   }//end of CreateTest
-
 
 
 //export DB functions ADD BELOW
@@ -256,7 +256,7 @@ function JSONToArray(theJSON){
         AT[0].ActiveTests.forEach(function(element) {  
             //console.warn('active tests element = ' + element)
             //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
-            Test.find({_id: element}).execFind(function(secerr, atest){
+            Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'Class']).execFind(function(secerr, atest){
               //console.log('found test = ' + atest)
               AllTests.push(atest[0]);
               //console.warn('size of all tests found = ' + AllTests.length)
@@ -429,11 +429,68 @@ exports.ReturnTestQuestions = function(userinfo, callback){
 
 
 
+  exports.DeleteThisTest = function(userinfo, callback){
+    //userinfo.testid = test , .userid = userID
+    TeacherUsers.findById(userinfo.userid, {'ActiveTests': 1} ,function(err, user){
+      if(!err){
+        //console.log('found active tests = ' + user)
+        //console.log('search for test = ' + userinfo.testtodelete)
+        var index = user.ActiveTests.indexOf(userinfo.testtodelete)
+        if(index != -1){
+          user.ActiveTests.splice(index,1);
+          user.save(function(saverr){
+            if(!saverr){
+              callback(null,user)
+            }//end of saverr if
+            else{
+              console.log('failed to save newly altered Active Tests array')
+              callback(saverr,null)
+            }//end of saverr else
+          })
+        }//end of index if
+        else{
+          console.log('Failed to find the test in Active Tests')
+          callback('failed to find test in Active Tests array', null)
+        }//end of index if
+      }//end of if
+      else{
+        console.log('failed to find user')
+        callback(err,null)
+      }//end of else
+    })//end of findbyid
+  }//end of DeleteThisTest
 
 
 
 
+  exports.SetupAClass = function(userinfo, callback){
+    //userinfo will have ClassName,Grade, Subject, NumberOfStudents
 
+    TeacherUsers.findById(userinfo.userid, function(err,teacher){
+      if(!err){
+        user.classroom.subject = req.body.ClassSubject;
+        user.classroom.gradeyear = req.body.ClassGrade;
+        user.classroom.classname = req.body.ClassName;
+        user.classroom.numofstudents = req.body.NumOfStudents;  
+        user.save(function(saverr){
+          if(!saverr){
+              console.log('saved the classroom data') 
+              callback(null,user)
+          }//end of !err    
+          else{
+              console.log('Save Error: ClassSetup')
+              callback(saverr,null)
+          }//end of else
+        })//end of user
+      }//end of if !err
+      else{
+        console.log('error finding teacher with id');
+        callback(err,null)
+      }//end of else !err
+    })//end of find by id
+
+
+  }//end of SetupAClass
 
 
 
