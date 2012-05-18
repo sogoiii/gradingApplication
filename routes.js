@@ -3,8 +3,6 @@ var passport = require('passport');
 var routes = require('./routes/index');
 
 
-
-
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   console.log('the user is not Authenticated');
@@ -75,7 +73,9 @@ app.get('/logout', routes.getlogout);
 
 */
 app.get('/user/:id/setupclass', ensureAuthenticated, RestirctAccess, routes.getsetup)
-app.post('/user/:id/setupclass', ensureAuthenticated, RestirctAccess, routes.postsetup)
+app.post('/user/:id/setupclass', ensureAuthenticated, RestirctAccess, routes.postsetup) //put and post are nearly identical.
+app.put('/user/:id/setupclass',ensureAuthenticated, RestirctAccess, routes.putsetup) //put and post are nearly identical.
+app.del('/user/:id/setupclass',ensureAuthenticated, RestirctAccess, routes.delsetup )
 
 app.get('/user/:id', ensureAuthenticated, RestirctAccess, routes.getuserindex);
 

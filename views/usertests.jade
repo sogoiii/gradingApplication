@@ -15,17 +15,6 @@
 			input.hiddentest(type='hidden', name='testtodelete')
 			button.btn.btn-primary(type='submit') Yes Delete
 
-#modal-from-dom.modal.hide.fade
-	.modal-header
-		a.close(href='#') ×
-		h3 Delete URL
-	.modal-body
-		p You are about to delete one track url, this procedure is irreversible.
-		p Do you want to proceed?
-	.modal-footer
-		a.btn.danger(href='delete.php?ref=') Yes
-		a.btn.secondary(href='javascript:$(\'#modal-from-dom\').modal(\'hide\')') No
-
 
 !=partial('partials/_TopBarLoggedIn')
 	.container-fluid
@@ -39,25 +28,24 @@
 						each test in AllTests
 							.alert.alert-success.alert-block
 								.row-fluid
-									.row-fluid
-										.span6
-											h4.alert-heading #{test.Class} 
-											p #{test.TestName}
-										.span6
-											.btn-group.pull-right
-												button.btn.btn-success.dropdown-toggle(data-toggle='dropdown')
-													| Actions
-													.span.caret
-												ul.dropdown-menu
-													li 
-														a(href='#') Upload
-													li
-														a(href='#') Review
-													li 
-														a(href='/user/#{userID}/edittest/#{test._id}') Edit
-													li.divider
-													li
-														a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#myModal') Delete Test
+									.span6
+										h4.alert-heading #{test.Class} 
+										p #{test.TestName}
+									.span6
+										.btn-group.pull-right
+											button.btn.btn-success.dropdown-toggle(data-toggle='dropdown')
+												| Actions
+												.span.caret
+											ul.dropdown-menu
+												li 
+													a(href='#') Upload
+												li
+													a(href='#') Review
+												li 
+													a(href='/user/#{userID}/edittest/#{test._id}') Edit
+												li.divider
+												li
+													a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#myModal') Delete Test
 															
 			.span2 
 				h3 Mearly test content

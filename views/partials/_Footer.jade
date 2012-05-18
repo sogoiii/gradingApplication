@@ -7,15 +7,27 @@ script
 			$('.confirmdelete').prop('action','/user/' + user + '/testdelete/' + test)
 			$('.hiddentest').prop('value', test)
 		});
-		$('#modal-from-dom').bind('show', function() {
-			var id = $(this).data('id'),
-			removeBtn = $(this).find('.danger'),
-			href = removeBtn.attr('href');
-			removeBtn.attr('href', href.replace(/ref=\\d*/, '&ref=' + id));
+		$('#DeleteClassModal').on('show', function (event) {
+			var classid = $(this).data('modal').options.classid
+			var user = $(this).data('modal').options.userid
+			$('.confirmdelete').prop('action','/user/' + user + '/setupclass/')
+			$('.hiddentest').prop('value', classid)
+		});
+
+		$('.editclass').click(function(e){
+			var nam = $(this).closest('.row-fluid').find('.classnametext').text()             
+			var sub = $(this).closest('.row-fluid').find('.subject').text()
+			var gr = $(this).closest('.row-fluid').find('.grade').text()
+			var nos = $(this).closest('.row-fluid').find('.NOS').text()
+			$('.classname').val(nam)           
+			$('.classsubject').val(sub)
+			$('.classgrade').val(gr)
+			$('.numberofstudents').val(nos)
+			$('.submitform').text('Edit Class')
+			var CRID = $(this).closest('.row-fluid').find('.classroomid').val()
+			$('.Editing').prop('value', CRID)
+			$('.reqtype').prop('value', 'PUT')
+			//$('.createclass').append('<input type="hidden" name="_method" value="put" />')
 		})
-		$('.confirm-delete').click(function(e) {
-			e.preventDefault();
-			var id = $(this).data('id');
-			$('#modal-from-dom').data('id', id).modal('show');
-		});
-		});
+		});//end of docment ready
+

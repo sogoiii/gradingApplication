@@ -1,7 +1,7 @@
 // Module Dependencies
 var mongoose = require('mongoose');
 var	Schema = mongoose.Schema;
-//var ObjectId = require('mongoose').Types.ObjectId;
+var ObjectId = require('mongoose').Types.ObjectId;
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy;
 var gridfs = require("./gridfs"); //this file should be inside here 
@@ -9,6 +9,8 @@ var gridfs = require("./gridfs"); //this file should be inside here
 
 // Model includes
 var TeacherUsers = require('./models/TeacherUsers');
+var Classroom = require('./models/ClassroomSchema');
+//var TeacherUsers = mongoose.model('TeacherUserSchema');
 var Test = require('./models/Test');
 var Question = require('./models/Questions');
 var Application = require('./models/UploadFilesTest'); //this was for uploading files, example
@@ -237,12 +239,6 @@ function GetWholeTeacherUserByID(userinfo, callback){
 
 
 
-function JSONToArray(theJSON){
-
-
-
-
-}//end of JSONToArray
 
 
 
@@ -251,22 +247,37 @@ function JSONToArray(theJSON){
     //find the user
     //find & aggergate every test linked to this user into a variable
     var AllTests = [];
-    TeacherUsers.find({_id: userinfo}, {'ActiveTests': 1}).execFind(function(err, AT) {
+    console.log('about to enter find teacher')
+    TeacherUsers.find({_id: userinfo}, ['ActiveTests']).execFind(function(err, AT) {
+      console.log('going to check if err exists')
       if(!err){
-        AT[0].ActiveTests.forEach(function(element) {  
-            //console.warn('active tests element = ' + element)
-            //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
-            Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'Class']).execFind(function(secerr, atest){
-              //console.log('found test = ' + atest)
-              AllTests.push(atest[0]);
-              //console.warn('size of all tests found = ' + AllTests.length)
-              if(AllTests.length == AT[0].ActiveTests.length){
-                callback(null, AllTests);
-              }
-            })//end second find
-        })//end of ForEach AT[0]
+          console.log('!err hence ill look at each value in AT[0]')
+          console.log('size of AT = ' + AT[0].ActiveTests)
+
+          if(typeof(AT[0].ActiveTests) != 'undefined'){
+            AT[0].ActiveTests.forEach(function(element) {  
+                console.log('in !err, i guess if found something')
+                //console.warn('active tests element = ' + element)
+                console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
+                Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'Class']).execFind(function(secerr, atest){
+                  console.log('found test = ' + atest)
+                  AllTests.push(atest[0]);
+                  //console.warn('size of all tests found = ' + AllTests.length)
+                  if(AllTests.length == AT[0].ActiveTests.length){
+                    callback(null, AllTests);
+                  }
+                  if(secerr){
+                    callback(sacerr,null)
+                  }
+                })//end second find
+            })//end of ForEach AT[0]
+          }//end of undefined if
+          else{
+            callback('undefined', null)
+          } //end of undefiend else 
       }//end of if !err
       else{
+        console.log('did not find teacher hence ill exit')
         callback(err,null);
       }//end of else
     })//end of find teacherusers
@@ -464,18 +475,22 @@ exports.ReturnTestQuestions = function(userinfo, callback){
 
 
   exports.SetupAClass = function(userinfo, callback){
-    //userinfo will have ClassName,Grade, Subject, NumberOfStudents
+    //userinfo will have ClassName,Grade, Subject, NumberOfStudents, userid
 
+    console.log('userinfo userid = ' +userinfo.userid )
     TeacherUsers.findById(userinfo.userid, function(err,teacher){
       if(!err){
-        user.classroom.subject = req.body.ClassSubject;
-        user.classroom.gradeyear = req.body.ClassGrade;
-        user.classroom.classname = req.body.ClassName;
-        user.classroom.numofstudents = req.body.NumOfStudents;  
-        user.save(function(saverr){
+        var newclass = new Classroom({ 
+            subject: userinfo.ClassSubject,
+            gradeyear: userinfo.ClassGrade,
+            classname: userinfo.ClassName,
+            numofstudents: userinfo.NumOfStudents
+        });
+        teacher.classroom.push(newclass)
+        teacher.save(function(saverr){
           if(!saverr){
               console.log('saved the classroom data') 
-              callback(null,user)
+              callback(null,teacher)
           }//end of !err    
           else{
               console.log('Save Error: ClassSetup')
@@ -488,18 +503,121 @@ exports.ReturnTestQuestions = function(userinfo, callback){
         callback(err,null)
       }//end of else !err
     })//end of find by id
-
-
   }//end of SetupAClass
 
 
 
 
 
+exports.EditAClass = function(userinfo, callback){
+  //userinfo will have ClassName,Grade, Subject, NumberOfStudents, userid, Edit_Class
+  
+  var index = null;
+  TeacherUsers.findById(userinfo.userid, ['classroom'],function(err,result){
+    if(!err){
+      //console.log('found the class to edit')
+      //console.log('result = ' + result)
+      for(var i = 0; i < result.classroom.length; i ++){
+        if(result.classroom[i]._id == userinfo.Edit_Class){
+          //console.log('found equivalent index = ' + i)
+          index = i;
+          break;
+        }//end of if
+      }//end of for loop
+
+      result.classroom[index].classname = userinfo.ClassName;
+      result.classroom[index].subject = userinfo.ClassGrade;
+      result.classroom[index].gradeyear = userinfo.ClassSubject;
+      result.classroom[index].numofstudents = userinfo.NumOfStudents;
+
+      result.markModified('classroom')
+
+      result.save(function(saverr){
+        if(!saverr){
+          console.log('saved item will return now')
+          callback(null,result)
+        }//end of iff
+        else{
+          console.log('didnt save item')
+          callback(saverr,null)
+        }//end of else
+      })//end of save function
+    }//endof !err
+    else{
+      console.log('failed to find class to edit')
+      callback(err,null)
+    }//end of !err else
+  })//end of find by id
+}//end of EditAClass
 
 
 
 
+exports.GetClasses = function(userinfo, callback){ //for setup class page (getsetup)
+//userinfo = userid
+
+  TeacherUsers.findById(userinfo, ['classroom'], function(err,result){
+    if(!err){
+      //console.log(result);
+      callback(null, result.classroom)
+    }//end of if !err
+    else{
+      console.log('failed to find teacher by id');
+      callback(err,null)
+    }//end of !err else
+  })//end of findbyid
+}//end of GetClasses
+
+
+
+
+exports.DeleteAClass = function(userinfo, callback){//called from delsetup
+//userinfo = userid, classid = setuptodelete
+  var index = null;
+  TeacherUsers.findById(userinfo.userid, ['classroom'], function(err,result){
+      if(!err){
+        // console.log('results found = ' + result.classroom)
+        // console.log('results size = ' + result.classroom.length)
+        for(var i = 0; i < result.classroom.length; i ++){
+          if(result.classroom[i]._id == userinfo.setuptodelete){
+            // console.log('found equivalent index = ' + i)
+            index = i;
+            break;
+          }//end of if
+        }//end of for loop
+        console.log('going to remove class name = ' + result.classroom[index].classname)
+        var theid  = result.classroom[index]._id;
+        console.log('going to remove class ID = ' + theid)
+        //result.id(theid).remove();
+        //result.classroom.remove()
+
+        var idx = result.classroom.indexOf(result.classroom[index])
+        console.log('index of element = '+ idx)
+        var oldclass = result.classroom;
+        oldclass.splice(idx,1);
+        result.classroom = oldclass;
+
+
+        result.save(function(saverr){
+          if(!saverr){
+            console.log('saved after removing item')
+            callback(null,result)
+          }
+          else{
+            console.log('failed to save item')
+            callback(saverr,null)
+          }
+        })//end of save
+      }//end of !err if
+      else{
+        console.log('didnt find the teacher user');
+        callback(err,null);
+      }// endof !err else
+  })//end of findbyID
+
+
+
+}//end of DeleteAClass
 
 
 

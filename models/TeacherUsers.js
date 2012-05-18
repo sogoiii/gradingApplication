@@ -8,6 +8,7 @@ var bcrypt = require('bcrypt');
 //var TestS = require('mongoose').model('TestSchema');
 //var QuestionSchema = require('mongoose').model('QuestionSchema');
 var TestSchema = require('./Test').TestSchema;
+var ClassroomSchema = require('./ClassroomSchema').ClassRoomSchema;
 
 
 
@@ -19,12 +20,13 @@ var TeacherUserSchema = new Schema({
     salt: {type: String, required: true},
     hash: {type: String, required: true},
     createdclassroom: {type: Boolean, default: 0},
-    classroom: {
-      subject: {type: String},
-      gradeyear: {type: Number},
-      classname: {type: String },
-      numofstudents: Number
-    },
+    // classroom: {
+    //   subject: {type: String},
+    //   gradeyear: {type: Number},
+    //   classname: {type: String },
+    //   numofstudents: Number
+    // },
+    classroom: [ClassroomSchema],
     ActiveTests: [{type: Schema.ObjectId, ref: 'TestSchema'}],
     Tests: [TestSchema],
     UserCreated: {type: Date, default: Date.now}
@@ -91,5 +93,6 @@ TeacherUserSchema.static('authenticateEmail', function(email, password, callback
 
 //export this Schema
  module.exports = mongoose.model('TeacherUserSchema', TeacherUserSchema );
+ //module.exports = mongoose.model('ClassRoomSchema', ClassRoomSchema);
 
 

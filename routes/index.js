@@ -128,13 +128,23 @@ exports.postregister2 = function(req, res){
 
 
 exports.getsetup = function(req,res){
-  //console.log('req.url = ' + req.url)
-  res.render('setupclass', {title: 'Class Setup', userID: req.params.id})
+//user will create or edit class information
+
+  db.GetClasses(req.params.id,function(err,results){
+    if(!err){
+      // console.log('initial = ' + results)
+      // console.log('second = ' + results.classroom)
+      res.render('setupclass', {title: 'Class Setup', classinfo: results})
+    }//end of if
+    else{
+      res.render('setupclass', {title: 'Class Setup'})
+    }//end of else
+  })//end of Get Classes
 }//end of getsetup
 
 
-exports.postsetup = function(req,res){
-
+exports.postsetup = function(req,res){ //this is called even for editing a class setup. the only difference would be a an if check which exists here now
+  console.log('you called the post version of class setup.')
   //first check if the inputs are valid  
   req.assert('ClassName', 'Class Name can only accepts alphanumeric');//.regex(/^[a-zA-Z0-9 -]$/i); //classname
   req.assert('ClassGrade', 'Class Grade only accepts numbers').isInt(); //grade
@@ -144,28 +154,85 @@ exports.postsetup = function(req,res){
   var errors = req.validationErrors();
   //console.log('error lenght = ' + errors.length)
   if(errors.length){
-     console.log('errors = ' + errors[0].param);
+    //console.log('errors = ' + errors[0].param);
     // console.log('errors = ' + errors[0].msg);  
     // console.log('errors = ' + errors[0].value);
-    res.render('setupclass', {
-        title: "Class Setup",
-        valerrors: errors,
-        message: req.flash('myerror')
-      });
+    res.render('setupclass', {title: "Class Setup", valerrors: errors, message: req.flash('myerror')});
   }//end of if
   else {
   //inputs are valid, hence i can now add them into the DB
-    db.SetupAClass(userinfo.userid, function(err, result){
+  req.body.userid = req.params.id;
+    db.SetupAClass(req.body, function(err, result){
       if(!err){
         res.redirect('/user/' + req.params.id)
       }//end of !err
       else{
-        res.redirect('/about/')
+        res.redirect('/about/'); //temporary line
+      }//end of !err else
+    })
+  }//end of else
+}//end of postsetup
+
+exports.putsetup = function(req,res){ //this is called even for editing a class setup. the only difference would be a an if check which exists here now
+  console.log('req.body.classroom ID = ' + req.body.Edit_Class);
+  console.log('you called the put version of class setup.')
+
+  req.assert('ClassName', 'Class Name can only accepts alphanumeric');//.regex(/^[a-zA-Z0-9 -]$/i); //classname
+  req.assert('ClassGrade', 'Class Grade only accepts numbers').isInt(); //grade
+  req.assert('ClassSubject', 'Class Subject only accepts alphanumeric ');//.regex(/^[a-zA-Z0-9 -]$/i); //subject
+  req.assert('NumOfStudents', 'Number of Students only accepts numbers').isInt(); //grade
+  
+  var errors = req.validationErrors();
+  //console.log('error lenght = ' + errors.length)
+  if(errors.length){
+    res.render('setupclass', {title: "Class Setup", valerrors: errors, message: req.flash('myerror')});
+  }//end of if
+  else {
+  //inputs are valid, hence i can now add them into the DB
+  req.body.userid = req.params.id;
+    db.EditAClass(req.body, function(err, result){
+      if(!err){
+        res.redirect('back');
+        //res.redirect('/user/' + req.params.id)
+      }//end of !err
+      else{
+        res.redirect('back');
+        //res.redirect('/about/'); //temporary line
       }//end of !err else
     })
   }//end of else
 
+
+  //res.redirect("back");
 }//end of postsetup
+
+
+
+
+exports.delsetup = function(req,res){
+//form input is an object id of the classroom embeddeddocument
+
+  console.log('test to delete = ' + req.body.setuptodelete)
+  req.body.userid = req.params.id;
+  db.DeleteAClass(req.body, function(err, result){
+    if(!err){
+
+
+    }//end !err if
+    else{
+
+    }//end of !err else
+  })//end of Delete Setup
+
+
+
+  res.redirect('back');
+}//end of delsetup
+
+
+
+
+
 
 
 
@@ -395,7 +462,6 @@ exports.getusertests = function(req, res){ //i want this to show all current and
       // console.log(done[1].TestName)
       // console.log(done[2].TestName)
       res.render('usertests',{title: 'Tests', AllTests: done})
-
     }//end of if
     else{
       console.log('get all tests error')
@@ -619,7 +685,7 @@ exports.testajaxpost = function(req,res){ //note to self: if this is from an aja
   //console.log('the test id i got was = ' + req.params.data)
   console.log('test i want to delete = ' + req.body.testtodelete)
   //res.render("viewimages", { title: "View Images" });
-  res.redirect('back');
+  res.redirect("back");
 }
 
 exports.testajaxpost2 = function(req,res){
