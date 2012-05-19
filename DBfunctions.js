@@ -85,10 +85,10 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
     //console.log('Create Test Data = ' + userinfo.classroom);
     var newTest = new Test({
       TestName: testname,
-      Class: classroom.classname,
-      NumberOfStudents: classroom.numofstudents,
-      Gradeyear: classroom.gradeyear,
-      Subject: classroom.subject
+      ClassName: classroom.ClassName,
+      NumberOfStudents: classroom.NumberOfStudents,
+      Gradeyear: classroom.Gradeyear,
+      Subject: classroom.Subject
     })
     console.log('new test looks like = ' + newTest)
     //return callback(null,null)
@@ -129,7 +129,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
 
   //   var newTest = new Test({
   //     TestName: userinfo.TestName,
-  //     Class: userinfo.ClassName
+  //     ClassName: userinfo.ClassName
   //   })
   //   newTest.save(function(err){
   //     if(err){
@@ -179,19 +179,19 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
     TeacherUsers.findById(pageinfo.userID, ['classroom', 'ActiveTests'], function(err,user){
       if(!err){
 
-        //console.log('returned from search = ' + user.classroom[0].classname)
+        //console.log('returned from search = ' + user.classroom[0].ClassName)
         //console.log('returned from search = ' + user)
         var index = null;
         for(var i = 0; i < user.classroom.length;i++){
-           if(pageinfo.ClassName == user.classroom[i].classname){
+           if(pageinfo.ClassName == user.classroom[i].ClassName){
               index = i;
           }
         }//end of for loop
-        console.log('class index = ' + index)
+        //console.log('class index = ' + index)
         //callback(null, user)
         CreateTest(user.classroom[index],pageinfo.TestName, function(CTerr, testid){ //with user info ill save test, output is the testID
                 //callback(null,testid);//test line
-                console.log('test id = ' + testid)
+                //console.log('test id = ' + testid)
                 if(!CTerr){
                   user.ActiveTests.push(testid);
                   user.save(function(saverr){
@@ -280,15 +280,15 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
           //console.log('!err hence ill look at each value in AT[0]')
           //console.log('size of AT = ' + AT[0].ActiveTests)
             var size = AT[0].ActiveTests.length;
-            console.log('size of Active Tests array = ' + size)
+            //console.log('size of Active Tests array = ' + size)
               if(size != 0){
-                  console.log('size of AT is larger than 0, hence i work normally')
+                  //console.log('size of AT is larger than 0, hence i work normally')
                     if(typeof(AT[0].ActiveTests) != 'undefined'){
                       AT[0].ActiveTests.forEach(function(element) {  
                           //console.log('in !err, i guess if found something')
                           //console.warn('active tests element = ' + element)
                           //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
-                          Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'Class', 'NumberOfStudents']).execFind(function(secerr, atest){
+                          Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'ClassName', 'NumberOfStudents']).execFind(function(secerr, atest){
                             //console.log('found test = ' + atest)
                             AllTests.push(atest[0]);
                             //console.warn('size of all tests found = ' + AllTests.length)
@@ -327,7 +327,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
 
   exports.GetClassInfo =  function(userinfo, callback){ //called from getuserindex
     //userinfo = userid
-    TeacherUsers.findById(userinfo,['classroom.classname'], function(err,result){
+    TeacherUsers.findById(userinfo,['classroom.ClassName'], function(err,result){
         if(!err){
           //console.log('Found User ID for GetClassInfo');
           //console.log('classes = ' + result.classroom)
@@ -375,30 +375,30 @@ exports.InsertQuestionToTest = function(userinfo, callback){//user put a questio
 
   newQuestion.save(function(Qerr){
     if(!Qerr){
-      console.log('Saved Single Question Instance')
+      //console.log('Saved Single Question Instance')
       Test.findById(userinfo.testID,function(err,test){
         if(!err){
           test.Questions.push(newQuestion);
           test.save(function(saverr){
             if(!saverr){
-              console.log('saved question to test instance');
+              //console.log('saved question to test instance');
               callback(null,test);
             }//end of if !saverr
             else{
-              callback(saverr, null);
               console.log('Failed saving question to test instance');
+              callback(saverr, null);
             }//end of else
           })//end of save question to test
         }//end of if !err
         else{
-          callback(err,null);
           console.log('Could not find the testID');
+          callback(err,null);
         }//end of else
       })//end of test.findbyid
     }
     else{
-      callback(Qerr,null);
       console.log('Error Saving Single Question Instance')
+      callback(Qerr,null);
     }
   })//end of newQuestion.save
 
@@ -416,7 +416,13 @@ exports.ReturnTestQuestions = function(userinfo, callback){
     if(!err){
       //console.log('grabed all questions for this test')
       //console.log('questions = ' + questions.Questions)
-      callback(null,questions.Questions);
+      console.log('size of questions = ' + questions.Questions.length)
+      if(questions.Questions.length != 0){
+          callback(null,questions.Questions);
+      }//end of if
+      else{ //if questions.Questions.length == 0
+          callback('No Questions Exist!', null)
+      }//end of else
     }//end of if
     else{
       console.log('could not find testID')
@@ -525,17 +531,17 @@ exports.ReturnTestQuestions = function(userinfo, callback){
 
 
 
-  exports.SetupAClass = function(userinfo, callback){
+  exports.SetupAClass = function(userinfo, callback){ //called from postsetup
     //userinfo will have ClassName,Grade, Subject, NumberOfStudents, userid
 
-    console.log('userinfo userid = ' +userinfo.userid )
+    //console.log('userinfo userid = ' +userinfo.userid )
     TeacherUsers.findById(userinfo.userid, function(err,teacher){
       if(!err){
         var newclass = new Classroom({ 
-            subject: userinfo.ClassSubject,
-            gradeyear: userinfo.ClassGrade,
-            classname: userinfo.ClassName,
-            numofstudents: userinfo.NumOfStudents
+            Subject: userinfo.ClassSubject,
+            Gradeyear: userinfo.ClassGrade,
+            ClassName: userinfo.ClassName,
+            NumberOfStudents: userinfo.NumOfStudents
         });
         teacher.classroom.push(newclass)
         teacher.save(function(saverr){
@@ -576,16 +582,16 @@ exports.EditAClass = function(userinfo, callback){
         }//end of if
       }//end of for loop
 
-      result.classroom[index].classname = userinfo.ClassName;
-      result.classroom[index].gradeyear = userinfo.ClassGrade;
-      result.classroom[index].subject = userinfo.ClassSubject;
-      result.classroom[index].numofstudents = userinfo.NumOfStudents;
+      result.classroom[index].ClassName = userinfo.ClassName;
+      result.classroom[index].Gradeyear = userinfo.ClassGrade;
+      result.classroom[index].Subject = userinfo.ClassSubject;
+      result.classroom[index].NumberOfStudents = userinfo.NumOfStudents;
 
       result.markModified('classroom')
 
       result.save(function(saverr){
         if(!saverr){
-          console.log('saved item will return now')
+          //console.log('saved item will return now')
           callback(null,result)
         }//end of iff
         else{
@@ -636,7 +642,7 @@ exports.DeleteAClass = function(userinfo, callback){//called from delsetup
             break;
           }//end of if
         }//end of for loop
-        console.log('going to remove class name = ' + result.classroom[index].classname)
+        console.log('going to remove class name = ' + result.classroom[index].ClassName)
         var theid  = result.classroom[index]._id;
         console.log('going to remove class ID = ' + theid)
         //result.id(theid).remove();

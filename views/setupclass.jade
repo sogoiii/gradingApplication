@@ -54,7 +54,7 @@
 						.alert.alert-success.alert-block
 							.row-fluid
 								.span6
-									h2.alert-heading.classnametext #{item.classname}
+									h2.alert-heading.classnametext #{item.ClassName}
 									input.classroomid(type='hidden', name='classid', value='#{item._id}') 
 									table.table.table-condensed.tableclass
 										thread
@@ -62,9 +62,9 @@
 											th Grade year
 											th Students
 										tbody
-											td.subject #{item.subject}
-											td.grade #{item.gradeyear}
-											td.NOS #{item.numofstudents}
+											td.subject #{item.Subject}
+											td.grade #{item.Gradeyear}
+											td.NOS #{item.NumberOfStudents}
 								.span6 
 									.btn-group.pull-right
 										button.btn.btn-success.dropdown-toggle(data-toggle='dropdown') Actions

@@ -5,10 +5,10 @@ var mongooseTypes = require('mongoose-types');
 
 
 var ClassRoomSchema = new Schema ({
-  subject: {type: String, match: /^[a-zA-Z0-9 -]+$/},
-  gradeyear: {type: Number},
-  classname: {type: String, match: /^[a-zA-Z0-9 -]+$/ },
-  numofstudents: {type: Number},
+  Subject: {type: String, match: /^[a-zA-Z0-9 -]+$/},
+  Gradeyear: {type: Number},
+  ClassName: {type: String, match: /^[a-zA-Z0-9 -]+$/ },
+  NumberOfStudents: {type: Number},
   classcreated: {type: Date, default: Date.now}
 })// end of standardMet
 

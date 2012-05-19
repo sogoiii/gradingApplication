@@ -191,8 +191,8 @@ exports.postsetup = function(req,res){ //this is called even for editing a class
 }//end of postsetup
 
 exports.putsetup = function(req,res){ //this is called even for editing a class setup. the only difference would be a an if check which exists here now
-  console.log('req.body.classroom ID = ' + req.body.Edit_Class);
-  console.log('you called the put version of class setup.')
+  //console.log('req.body.classroom ID = ' + req.body.Edit_Class);
+  //console.log('you called the put version of class setup.')
 
   req.sanitize('ClassName').ltrim()
   req.sanitize('ClassSubject').ltrim();
@@ -208,8 +208,8 @@ exports.putsetup = function(req,res){ //this is called even for editing a class 
   req.assert('NumOfStudents', 'Number of Students only accepts numbers').isInt(); //grade
   
   var errors = req.validationErrors();
-  console.log('errors = ' + errors);
-  console.log('error lenght = ' + errors.length)
+  //console.log('errors = ' + errors);
+  //console.log('error lenght = ' + errors.length)
   req.session.errors = errors;
   if(errors.length){
     //res.render('setupclass', {title: "Class Setup", valerrors: errors, message: req.flash('myerror')});
@@ -240,15 +240,15 @@ exports.putsetup = function(req,res){ //this is called even for editing a class 
 exports.delsetup = function(req,res){
 //form input is an object id of the classroom embeddeddocument
 
-  console.log('test to delete = ' + req.body.setuptodelete)
+  console.log('setup to delete = ' + req.body)
   req.body.userid = req.params.id;
   db.DeleteAClass(req.body, function(err, result){
     if(!err){
-
+      console.log('result returned = ' + result)
 
     }//end !err if
     else{
-
+      console.log('failed to delete class')
     }//end of !err else
   })//end of Delete Setup
 
@@ -277,7 +277,7 @@ exports.postlogin = function(req, res){ //save session to cookie
 exports.getlogout = function(req,res){ 
   if(req.user){
     req.session.destroy(function(err){
-    console.log('logout user = ' + req.user.id);
+    //console.log('logout user = ' + req.user.id);
     })
   }
   res.redirect('/');
@@ -396,10 +396,13 @@ exports.getedittest = function(req,res){ //i know the test ID, i should have ass
   db.ReturnTestQuestions(req.params.testid, function(err,results){
     if(!err){
       results = decodeQuestionHtml(results); //i encoded the html so i can now decode it. (SERCURITY ISSUE POSSIBLE!!!!)
-      res.render('edittest',{title: 'Edit Test', wymeditor: true, message: 'Found Questions: Look Below', Questions: results})
+      res.render('edittest',{title: 'Edit Test', wymeditor: true, Questions: results})
     }//if
+    else if(err == 'no questions'){
+      res.render('edittest',{title: 'Edit Test', wymeditor: true, message: err})
+    }
     else{
-      res.render('edittest',{title: 'Edit Test', wymeditor: true, message: 'Failed to find questions'})
+      res.render('edittest',{title: 'Edit Test', wymeditor: true, message: 'Unexpected Error'})
     }//end of else
   });//end of ReturnTestQuestions
 }//end of getedittest
@@ -410,7 +413,7 @@ exports.putedittest = function(req,res){//user is looking at test and adds quest
   //sanitize and encode variables
   //Create Question and embedd into test
 
-  console.log('inside put edit test!!')
+  //console.log('inside put edit test!!')
   req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
   req.sanitize('QuestionHTML').entityEncode(); //entitiy.Decode() for dispalying later
   req.body.testID = req.params.testid;
@@ -508,7 +511,7 @@ exports.getusertests = function(req, res){ //i want this to show all current and
   db.GetAllTests(req.params.id, function(err, result){
     if(!err){
        //console.log('Done returned');
-       console.log('tests function returned = ' + result)
+       //console.log('tests function returned = ' + result)
       // console.log(done[1].TestName)
       // console.log(done[2].TestName)
       res.render('usertests',{title: 'Tests', AllTests: result})

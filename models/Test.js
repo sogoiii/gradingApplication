@@ -17,7 +17,7 @@ var TestSchema = new Schema({
 	NumberOfStudents: {type: Number},
 	Gradeyear: {type: Number}, //this could be a string becaue countries have primary and secondary without levels in between
 	Subject: {type: String},
-	Class: {type: String},
+	ClassName: {type: String},
 	Teacheremail: {type: Email},
 	TestCreated: {type: Date, default: Date.now}
 

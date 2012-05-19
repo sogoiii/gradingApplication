@@ -40,7 +40,7 @@
 								input(type='text', name= 'WrongAnswer3') Add Question
 						input(type='hidden', name='_method', value='put')			
 					button.btn.btn-primary.wymupdate(type='submit') Add Question
-				if(message)		
+				- if(typeof(message) != 'undefined')		
 					.alert.alert-error.alert-block
 						a.close(data-dismiss='alert', href='#') ×
 						h4.alert-heading Question
