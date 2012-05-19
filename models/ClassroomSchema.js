@@ -1,14 +1,13 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var mongooseTypes = require('mongoose-types');
-mongooseTypes.loadTypes(mongoose, "email");
 
 
 
 var ClassRoomSchema = new Schema ({
-  subject: {type: String},
+  subject: {type: String, match: /^[a-zA-Z0-9 -]+$/},
   gradeyear: {type: Number},
-  classname: {type: String },
+  classname: {type: String, match: /^[a-zA-Z0-9 -]+$/ },
   numofstudents: {type: Number},
   classcreated: {type: Date, default: Date.now}
 })// end of standardMet

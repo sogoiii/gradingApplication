@@ -2,6 +2,7 @@
 var mongoose = require('mongoose');
 var	Schema = mongoose.Schema;
 var ObjectId = require('mongoose').Types.ObjectId;
+var Query = require('mongoose').Query
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy;
 var gridfs = require("./gridfs"); //this file should be inside here 
@@ -62,7 +63,7 @@ passport.deserializeUser(function(id, done) {
 
 
 
-function GetWholeTeacherUserByID(userinfo, callback){
+function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
     //userinfo = userid
     TeacherUsers.findById(userinfo, function(err,user){
       if(!err){
@@ -78,25 +79,28 @@ function GetWholeTeacherUserByID(userinfo, callback){
 
 
 
-  function CreateTest(userinfo, pageinfo, callback){ //userinfo is actually the tearcherSchema, pageinfo is from post information
+  function CreateTest(classroom, testname, callback){ //userinfo is actually the tearcherSchema, pageinfo is from post information
+    //classroom is the class  
     //put variabels into my newly created test
-    console.log('Create Test = ' + pageinfo.TestName);
+    //console.log('Create Test Data = ' + userinfo.classroom);
     var newTest = new Test({
-      TestName: pageinfo.TestName,
-      Class: userinfo.classroom.classname,
-      NumberOfStudents: userinfo.classroom.numofstudents,
-      Gradeyear: userinfo.classroom.gradeyear,
-      Subject: userinfo.classroom.subject
+      TestName: testname,
+      Class: classroom.classname,
+      NumberOfStudents: classroom.numofstudents,
+      Gradeyear: classroom.gradeyear,
+      Subject: classroom.subject
     })
+    console.log('new test looks like = ' + newTest)
+    //return callback(null,null)
     newTest.save(function(err){
-      if(err){
+      if(!err){
+        //console.log('saved test');
+        return callback(null,newTest.id);
+      }//end of if err
+      else{
         console.log('did not save test');
         console.log(err);
         return callback(err, null);//save error into callback 
-      }//end of if err
-      else{
-        console.log('saved test');
-        return callback(null,newTest.id);
       }//end of else err
     })//end of save
 
@@ -117,72 +121,94 @@ function GetWholeTeacherUserByID(userinfo, callback){
 
 
 
-  //create test instance for a specific user 
-  exports.CreateTest = function(userinfo, callback){
-    //put variabels into my newly created test
-    var newTest = new Test({
-      TestName: userinfo.TestName,
-      Class: userinfo.ClassName
-    })
-    newTest.save(function(err){
-      if(err){
-        console.log('did not save test');
-        return callback(err, null);//save error into callback 
-      }//end of if err
-      else{
-        console.log('saved test');
-        return callback(null,newTest.id);
-      }//end of else err
-    })//end of save
+  // //create test instance for a specific user 
+  // exports.CreateTest = function(userinfo, callback){ // this one is no longer used
+  //   //put variabels into my newly created test
 
-  }//end of CreateTest
+  //   console.log('create test function received = ' + userinfo)
 
+  //   var newTest = new Test({
+  //     TestName: userinfo.TestName,
+  //     Class: userinfo.ClassName
+  //   })
+  //   newTest.save(function(err){
+  //     if(err){
+  //       console.log('did not save test');
+  //       return callback(err, null);//save error into callback 
+  //     }//end of if err
+  //     else{
+  //       console.log('saved test');
+  //       return callback(null,newTest.id);
+  //     }//end of else err
+  //   })//end of save
 
-  exports.AddTestToTeacher = function(userinfo, callback){ //seeing if can call a function in here
-    //userinfo = userID, testID
-
-    GetWholeTeacherUserByID(userinfo.userID, function(err,user){
-      if(!err){
-        user.ActiveTests.push(userinfo.testID);
-        user.save(function(saverr){
-          if(!saverr){console.log('saved objectID in ActiveTests')}
-          else{console.log('error adding ObjectID into ActiveTests')}  
-        })//end of save
-      }//end of if
-      else{
-
-      }//end of else
-    })//end of getwholeteacherUserbyID
-  }//end of AddTestToTeacher
+  // }//end of CreateTest
 
 
+//i belive the function below is unsued
+  // exports.AddTestToTeacher = function(userinfo, callback){ //seeing if can call a function in here
+  //   //userinfo = userID, testID
+
+  //   GetWholeTeacherUserByID(userinfo.userID, function(err,user){
+  //     if(!err){
+  //       user.ActiveTests.push(userinfo.testID);
+  //       user.save(function(saverr){
+  //         if(!saverr){console.log('saved objectID in ActiveTests')}
+  //         else{console.log('error adding ObjectID into ActiveTests')}  
+  //       })//end of save
+  //     }//end of if
+  //     else{
+
+  //     }//end of else
+  //   })//end of getwholeteacherUserbyID
+  // }//end of AddTestToTeacher
 
 
-  exports.FindTeacherCreateTestAddAssociateTest = function(pageinfo,callback){ //Ill just keep it as two functions for now
+
+
+  exports.FindTeacherCreateTestAddAssociateTest = function(pageinfo,callback){ //called from postcreatetest
+    //pageinfo  = .userID , .TestName, .ClassName
     //find teacher
+    // using selected class name find the correct class 
     //creat test and add user variables
     //save test and associate test
 
-    GetWholeTeacherUserByID(pageinfo.userID, function(err,user){
+
+
+
+    TeacherUsers.findById(pageinfo.userID, ['classroom', 'ActiveTests'], function(err,user){
       if(!err){
-        CreateTest(user,pageinfo, function(CTerr, testid){ //with user info ill save test, output is the testID
-          if(!CTerr){
-            user.ActiveTests.push(testid);
-            user.save(function(saverr){
-            if(!saverr){
-              console.log('saved objectID in ActiveTests')
-              callback(null,testid)
-            }
-            else{
-              console.log('error adding ObjectID into ActiveTests')
-              callback(saverr, null)
-            }  
-            })//end of save
-          }//end of !CTerr
-          else{
-            console.log('error saving test')
-            callback(CTerr, null)
+
+        //console.log('returned from search = ' + user.classroom[0].classname)
+        //console.log('returned from search = ' + user)
+        var index = null;
+        for(var i = 0; i < user.classroom.length;i++){
+           if(pageinfo.ClassName == user.classroom[i].classname){
+              index = i;
           }
+        }//end of for loop
+        console.log('class index = ' + index)
+        //callback(null, user)
+        CreateTest(user.classroom[index],pageinfo.TestName, function(CTerr, testid){ //with user info ill save test, output is the testID
+                //callback(null,testid);//test line
+                console.log('test id = ' + testid)
+                if(!CTerr){
+                  user.ActiveTests.push(testid);
+                  user.save(function(saverr){
+                  if(!saverr){
+                    //console.log('saved objectID in ActiveTests')
+                    callback(null,testid)
+                  }
+                  else{
+                    console.log('error adding ObjectID into ActiveTests')
+                    callback(saverr, null)
+                  }  
+                  })//end of save
+                }//end of !CTerr if
+                else{
+                  console.log('error saving test')
+                  callback(CTerr, null)
+                }//end of !CTerr else
         })//end of Create Test
       }//end of if !err
       else{ 
@@ -247,34 +273,42 @@ function GetWholeTeacherUserByID(userinfo, callback){
     //find the user
     //find & aggergate every test linked to this user into a variable
     var AllTests = [];
-    console.log('about to enter find teacher')
+    //console.log('about to enter find teacher')
     TeacherUsers.find({_id: userinfo}, ['ActiveTests']).execFind(function(err, AT) {
-      console.log('going to check if err exists')
+      //console.log('going to check if err exists')
       if(!err){
-          console.log('!err hence ill look at each value in AT[0]')
-          console.log('size of AT = ' + AT[0].ActiveTests)
-
-          if(typeof(AT[0].ActiveTests) != 'undefined'){
-            AT[0].ActiveTests.forEach(function(element) {  
-                console.log('in !err, i guess if found something')
-                //console.warn('active tests element = ' + element)
-                console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
-                Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'Class']).execFind(function(secerr, atest){
-                  console.log('found test = ' + atest)
-                  AllTests.push(atest[0]);
-                  //console.warn('size of all tests found = ' + AllTests.length)
-                  if(AllTests.length == AT[0].ActiveTests.length){
-                    callback(null, AllTests);
-                  }
-                  if(secerr){
-                    callback(sacerr,null)
-                  }
-                })//end second find
-            })//end of ForEach AT[0]
-          }//end of undefined if
-          else{
-            callback('undefined', null)
-          } //end of undefiend else 
+          //console.log('!err hence ill look at each value in AT[0]')
+          //console.log('size of AT = ' + AT[0].ActiveTests)
+            var size = AT[0].ActiveTests.length;
+            console.log('size of Active Tests array = ' + size)
+              if(size != 0){
+                  console.log('size of AT is larger than 0, hence i work normally')
+                    if(typeof(AT[0].ActiveTests) != 'undefined'){
+                      AT[0].ActiveTests.forEach(function(element) {  
+                          //console.log('in !err, i guess if found something')
+                          //console.warn('active tests element = ' + element)
+                          //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
+                          Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'Class', 'NumberOfStudents']).execFind(function(secerr, atest){
+                            //console.log('found test = ' + atest)
+                            AllTests.push(atest[0]);
+                            //console.warn('size of all tests found = ' + AllTests.length)
+                            if(AllTests.length == AT[0].ActiveTests.length){
+                              callback(null, AllTests);
+                            }
+                            if(secerr){
+                              callback(sacerr,null)
+                            }
+                          })//end second find
+                      })//end of ForEach AT[0]
+                    }//end of undefined if
+                    else{
+                      callback('undefined', null)
+                    } //end of typeof(AT[0].ActiveTests) != undefiend else 
+              }//end of AT size check IF
+              else{
+                console.log('size of AT was zero hence ill return with custome error')
+                callback('NoTests', null)
+              }      
       }//end of if !err
       else{
         console.log('did not find teacher hence ill exit')
@@ -291,18 +325,35 @@ function GetWholeTeacherUserByID(userinfo, callback){
 
 
 
-  exports.GetClassInfo =  function(userinfo, callback){
-    TeacherUsers.findById(userinfo, function(err,user){
-        if(err){
-          console.log('Did not find user '+ userinfo);
-          return callback(err,null);
-        }
-        else {
+  exports.GetClassInfo =  function(userinfo, callback){ //called from getuserindex
+    //userinfo = userid
+    TeacherUsers.findById(userinfo,['classroom.classname'], function(err,result){
+        if(!err){
           //console.log('Found User ID for GetClassInfo');
-          return callback(null,user.classroom);
-        }
+          //console.log('classes = ' + result.classroom)
+          //console.log('result size = ' + result.classroom.length)
+          var size = result.classroom.length;
+          if(size != 0){
+            //console.log('size was not equal to zero')
+            callback(null,result.classroom, null);
+          }//end of if
+          else{
+            //console.log('size was equal to zero')
+            callback('size of classroom array = 0', null, 'setup')//
+          }//end of else     
+        }//end of !err if
+        else {
+          console.log('Did not find user '+ userinfo);
+          callback(err,null,'nothing');
+        }//end of !err else
     })//end of findbyID
   }//end of GetClassInfo
+
+
+
+
+
+
 
 
 
@@ -363,7 +414,7 @@ exports.ReturnTestQuestions = function(userinfo, callback){
 
   Test.findById(userinfo, function(err,questions){
     if(!err){
-      console.log('grabed all questions for this test')
+      //console.log('grabed all questions for this test')
       //console.log('questions = ' + questions.Questions)
       callback(null,questions.Questions);
     }//end of if
@@ -489,7 +540,7 @@ exports.ReturnTestQuestions = function(userinfo, callback){
         teacher.classroom.push(newclass)
         teacher.save(function(saverr){
           if(!saverr){
-              console.log('saved the classroom data') 
+              //console.log('saved the classroom data') 
               callback(null,teacher)
           }//end of !err    
           else{
@@ -526,8 +577,8 @@ exports.EditAClass = function(userinfo, callback){
       }//end of for loop
 
       result.classroom[index].classname = userinfo.ClassName;
-      result.classroom[index].subject = userinfo.ClassGrade;
-      result.classroom[index].gradeyear = userinfo.ClassSubject;
+      result.classroom[index].gradeyear = userinfo.ClassGrade;
+      result.classroom[index].subject = userinfo.ClassSubject;
       result.classroom[index].numofstudents = userinfo.NumOfStudents;
 
       result.markModified('classroom')

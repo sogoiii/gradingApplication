@@ -23,7 +23,7 @@ var QuestionSchema = new Schema({
 	CorrectAnswertext: {type: String, required: true, max: 140, match:/^[a-zA-Z0-9 -"]/ },
 	WrongAnswers: [WrongAnswerSchema],
 	//StandardMet: [StandardMetSchema],
-
+	QuestionCreated: {type: Date, default: Date.now}
 	//NumberOfTimesQuestionUsed: {type: Number}, //this number will be updated every time it is used/ must be atomic - performance hit here
 });//end of QuestionSchema
 

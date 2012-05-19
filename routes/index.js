@@ -134,7 +134,9 @@ exports.getsetup = function(req,res){
     if(!err){
       // console.log('initial = ' + results)
       // console.log('second = ' + results.classroom)
-      res.render('setupclass', {title: 'Class Setup', classinfo: results})
+      var temperr = req.session.errors
+      req.session.errors = '';
+      res.render('setupclass', {title: 'Class Setup', classinfo: results, valerrors: temperr})
     }//end of if
     else{
       res.render('setupclass', {title: 'Class Setup'})
@@ -144,30 +146,45 @@ exports.getsetup = function(req,res){
 
 
 exports.postsetup = function(req,res){ //this is called even for editing a class setup. the only difference would be a an if check which exists here now
-  console.log('you called the post version of class setup.')
+  //console.log('you called the post version of class setup.')
   //first check if the inputs are valid  
-  req.assert('ClassName', 'Class Name can only accepts alphanumeric');//.regex(/^[a-zA-Z0-9 -]$/i); //classname
+  
+  req.sanitize('ClassName').ltrim()
+  req.sanitize('ClassSubject').ltrim();
+  req.sanitize('ClassGrade').ltrim();
+  req.sanitize('NumOfStudents').ltrim();
+  req.sanitize('ClassName').rtrim()
+  req.sanitize('ClassSubject').rtrim();
+  req.sanitize('ClassGrade').rtrim();
+  req.sanitize('NumOfStudents').rtrim();
+  req.assert('ClassName', 'Class Name only accepts alphanumeric').regex(/^[a-zA-Z0-9 -]+$/); //classname
   req.assert('ClassGrade', 'Class Grade only accepts numbers').isInt(); //grade
-  req.assert('ClassSubject', 'Class Subject only accepts alphanumeric ');//.regex(/^[a-zA-Z0-9 -]$/i); //subject
+  req.assert('ClassSubject', 'Class Subject only accepts alphanumeric ').regex(/^[a-zA-Z0-9 -]+$/); //subject
   req.assert('NumOfStudents', 'Number of Students only accepts numbers').isInt(); //grade
   
+  //console.log('classname = "' + req.body.ClassName + '"')
+
   var errors = req.validationErrors();
+  //console.log('errors = ' + errors[0]);
   //console.log('error lenght = ' + errors.length)
+  req.session.errors = errors
   if(errors.length){
     //console.log('errors = ' + errors[0].param);
     // console.log('errors = ' + errors[0].msg);  
     // console.log('errors = ' + errors[0].value);
-    res.render('setupclass', {title: "Class Setup", valerrors: errors, message: req.flash('myerror')});
+    //res.render('setupclass', {title: "Class Setup", valerrors: errors, message: req.flash('myerror')});
+    res.redirect('back');
   }//end of if
   else {
   //inputs are valid, hence i can now add them into the DB
   req.body.userid = req.params.id;
     db.SetupAClass(req.body, function(err, result){
       if(!err){
-        res.redirect('/user/' + req.params.id)
+        //res.redirect('/user/' + req.params.id)
+        res.redirect('back')
       }//end of !err
       else{
-        res.redirect('/about/'); //temporary line
+        res.redirect('back'); 
       }//end of !err else
     })
   }//end of else
@@ -177,15 +194,26 @@ exports.putsetup = function(req,res){ //this is called even for editing a class 
   console.log('req.body.classroom ID = ' + req.body.Edit_Class);
   console.log('you called the put version of class setup.')
 
-  req.assert('ClassName', 'Class Name can only accepts alphanumeric');//.regex(/^[a-zA-Z0-9 -]$/i); //classname
+  req.sanitize('ClassName').ltrim()
+  req.sanitize('ClassSubject').ltrim();
+  req.sanitize('ClassGrade').ltrim();
+  req.sanitize('NumOfStudents').ltrim();
+  req.sanitize('ClassName').rtrim()
+  req.sanitize('ClassSubject').rtrim();
+  req.sanitize('ClassGrade').rtrim();
+  req.sanitize('NumOfStudents').rtrim();
+  req.assert('ClassName', 'Class Name only accepts alphanumeric').regex(/^[a-zA-Z0-9 -]+$/); //classname
   req.assert('ClassGrade', 'Class Grade only accepts numbers').isInt(); //grade
-  req.assert('ClassSubject', 'Class Subject only accepts alphanumeric ');//.regex(/^[a-zA-Z0-9 -]$/i); //subject
+  req.assert('ClassSubject', 'Class Subject only accepts alphanumeric ').regex(/^[a-zA-Z0-9 -]+$/); //subject
   req.assert('NumOfStudents', 'Number of Students only accepts numbers').isInt(); //grade
   
   var errors = req.validationErrors();
-  //console.log('error lenght = ' + errors.length)
+  console.log('errors = ' + errors);
+  console.log('error lenght = ' + errors.length)
+  req.session.errors = errors;
   if(errors.length){
-    res.render('setupclass', {title: "Class Setup", valerrors: errors, message: req.flash('myerror')});
+    //res.render('setupclass', {title: "Class Setup", valerrors: errors, message: req.flash('myerror')});
+    res.redirect('back');
   }//end of if
   else {
   //inputs are valid, hence i can now add them into the DB
@@ -280,12 +308,20 @@ exports.getlogout = function(req,res){
 exports.getuserindex = function(req,res){ //make this the overview?
   //console.log('req.session.CTE = ' + req.session.CTE);
 
-  db.GetClassInfo(req.params.id,function(err,classinfo){
-    if(!err){
-      res.render('userindex', {title: 'Overview', TestNameError: req.session.CTE, classinfo: classinfo}); 
-    }
+  db.GetClassInfo(req.params.id,function(err,classinfo, setup){
+    if(!err && !setup){
+      //console.log('the get index first IF ')
+      var testerr = req.session.CTE;
+      req.session.CTE = '';
+      res.render('userindex', {title: 'Overview', CreateTestErrors: testerr, classinfo: classinfo}); 
+    }//end of !err and setup !null
+    else if(err && setup == 'setup'){
+      res.render('userindex', {title: 'Overview', setupclass: true});
+    }//end of !err and setup == 'setup'
     else{
-      //do something with inablility to find user
+      //do something with
+      console.log('the get index else ')
+      res.render('userindex', {title: 'Overview'}); //temporary...seems like a hole at the momment
     }
   })//end of GetClassInfo
 }//end of getuserhome
@@ -307,31 +343,45 @@ exports.postcreatetest = function(req,res) {
   //when it returns redirect to the url above.
 
 
+  req.sanitize('TestName').ltrim()
+  req.assert('TestName', 'Test name only accepts alphanumeric').regex(/^[a-zA-Z0-9 -]+$/); //classname
+  req.assert('ClassName', 'Select a class').notContains('Select Class'); //classname
 
-  req.body.userID = req.params.id; //need to include user ID so to ActiveTests array
-  if(!req.body.TestName || req.body.ClassName == 'Select Class'){
-      if(!req.body.TestName){req.session.CTE = 'IncludeTestName';}
+  var errors = req.validationErrors();
+  //console.log('errors = ' + errors);
+  //console.log('error lenght = ' + errors.length)
+
+  req.session.CTE = errors;
+  
+  if(errors.length){
+      //if(!req.body.TestName){req.session.CTE = 'IncludeTestName';}
       //if(!req.body.ClassName){req.session.CTECN = 'IncludeClassName';}
       res.redirect('back'); //
     }//end of req.body.TestName if
   else{
-      req.session.CTE = ''; //since testname was included reset the error in the dom.
-      req.session.CTCN = ''; //since class name was selected 
-      console.log('postcreate = ' + req.body.TestName);
+      // req.session.CTE = ''; //since testname was included reset the error in the dom.
+      // req.session.CTCN = ''; //since class name was selected 
+      //console.log('postcreate = ' + req.body.TestName);
+      req.body.userID = req.params.id; //need to include user ID so to ActiveTests array
       db.FindTeacherCreateTestAddAssociateTest(req.body, function(err,testid){
         if(!err){
           res.redirect('/user/' + req.params.id + '/edittest/' + testid);
         }
         else{
-          res.redirect('/user/' + req.params.id);
+          res.redirect('/user/' + req.params.id); //res redirectback
         }
       })//end of find teahcer by ID
   }//end of req.body.Testname Else
 }//end of postcreatetest
 
 
+
+
+
+
+
 function decodeQuestionHtml(Questions){
-  console.log('num of questions = ' + Questions.length);
+  //console.log('num of questions = ' + Questions.length);
   for(i = 0; i<Questions.length; i++){
     var QuestionDecoded = sanitize(Questions[i].Questionhtml).entityDecode();
     Questions[i].Questionhtml = QuestionDecoded;
@@ -455,15 +505,19 @@ exports.postusercreatetest = function(req, res){
 
 exports.getusertests = function(req, res){ //i want this to show all current and older tests 
 
-  db.GetAllTests(req.params.id, function(err, done){
+  db.GetAllTests(req.params.id, function(err, result){
     if(!err){
        //console.log('Done returned');
-       console.log('tests function returned = ' + done)
+       console.log('tests function returned = ' + result)
       // console.log(done[1].TestName)
       // console.log(done[2].TestName)
-      res.render('usertests',{title: 'Tests', AllTests: done})
+      res.render('usertests',{title: 'Tests', AllTests: result})
     }//end of if
-    else{
+    else if(err = 'NoTests'){
+      console.log('no test found')
+      res.render('usertests',{title: 'Tests'})
+    }
+    else {
       console.log('get all tests error')
       res.render('usertests',{title: 'Tests'})
     }//end of else

@@ -4,17 +4,13 @@
       .span2
         include partials/_SideBar
       .span8
-        h1 This is the user index page
-          .alert.alert-warning.alert-block
-            a.close(data-dismiss='alert', href='#') ×
-            h4.alert-heading Welcome! 
-            p Setup you class if you have not! 
-            a.btn.btn-warning(href='/user/#{userID}/setupclass') Setup
-            form.form-horizontal(method='post', action='')
-          h4 Create Test!
-          - if(typeof(TestNameError) != 'undefined' && TestNameError == 'IncludeTestName')
-            .control-group.error
-              label.control-label Enter Class Name and Select Class
+        h1 Create Test
+          - if(typeof(setupclass) != 'undefined')
+            .alert.alert-warning.alert-block
+              a.close(data-dismiss='alert', href='#') ×
+              h4.alert-heading Welcome! 
+              p Please setup your classes
+              a.btn.btn-warning(href='/user/#{userID}/setupclass') Setup
         fieldset.well.form-inline
           form.control-group(action='/user/#{userID}/createtest', method='post')
             .span3
@@ -28,19 +24,17 @@
                     option Select Class
                     - if(typeof(classinfo) != 'undefined')
                       each val,key in classinfo
-                        - if(key == 'classname')
-                          option #{val}
+                          option #{val.classname}
             .span2
               button.btn.btn-success.span2(type='submit') Create Test        
-            //- .span2
-            //-   select.span2(name='Grade', size='1')
-            //-     option grade 1
-            //-     option grade 2
-            //- .span2
-            //-   select.span2(name='Subject', size='1')
-            //-     option subject 1
-            //-     option subject 2
-          .control-group    
+        - if(typeof(CreateTestErrors) != 'undefined')
+          each err in CreateTestErrors
+            each val,key in err
+              - if(key == 'msg')
+                .alert.alert-error.alert-block
+                  a.close(data-dismiss='alert', href='#') ×
+                  h4.alert-heading Error!
+                  p #{val}
       .span2 
         h3 Placeholder Data
         p #{title}

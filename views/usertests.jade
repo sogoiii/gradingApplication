@@ -29,8 +29,18 @@
 							.alert.alert-success.alert-block
 								.row-fluid
 									.span6
-										h4.alert-heading #{test.Class} 
-										p #{test.TestName}
+										h2.alert-heading.classnametext #{test.TestName}
+										table.table.table-condensed.tableclass
+											thread
+												th Class
+												th Subject
+												th Grade year
+												th Students
+											tbody
+												td #{test.Class}
+												td.subject #{test.Subject}
+												td.grade #{test.Gradeyear}
+												td.NOS #{test.NumberOfStudents}
 									.span6
 										.btn-group.pull-right
 											button.btn.btn-success.dropdown-toggle(data-toggle='dropdown')
