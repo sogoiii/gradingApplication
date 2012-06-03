@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 var mongooseTypes = require('mongoose-types');
 mongooseTypes.loadTypes(mongoose, "email");
 var Email = mongoose.SchemaTypes.Email;
-
+var gridfs = require("../gridfs");
 
 
 //var QuestionSchema = require('mongoose').model('QuestionSchema');
@@ -19,10 +19,13 @@ var TestSchema = new Schema({
 	Subject: {type: String},
 	ClassName: {type: String},
 	Teacheremail: {type: Email},
-	TestCreated: {type: Date, default: Date.now}
-
-
+	TestCreated: {type: Date, default: Date.now},
+	PDFTest: [mongoose.Schema.Mixed]
 });
+
+
+
+
 
 
 

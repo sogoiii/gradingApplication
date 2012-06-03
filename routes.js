@@ -89,7 +89,9 @@ app.del('/user/:id/testdelete/:testid', ensureAuthenticated, RestirctAccess, rou
 
 
 app.get('/user/:id/tests', ensureAuthenticated, RestirctAccess, routes.getusertests);
-app.post('user/:id/tests', ensureAuthenticated, RestirctAccess, routes.postusertests);
+app.post('/user/:id/tests/upload', ensureAuthenticated, RestirctAccess, routes.uploadatest);
+
+
 app.get('/user/:id/questions', ensureAuthenticated, RestirctAccess, routes.getuserquestions);
 app.get('/user/:id/statistics', ensureAuthenticated, RestirctAccess, routes.getuserstatistics);
 
@@ -119,7 +121,7 @@ app.get('/file/:id', routes.getshowfile2)
 
 /*
   
-    OLDER TESTING AND LEARNING ROUTES!!! - probably not using anymore or for randome use only!!!
+    OLDER TESTING AND LEARNING ROUTES!!! - probably not using anymore or for random use only!!!
 
 */
 

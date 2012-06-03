@@ -1,4 +1,5 @@
-#myModal.modal.hide.fade	
+- myscripts.push('spin.min.js')
+#DeleteTest.modal.hide.fade	
 	.modal-header
 		a.close(href='#', data-dismiss='modal') ×
 		h3 Delete URL
@@ -15,6 +16,19 @@
 			input.hiddentest(type='hidden', name='testtodelete')
 			button.btn.btn-primary(type='submit') Yes Delete
 
+#UploadFileModal.modal.hide.fade	
+	.modal-header
+		a.close(href='#', data-dismiss='modal') ×
+		h3 Upload PDF of Test!
+	.modal-body
+		p Do not refresh page, it will happen automatically!
+		p.person Please select the correct file!
+	.modal-footer
+		form.UploadFile.control-group(action='', method='POST',enctype="multipart/form-data")
+			input(type="file", name="PDFTest") Select File
+			input.hiddentest(type='hidden', name='testtoupload')
+			button.btn.btn-primary(type='submit') Start Upload
+
 
 !=partial('partials/_TopBarLoggedIn')
 	.container-fluid
@@ -22,44 +36,60 @@
 			.span2
 				include partials/_SideBar
 			.span8
-				h1 This page will return all existing tests 
-				p #{title}
-					- if(typeof(AllTests) != 'undefined')
-						each test in AllTests
-							.alert.alert-success.alert-block
-								.row-fluid
-									.span6
-										h2.alert-heading.classnametext #{test.TestName}
-										table.table.table-condensed.tableclass
-											thread
-												th Class
-												th Subject
-												th Grade year
-												th Students
-											tbody
-												td #{test.ClassName}
-												td.subject #{test.Subject}
-												td.grade #{test.Gradeyear}
-												td.NOS #{test.NumberOfStudents}
-									.span6
-										.btn-group.pull-right
-											button.btn.btn-success.dropdown-toggle(data-toggle='dropdown')
-												| Actions
-												.span.caret
-											ul.dropdown-menu
-												li 
-													a(href='#') Upload
+				h1 Your Test instances are below!
+				br
+				- if(pageerror != '')
+					.alert.alert-error.alert-block
+						a.close(data-dismiss='alert', href='#') ×
+						h4.alert-heading Error!
+						p #{pageerror}
+				- if(typeof(AllTests) != 'undefined')
+					each test in AllTests
+						.alert.alert-info.alert-block
+							.row-fluid
+								.span6
+									h2.alert-heading.classnametext #{test.TestName}
+									table.table.table-condensed.tableclass
+										thread
+											th Class
+											th Subject
+											th Grade year
+											th Students
+										tbody
+											td #{test.ClassName}
+											td.subject #{test.Subject}
+											td.grade #{test.Gradeyear}
+											td.NOS #{test.NumberOfStudents}
+								br
+								br
+								br
+								#testspin
+								.span6
+									.btn-group.pull-right
+										button.btn.btn-info.dropdown-toggle(data-toggle='dropdown')
+											| Actions
+											.span.caret
+										ul.dropdown-menu
+											li
+												a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#UploadFileModal') Upload 
+											- if(test.PDFTest.length == '1')
 												li
-													a(href='#') Review
-												li 
-													a(href='/user/#{userID}/edittest/#{test._id}') Edit
-												li.divider
+													a.GradeRequest(href='#') Grade
+											- else
 												li
-													a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#myModal') Delete Test
-															
+													a.notavailable(href='#') Grade
+											li
+												a(href='#') Review
+											li 
+												a(href='/user/#{userID}/edittest/#{test._id}') Edit
+											li.divider
+											li
+												a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#DeleteTest') Delete Test				
 			.span2 
 				h3 Mearly test content
-				p #{title}
+				p some cool content here!
+				#Spinner
+
 
 
 

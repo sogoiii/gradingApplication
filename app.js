@@ -51,6 +51,7 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.set(express.logger());
   app.use(express.cookieParser());
+  //app.use(express.limit('2mb')); //limit file accepted here for testing only
   app.use(express.bodyParser());
   app.use(expressValidator);
   app.use(express.methodOverride());

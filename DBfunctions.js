@@ -273,6 +273,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
     //find the user
     //find & aggergate every test linked to this user into a variable
     var AllTests = [];
+    var testexist = [];
     //console.log('about to enter find teacher')
     TeacherUsers.find({_id: userinfo}, ['ActiveTests']).execFind(function(err, AT) {
       //console.log('going to check if err exists')
@@ -288,8 +289,10 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
                           //console.log('in !err, i guess if found something')
                           //console.warn('active tests element = ' + element)
                           //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
-                          Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'ClassName', 'NumberOfStudents']).execFind(function(secerr, atest){
+                          Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'ClassName', 'NumberOfStudents', 'PDFTest']).execFind(function(secerr, atest){
                             //console.log('found test = ' + atest)
+                            //console.log('pdftest inside = ' + atest[0].PDFTest.length);
+
                             AllTests.push(atest[0]);
                             //console.warn('size of all tests found = ' + AllTests.length)
                             if(AllTests.length == AT[0].ActiveTests.length){
@@ -435,64 +438,64 @@ exports.ReturnTestQuestions = function(userinfo, callback){
 
 
 
-  //insert question from the create test page
-  exports.InsertQuestion =  function(userinfo, callback){
-    var newQuestion = new Question({
-      Questionhtml: userinfo.QuestionHTML,
-      CorrectAnswertext: userinfo.CorrectAnswer
-    })//end of question
+  // //insert question from the create test page
+  // exports.InsertQuestion =  function(userinfo, callback){
+  //   var newQuestion = new Question({
+  //     Questionhtml: userinfo.QuestionHTML,
+  //     CorrectAnswertext: userinfo.CorrectAnswer
+  //   })//end of question
 
-    //var WrongAnswerSchema = mongoose.model('WrongAnswerSchema').WrongAnswerSchema;
-    var WA1 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer1})//wrong answer 1
-    var WA2 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer2})//wrong answer 2
-    var WA3 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer3})//wrong answer 3
-     newQuestion.WrongAnswers.push(WA1);
-     newQuestion.WrongAnswers.push(WA2);
-     newQuestion.WrongAnswers.push(WA3);
+  //   //var WrongAnswerSchema = mongoose.model('WrongAnswerSchema').WrongAnswerSchema;
+  //   var WA1 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer1})//wrong answer 1
+  //   var WA2 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer2})//wrong answer 2
+  //   var WA3 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer3})//wrong answer 3
+  //    newQuestion.WrongAnswers.push(WA1);
+  //    newQuestion.WrongAnswers.push(WA2);
+  //    newQuestion.WrongAnswers.push(WA3);
 
-    // newQuestion.save(function(err){
-    //   if(err){
-    //     console.log('Save Error: NewQuestion');
-    //     console.log('QHTML = ' + err.errors.Questionhtml)
-    //     console.log('CAT = ' + err.errors.CorrectAnswertext)
-    //     //callback(err,done);//return back to the routes index.js with err and done 
-    //   }
-    //   else
-    //     console.log('Saved New Question To DB')
-    // });//end of NewQuestion.Save
+  //   // newQuestion.save(function(err){
+  //   //   if(err){
+  //   //     console.log('Save Error: NewQuestion');
+  //   //     console.log('QHTML = ' + err.errors.Questionhtml)
+  //   //     console.log('CAT = ' + err.errors.CorrectAnswertext)
+  //   //     //callback(err,done);//return back to the routes index.js with err and done 
+  //   //   }
+  //   //   else
+  //   //     console.log('Saved New Question To DB')
+  //   // });//end of NewQuestion.Save
 
-    var newTest = new Test({
-      TestName: 'Testing Debug name'
-    })
+  //   var newTest = new Test({
+  //     TestName: 'Testing Debug name'
+  //   })
 
-    newTest.Questions.push(newQuestion);
+  //   newTest.Questions.push(newQuestion);
 
-    newTest.save(function(err){
-      if(err){
-        console.log('error saving new test');
-      }
-      else{
-        console.log('saved test')
-      }
+  //   newTest.save(function(err){
+  //     if(err){
+  //       console.log('error saving new test');
+  //     }
+  //     else{
+  //       console.log('saved test')
+  //     }
 
-    })//end of myTestSave
+  //   })//end of myTestSave
 
 
-    console.log('user id = ' +userinfo.userID )
-    TeacherUsers.findById(userinfo.userID, function(err,user){
-        user.Tests.push(newTest);
-        user.save(function(saveerr){});
+  //   console.log('user id = ' +userinfo.userID )
+  //   TeacherUsers.findById(userinfo.userID, function(err,user){
+  //       user.Tests.push(newTest);
+  //       user.save(function(saveerr){});
 
-        if(err){
-          console.log('DBFUNCTIONS NO USER TO SAVE ');
-        }
-        else {
-          console.log('DBFUNCTIONS found user = ' +  user.email);
-        }
+  //       if(err){
+  //         console.log('DBFUNCTIONS NO USER TO SAVE ');
+  //       }
+  //       else {
+  //         console.log('DBFUNCTIONS found user = ' +  user.email);
+  //       }
         
-    })//end of findbyID
+  //   })//end of findbyID
 
-  } // end of InsertNewQuestion
+  // } // end of InsertNewQuestion
 
 
 
@@ -527,6 +530,52 @@ exports.ReturnTestQuestions = function(userinfo, callback){
       }//end of else
     })//end of findbyid
   }//end of DeleteThisTest
+
+
+
+
+  exports.SendPDFToGridfs = function(userinfo, callback){
+    //userinfo.PDFTest= the file , userinfo.testtoupload
+
+    var opts = {
+        content_type: userinfo.PDFTest.type
+      };
+
+    Test.findById(userinfo.testtoupload,function(err,test){
+      if(!err){
+        test.PDFTest.splice(0,1);//remove the old document before storing new one
+        test.save(function(saverr1){
+          if(!saverr1){
+                gridfs.putFile(userinfo.PDFTest.path,userinfo.PDFTest.filename, opts, function(err,result){
+                  test.PDFTest.push(result)
+                  test.markModified('PDFTest');
+                  test.save(function(saverr){
+                      if(!saverr){
+                        console.log('saved PDF to this test');
+                        return callback(null);
+                      }//end of if err
+                      else{
+                        console.log('did not pdf file');
+                        console.log(err);
+                        return callback(saverr);//save error into callback 
+                      }//end of else err
+                    })//end of save
+                //return callback(null);
+                })//end of gridfs putfile
+          }//end of first save if
+          else{
+            return callback(saverr1)
+          }//end of first save else
+        })//end of first save
+      }//end of if !err
+      else{
+        console.log('Could not find the testID');
+        callback(err);
+      }//end of else
+    })//end of test.findbyid
+  }//end of sendpdftogridfs
+
+
 
 
 

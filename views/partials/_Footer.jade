@@ -1,7 +1,7 @@
 != renderScriptsTags(myscripts)
 script
 	$(document).ready(function () {
-		$('#myModal').on('show', function (event) {
+		$('#DeleteTest').on('show', function (event) {
 			var test = $(this).data('modal').options.testid
 			var user = $(this).data('modal').options.userid
 			$('.confirmdelete').prop('action','/user/' + user + '/testdelete/' + test)
@@ -12,6 +12,12 @@ script
 			var user = $(this).data('modal').options.userid
 			$('.confirmdelete').prop('action','/user/' + user + '/setupclass/')
 			$('.hiddentest').prop('value', classid)
+		});
+		$('#UploadFileModal').on('show', function (event){
+			var test = $(this).data('modal').options.testid
+			var user = $(this).data('modal').options.userid
+			$('.UploadFile').prop('action', '/user/' + user + '/tests/upload')
+			$('.hiddentest').prop('value', test)
 		});
 
 		$('.editclass').click(function(e){
@@ -29,5 +35,31 @@ script
 			$('.reqtype').prop('value', 'PUT')
 			//$('.createclass').append('<input type="hidden" name="_method" value="put" />')
 		})
+		$('.uploadfile').click(function(e){
+
+
+		})
+
+
+		$('.GradeRequest').click(function(e){
+			$('#Spinner').spin({radius: 9, length: 7,className: 'Spinner'});
+		})
+
+		$.fn.spin = function(opts) {
+		this.each(function() {
+		var $this = $(this),
+		data = $this.data();
+		if (data.spinner) {
+		data.spinner.stop();
+		delete data.spinner;
+		}
+		if (opts !== false) {
+		data.spinner = new Spinner($.extend({color: $this.css('color')}, opts)).spin(this);
+		}
+		});
+		return this;
+		};
+
+		$('#testspin').spin();
 		});//end of docment ready
 

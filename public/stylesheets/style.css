@@ -50,3 +50,15 @@ a {
 .show-grid .show-grid [class*="span"] {
   background-color: #ccc;
 }
+
+
+a.notavailable {    
+  color: #838B8B;
+}
+
+#Spinner {
+  background: #aaa;
+  color: black;
+}
+
+

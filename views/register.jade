@@ -3,7 +3,7 @@ if(DynsessionLoggedIn != true)
 else
   !=partial('partials/_TopBarLoggedIn')
 .container
-  .row
+  .row-fluid
     .span4
       h2 Register
       form.well.form(action='/register', method='post')

@@ -455,45 +455,45 @@ exports.getusercreatetest = function(req, res){
 
 
 
-exports.postusercreatetest = function(req, res){
-  //req.body.CorrectAnswer QuestionHTML WrongAnswer1,2,3 //user text input names
+// exports.postusercreatetest = function(req, res){
+//   //req.body.CorrectAnswer QuestionHTML WrongAnswer1,2,3 //user text input names
 
-  // //Remove XSS from user input
-  // req.body.QuestionHTML = req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
-  // //console.log('XSS - QHTML = ' + req.body.QuestionHTML)
-  // //encode the now XSS sanitized variable
-  // req.body.EncodedQuestionHTML = sanitize(req.body.QuestionHTML).entityEncode(); //entitiy.Decode() for dispalying later
-  // console.log('Encoded 1 = ' + req.body.EncodedQuestionHTML);
-
-
-  //Remove XSS from user input
-  req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
-  //console.log('XSS - QHTML = ' + req.body.QuestionHTML)
-  //encode the now XSS sanitized variable
-  req.sanitize('QuestionHTML').entityEncode(); //entitiy.Decode() for dispalying later
-  //console.log('Encoded 1 = ' + req.body.QuestionHTML);
+//   // //Remove XSS from user input
+//   // req.body.QuestionHTML = req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
+//   // //console.log('XSS - QHTML = ' + req.body.QuestionHTML)
+//   // //encode the now XSS sanitized variable
+//   // req.body.EncodedQuestionHTML = sanitize(req.body.QuestionHTML).entityEncode(); //entitiy.Decode() for dispalying later
+//   // console.log('Encoded 1 = ' + req.body.EncodedQuestionHTML);
 
 
+//   //Remove XSS from user input
+//   req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
+//   //console.log('XSS - QHTML = ' + req.body.QuestionHTML)
+//   //encode the now XSS sanitized variable
+//   req.sanitize('QuestionHTML').entityEncode(); //entitiy.Decode() for dispalying later
+//   //console.log('Encoded 1 = ' + req.body.QuestionHTML);
 
 
-  // req.assert('CorrectAnswer', 'CorrectAnwer alphanumeric').isAlphanumeric();
-  // var errors = req.validationErrors();
-  // console.log('error lenght = ' + errors.length)
-  // if(errors.length){
-  //    console.log('errors = ' + errors[0].param);
-  //   // console.log('errors = ' + errors[0].msg);  
-  //   // console.log('errors = ' + errors[0].value);
-  // }//end of if
-
-  req.body.userID = req.params.id;
-  db.InsertQuestion(req.body, function(err,done){ 
-
-  });//end of insertQuestion
 
 
-  res.redirect('/user/' + req.params.id +'/createtest');
-  //res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'just came from post'})
-}
+//   // req.assert('CorrectAnswer', 'CorrectAnwer alphanumeric').isAlphanumeric();
+//   // var errors = req.validationErrors();
+//   // console.log('error lenght = ' + errors.length)
+//   // if(errors.length){
+//   //    console.log('errors = ' + errors[0].param);
+//   //   // console.log('errors = ' + errors[0].msg);  
+//   //   // console.log('errors = ' + errors[0].value);
+//   // }//end of if
+
+//   req.body.userID = req.params.id;
+//   db.InsertQuestion(req.body, function(err,done){ 
+
+//   });//end of insertQuestion
+
+
+//   res.redirect('/user/' + req.params.id +'/createtest');
+//   //res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'just came from post'})
+// }
 
 
 
@@ -507,14 +507,18 @@ exports.postusercreatetest = function(req, res){
 
 
 exports.getusertests = function(req, res){ //i want this to show all current and older tests 
-
+  
+  var uploaderr = req.session.TestPageerrors;
+  req.session.TestPageerrors = '';
   db.GetAllTests(req.params.id, function(err, result){
     if(!err){
-       //console.log('Done returned');
-       //console.log('tests function returned = ' + result)
-      // console.log(done[1].TestName)
-      // console.log(done[2].TestName)
-      res.render('usertests',{title: 'Tests', AllTests: result})
+
+      res.render('usertests',{title: 'Tests',
+                             pageerror: uploaderr,
+                             AllTests: result})
+
+
+
     }//end of if
     else if(err = 'NoTests'){
       console.log('no test found')
@@ -530,6 +534,49 @@ exports.getusertests = function(req, res){ //i want this to show all current and
 
  // res.render('usertests',{title: 'Tests', wymeditor: true})
 }//end get tests
+
+
+
+
+exports.uploadatest = function(req,res){///user/:id/tests/upload
+//user selected a test and wanted to upload a file
+//req.file.scannedtest = the file to upload
+
+console.log('A file will be uploaded to gridfs server')
+console.log('test file = ' + req.body.testtoupload)
+console.log(req.files.PDFTest.type);
+console.log(req.files.PDFTest.size);
+
+if(req.files.PDFTest.type != 'application/pdf'){
+  req.session.TestPageerrors = 'File must be a PDF!'
+  res.redirect("back"); //back is the upload page 
+}
+else{
+  req.body.PDFTest = req.files.PDFTest;
+  db.SendPDFToGridfs(req.body, function(err){
+    if(!err){
+      //console.log('file should exisst on gridfs')
+      res.redirect('back')
+    }//end of if
+    else{ 
+      console.log('error sending file to gridfs')
+      req.flash('FileType', 'wrong file type');
+      res.redirect('back')
+    }//end of else
+  })//end of sendpdftogridfs
+};//end of first else 
+
+
+
+
+//res.redirect('back')
+
+}//end of uploadtes
+
+
+
+
+
 
 
 /*
@@ -611,8 +658,9 @@ exports.getupload = function(req,res){
 }
 
 
-  exports.postupload = function(req,res){
+  exports.postupload = function(req,res){ //uploadnew post 
     console.log(req.files.file.type);
+    console.log(req.files.file.size);
     if(req.files.file.type != 'application/pdf'){
       req.flash('myerror', 'wrong file type');
       res.redirect("back"); //back is the upload page 
