@@ -30,6 +30,20 @@
 			button.btn.btn-primary(type='submit') Start Upload
 
 
+#GradingModal.modal.hide.fade	
+	.modal-header
+		a.close(href='#', data-dismiss='modal') ×
+		h3 Get some coffee, grading has begun!
+	.modal-body
+		p This page will update when completed.
+		p.ConfirmDone
+		#Spinner.Spinner
+	.modal-footer
+		form.UploadFile.control-group(action='', method='POST',enctype="multipart/form-data")
+			input(type="file", name="PDFTest") Select File
+			input.hiddentest(type='hidden', name='testtoupload')
+			button.btn.btn-primary(type='submit') Start Upload
+
 !=partial('partials/_TopBarLoggedIn')
 	.container-fluid
 		.row-fluid
@@ -38,7 +52,7 @@
 			.span8
 				h1 Your Test instances are below!
 				br
-				- if(pageerror != '')
+				- if(pageerror == 'File must be a PDF!' )
 					.alert.alert-error.alert-block
 						a.close(data-dismiss='alert', href='#') ×
 						h4.alert-heading Error!
@@ -60,10 +74,6 @@
 											td.subject #{test.Subject}
 											td.grade #{test.Gradeyear}
 											td.NOS #{test.NumberOfStudents}
-								br
-								br
-								br
-								#testspin
 								.span6
 									.btn-group.pull-right
 										button.btn.btn-info.dropdown-toggle(data-toggle='dropdown')
@@ -74,7 +84,7 @@
 												a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#UploadFileModal') Upload 
 											- if(test.PDFTest.length == '1')
 												li
-													a.GradeRequest(href='#') Grade
+													a.GradeRequest(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#GradingModal') Grade
 											- else
 												li
 													a.notavailable(href='#') Grade
@@ -88,7 +98,7 @@
 			.span2 
 				h3 Mearly test content
 				p some cool content here!
-				#Spinner
+				
 
 
 

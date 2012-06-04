@@ -18,7 +18,9 @@ var mongoStore = require('session-mongoose');
 var mongooseTypes = require('mongoose-types');
 mongooseTypes.loadTypes(mongoose);
 
-
+var amqp = require('amqp');
+var rabbitMQ = amqp.createConnection({ host: '127.0.0.1' });
+var rpc = new (require('./amqprpc'))(rabbitMQ);
 
 
 var passport = require('passport')
@@ -36,7 +38,7 @@ model_files.forEach(function(file){
 
 
 var app = module.exports = express.createServer();
-
+var io = require('socket.io').listen(app);
 
 //Database
 var dbloc = 'mongodb://localhost/ecomm_database';
@@ -146,16 +148,60 @@ require('./routes')(app);
 
 
 
+
+
+
+
+/*
+
+
+SOCKET IO STUFF!!!
+
+
+*/
+
+
+io.set('log level', 1);
+io.sockets.on('connection', function (socket) {
+
+
+  //this function is called from the browser
+  socket.on('RPC_request', function (data){
+    console.log('Received request to send an RPC Command');
+      rpc.makeRequest('image', data, function response(err, response){
+        if(err)
+          console.error('error = ' + err);
+        else{
+          socket.emit('RPC_response', 'the RPC function has returned go check statistics page');  
+          //console.log("response = '" + response.data + "' is of type = '" + response.contentType+"'");
+          console.log("response = '" + response.data + "' To browser = '" + response.data.cool);
+        }
+      });//end of rpc.makerequest
+  })//end of RPC_request
+
+
+
+
+
+});//end of socket.io
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
-
-/*this function is not used here, its in routes.js*/
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  console.log('the user is not authorized');
-  res.redirect('/login')
-}
-
-
-
-

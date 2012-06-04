@@ -56,9 +56,13 @@ a.notavailable {
   color: #838B8B;
 }
 
-#Spinner {
-  background: #aaa;
+.Spinner {
+  float: right;
+  background-color: #aaa;
   color: black;
+  position: relative;
+  top: -14px;
+  left: -20px;
 }
 
 

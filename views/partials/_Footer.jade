@@ -1,6 +1,12 @@
 != renderScriptsTags(myscripts)
+script(src='/socket.io/socket.io.js')
 script
 	$(document).ready(function () {
+		var socket = io.connect();
+		socket.on('RPC_response', function(rpcresult){
+		$('.ConfirmDone').text(rpcresult)
+		$('#Spinner').spin(false);
+		})
 		$('#DeleteTest').on('show', function (event) {
 			var test = $(this).data('modal').options.testid
 			var user = $(this).data('modal').options.userid
@@ -19,6 +25,15 @@ script
 			$('.UploadFile').prop('action', '/user/' + user + '/tests/upload')
 			$('.hiddentest').prop('value', test)
 		});
+		$('#GradingModal').on('show', function (event){
+			var test = $(this).data('modal').options.testid
+			var user = $(this).data('modal').options.userid
+			$('#Spinner').spin({radius: 9, length: 7,className: 'Spinner'});
+			socket.emit('RPC_request', {testid: test, userid: user});
+		});
+
+
+
 
 		$('.editclass').click(function(e){
 			var nam = $(this).closest('.row-fluid').find('.classnametext').text()             
@@ -41,9 +56,9 @@ script
 		})
 
 
-		$('.GradeRequest').click(function(e){
-			$('#Spinner').spin({radius: 9, length: 7,className: 'Spinner'});
-		})
+		//- $('.GradeRequest').click(function(e){
+		//- 	$('#Spinner').spin({radius: 9, length: 7,className: 'Spinner'});
+		//- })
 
 		$.fn.spin = function(opts) {
 		this.each(function() {
@@ -60,6 +75,6 @@ script
 		return this;
 		};
 
-		$('#testspin').spin();
+		//- $('#testspin').spin();
 		});//end of docment ready
 
