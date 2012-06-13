@@ -576,6 +576,20 @@ else{
 
 
 
+exports.pdffile = function(req,res){
+  // console.log('in pdf file for file = ' + req.fileid);
+
+  gridfs.getnew( req.params.fileid , function(err,file) {
+    res.writeHead('200', {'Content-Type': 'application/pdf'});
+     res.end(file,'binary');
+  });
+
+}//end of pdffile
+
+
+
+
+
 
 
 
@@ -690,13 +704,21 @@ exports.getupload = function(req,res){
 
 //works better than above
 exports.getshowfile2 = function(req, res){
-  gridfs.getnew( function(err,file) {
+  //file was read from the response url ???
+  gridfs.getnew( req.params.id , function(err,file) {
     res.writeHead('200', {'Content-Type': 'image/png'});
      res.end(file,'binary');
-  }, req.params.id );
+  });
 };
 
-
+//testing getshowfileforpdffiles
+exports.getshowfile3 = function(req, res){
+  //file was read from the response url ???
+  gridfs.getnew( req.params.id , function(err,file) {
+    res.writeHead('200', {'Content-Type': 'application/pdf'});
+     res.end(file,'binary');
+  });
+};
 
 
 

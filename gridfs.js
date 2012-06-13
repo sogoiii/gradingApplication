@@ -34,7 +34,7 @@
   };
 
   //allows the whole file to be found
-  exports.getnew = function(callback, id){
+  exports.getnew = function(id, callback){
     var db, store;
     db = mongoose.connection.db;
     store = new GridStore(db,new ObjectID(id), 'r');

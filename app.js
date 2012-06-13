@@ -161,7 +161,7 @@ SOCKET IO STUFF!!!
 */
 
 
-io.set('log level', 1);
+io.set('log level', 1); 
 io.sockets.on('connection', function (socket) {
 
 
@@ -179,6 +179,25 @@ io.sockets.on('connection', function (socket) {
       });//end of rpc.makerequest
   })//end of RPC_request
 
+
+  //this function is called for creating a pdf file
+  socket.on('RPC_PrintPDF', function(data){
+    console.log('recieved request to create pdf')
+    rpc.makeRequest('createPDF', data, function response(err,response){
+      if(!err){
+        console.log('Returned from java')
+        response.createdid = response.data;
+        var out = response.createdid.toString();
+        console.log('response = ' + out);
+        response.textreply = 'Click the download button';
+        socket.emit('RPC_Print_response', out)
+      }//end of if
+      else{
+        console.log('Failed RPC')
+
+      }//end of else
+    })//end of rpc.makerequest
+  })//end of socket.on
 
 
 

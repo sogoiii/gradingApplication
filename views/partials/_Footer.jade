@@ -7,6 +7,12 @@ script
 		$('.ConfirmDone').text(rpcresult)
 		$('#Spinner').spin(false);
 		})
+		socket.on('RPC_Print_response', function(rpcresult){
+		$('.CreatedPDFID').text(rpcresult)	
+		$('.ConfirmDone').text('Click the download file')
+		$('a#PDFURL').prop('href', '/pdffile/' + rpcresult);
+		$('#CreatePDFSpinner').spin(false);
+		})
 		$('#DeleteTest').on('show', function (event) {
 			var test = $(this).data('modal').options.testid
 			var user = $(this).data('modal').options.userid
@@ -31,7 +37,12 @@ script
 			$('#Spinner').spin({radius: 9, length: 7,className: 'Spinner'});
 			socket.emit('RPC_request', {testid: test, userid: user});
 		});
-
+		$('#CreatePDF').on('show', function (event){
+			var test = $(this).data('modal').options.testid
+			var user = $(this).data('modal').options.userid
+			$('#CreatePDFSpinner').spin({radius: 9, length: 7,className: 'Spinner'});
+			socket.emit('RPC_PrintPDF', {testid: test, userid: user});
+		});
 
 
 
@@ -56,9 +67,6 @@ script
 		})
 
 
-		//- $('.GradeRequest').click(function(e){
-		//- 	$('#Spinner').spin({radius: 9, length: 7,className: 'Spinner'});
-		//- })
 
 		$.fn.spin = function(opts) {
 		this.each(function() {
@@ -75,6 +83,5 @@ script
 		return this;
 		};
 
-		//- $('#testspin').spin();
 		});//end of docment ready
 

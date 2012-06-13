@@ -44,6 +44,25 @@
 			input.hiddentest(type='hidden', name='testtoupload')
 			button.btn.btn-primary(type='submit') Start Upload
 
+
+#CreatePDF.modal.hide.fade	
+	.modal-header
+		a.close(href='#', data-dismiss='modal') ×
+		h3 Get some coffee, grading has begun!
+	.modal-body
+		p This page will update when completed.
+		p.ConfirmDone
+		p.CreatedPDFID
+		#CreatePDFSpinner.Spinner
+	.modal-footer
+			a.btn.btn-primary#PDFURL() Open PDF
+
+
+
+
+
+
+
 !=partial('partials/_TopBarLoggedIn')
 	.container-fluid
 		.row-fluid
@@ -81,13 +100,21 @@
 											.span.caret
 										ul.dropdown-menu
 											li
-												a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#UploadFileModal') Upload 
+												a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#CreatePDF') Create PDF	
+											- if(test.CreatedPDF.length == '1')
+												li
+													a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#UploadFileModal') Upload 
+											- else
+												li
+													a.notavailable(href='#') Upload
+
 											- if(test.PDFTest.length == '1')
 												li
-													a.GradeRequest(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#GradingModal') Grade
+													a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#GradingModal') Grade
 											- else
 												li
 													a.notavailable(href='#') Grade
+	
 											li
 												a(href='#') Review
 											li 

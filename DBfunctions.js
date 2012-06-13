@@ -289,7 +289,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
                           //console.log('in !err, i guess if found something')
                           //console.warn('active tests element = ' + element)
                           //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
-                          Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'ClassName', 'NumberOfStudents', 'PDFTest']).execFind(function(secerr, atest){
+                          Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'ClassName', 'NumberOfStudents', 'PDFTest', 'CreatedPDF']).execFind(function(secerr, atest){ //get only PDFCreated[0].filename ???
                             //console.log('found test = ' + atest)
                             //console.log('pdftest inside = ' + atest[0].PDFTest.length);
 
@@ -547,7 +547,7 @@ exports.ReturnTestQuestions = function(userinfo, callback){
         test.save(function(saverr1){
           if(!saverr1){
                 gridfs.putFile(userinfo.PDFTest.path,userinfo.PDFTest.filename, opts, function(err,result){
-                  test.PDFTest.push(result)
+                  test.PDFTest.push(result) //should have just grabbed the object id instead of the whole result...
                   test.markModified('PDFTest');
                   test.save(function(saverr){
                       if(!saverr){

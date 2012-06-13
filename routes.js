@@ -83,6 +83,8 @@ app.post('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.pos
 app.get('/user/:id/edittest/:testid', ensureAuthenticated, RestirctAccess, routes.getedittest);
 app.put('/user/:id/edittest/:testid', ensureAuthenticated, RestirctAccess, routes.putedittest);
 app.del('/user/:id/testdelete/:testid', ensureAuthenticated, RestirctAccess, routes.deltest);
+app.get('/pdffile/:fileid',  routes.pdffile)
+
 
 // app.get('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.getusercreatetest);
 // app.post('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.postusercreatetest);
@@ -111,7 +113,7 @@ app.get('/user/:id/statistics', ensureAuthenticated, RestirctAccess, routes.getu
 app.get('/uploadtest', routes.getupload);
 app.post('/uploadnew',routes.postupload);
 app.get('/file/:id', routes.getshowfile2)
-
+app.get('/filePDF/:id', routes.getshowfile3)
 
 
 
