@@ -299,25 +299,46 @@
 
 
 
+// !=partial('partials/_TopBarLoggedIn')
+// .container-fluid
+//   .row-fluid
+//     .span2
+//       h1= title
+//     .span8
+//       p Welcome to #{title}
+//       h2 Live demo
+//         p Toggle a modal via javascript by clicking the button below. It will slide down and fade in from the top of the page.
+//           #myModal.modal.hide.fade
+//             .modal-header
+//               button.close(data-dismiss='modal') ×
+//               h3 Are You Sure You Want Delete This Test?
+//             .modal-body
+//               p You will have to recreate it to bring it back.
+//             .modal-footer
+//               form.control-group(action='/user/#{userID}/testdelete', method='post')
+//                 button.btn(data-dismiss='modal') No!
+//                 input(type='hidden', name='_method', value='delete')
+//                 button.btn.btn-primary(type='submit') Yes Delete
+//           a.btn.btn-primary.btn-large(data-toggle='modal', href='#myModal') Launch demo modal
+        
+
+
+
+
+
+
+
+
+
+// script(language='javascript', type='text/javascript', src='/javascripts/jQuery.js')
+// script(language='javascript', type='text/javascript', src='/javascripts/jquery.jqplot.min.js')
+//- link(rel='stylesheet', href="/stylesheets/jquery.jqplot.css")
+
+
+
 !=partial('partials/_TopBarLoggedIn')
 .container-fluid
   .row-fluid
     .span2
-      h1= title
-    .span8
-      p Welcome to #{title}
-      h2 Live demo
-        p Toggle a modal via javascript by clicking the button below. It will slide down and fade in from the top of the page.
-          #myModal.modal.hide.fade
-            .modal-header
-              button.close(data-dismiss='modal') ×
-              h3 Are You Sure You Want Delete This Test?
-            .modal-body
-              p You will have to recreate it to bring it back.
-            .modal-footer
-              form.control-group(action='/user/#{userID}/testdelete', method='post')
-                button.btn(data-dismiss='modal') No!
-                input(type='hidden', name='_method', value='delete')
-                button.btn.btn-primary(type='submit') Yes Delete
-          a.btn.btn-primary.btn-large(data-toggle='modal', href='#myModal') Launch demo modal
-        
+      #chartdiv(style='height: 400px; width: 300px;')
+

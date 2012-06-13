@@ -90,7 +90,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
       Gradeyear: classroom.Gradeyear,
       Subject: classroom.Subject
     })
-    console.log('new test looks like = ' + newTest)
+    // console.log('new test looks like = ' + newTest)
     //return callback(null,null)
     newTest.save(function(err){
       if(!err){
