@@ -101,7 +101,7 @@
 										ul.dropdown-menu
 											li
 												a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#CreatePDF') Create PDF	
-											- if(test.CreatedPDF.length == '1')
+											- if(test.CreatedPDFj.length == '1')
 												li
 													a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#UploadFileModal') Upload 
 											- else
