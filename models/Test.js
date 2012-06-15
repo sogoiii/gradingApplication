@@ -13,6 +13,7 @@ var QuestionSchema = require('./Questions').QuestionSchema;
 var TestSchema = new Schema({
 	TestName: {type: String, required: true},
 	Questions: [QuestionSchema],
+	Answers: [mongoose.Schema.Mixed],
 	
 	NumberOfStudents: {type: Number},
 	Gradeyear: {type: Number}, //this could be a string becaue countries have primary and secondary without levels in between

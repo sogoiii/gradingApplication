@@ -512,7 +512,7 @@ exports.getusertests = function(req, res){ //i want this to show all current and
   req.session.TestPageerrors = '';
   db.GetAllTests(req.params.id, function(err, result){
     if(!err){
-
+      console.log("alltests = " +result);
       res.render('usertests',{title: 'Tests',
                              pageerror: uploaderr,
                              AllTests: result})
