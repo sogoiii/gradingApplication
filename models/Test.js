@@ -22,7 +22,8 @@ var TestSchema = new Schema({
 	Teacheremail: {type: Email},
 	TestCreated: {type: Date, default: Date.now},
 	PDFTest: [mongoose.Schema.Mixed],
-	CreatedPDF: [mongoose.Schema.Mixed]
+	CreatedPDF: [mongoose.Schema.Mixed],
+	TestResults: [mongoose.Schema.Mixed]
 });
 
 

@@ -129,6 +129,15 @@ script
 
 
 
+		$.jqplot('chartdivtest',  [[[1, 2],[2,5.12],[3,13.1],[4,33.6],[5,85.9],[6,219.9]]],
+			{title:'Data from Server',
+			axes:{yaxis:{min:-10, max:240}},
+			series:[{color:'#5FAB78',
+					label: 'student grades'}],
+			legend: {show: true,
+					location: 'se'}
+			});
+
 
 
 

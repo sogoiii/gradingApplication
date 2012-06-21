@@ -136,7 +136,7 @@ app.get('/user/:id/overview', ensureAuthenticated, RestirctAccess, routes.getuse
 app.del('/user/testajaxpost', routes.testajaxpost)
 app.post('/user/testajaxpost', routes.testajaxpost2)
 
-
+app.get('/testplot', routes.gettestplot);
 
 }
 

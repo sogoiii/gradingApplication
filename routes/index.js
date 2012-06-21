@@ -821,5 +821,21 @@ exports.testajaxpost2 = function(req,res){
   //res.redirect('/about', { title: 'About'})
 }
 
+exports.gettestplot = function(req,res){
 
+  db.grabTestResultstest(req.body, function(err){
+    if(!err){
+
+
+      res.render("Testviews/testplot", {title: "testingplotstuff"});
+    }//end of !err if
+    else{
+
+
+      res.render("Testviews/testplot", {title: "testingplotstuff"});
+    }//end of !err else
+  })//end of grabTestResults
+
+  // res.render("Testviews/testplot", {title: "testingplotstuff"});
+}
 

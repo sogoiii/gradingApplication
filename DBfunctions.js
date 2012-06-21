@@ -729,6 +729,71 @@ exports.DeleteAClass = function(userinfo, callback){//called from delsetup
 
 
 
+exports.grabTestResultstest = function(userinfo, callback){
+  //userinfo = testobjetid = 4fda1af52f910cc6200000d3
+
+
+  Test.findById("4fda1af52f910cc6200000d3",function(err,result){
+    if(!err){
+      // console.log("found test object")
+      // console.log("result = " + result)
+      console.log("Answers = " + result.TestResults)
+      // console.log("result = " + result);
+      // console.log("result = " + result.id);
+      callback(null,result);
+    }//end of !eer if
+    else{
+      console.log("did not find test object")
+      callback(err,null);
+    }//end of !err else
+  })//end of findbyid
+}//end of grabTestResults
+
+function reconTestResults(userinfo, callback){ //name is misleading
+
+
+
+
+}//end of get Teacher User by ID
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
