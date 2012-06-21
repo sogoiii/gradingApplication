@@ -110,33 +110,82 @@ script
 
 
 
+		var fromserver = [[]];
+		var dataRenderer2 = function(){
+			var data = [[]];
+			for (var i=0; i<13; i+=0.5) {
+				data[0].push([i, Math.sin(i)]);
+			}
+			$('#sinedata').text(data);
+			return data;
+			}
 
 
 
+		var statRender = function(){
+			socket.emit('getresults', 'tobi', function (somedata) {
+				var data = [[]];
+				for(i = 0; i < somedata.length;i++){
+					data[0].push([i,somedata[i].numcorrect])
+				}
+				$('#datareceived').text(data);
+				$.jqplot('chartdivtest',  data,
+				{title:'Data from Server',
+				axes:{yaxis:{min:-1, max:3}},
+				axes:{xaxis:{min:-1, max:11}},
+				series:[{color:'#5FAB78',label: 'student grades'}],
+				legend: {show: true, location: 'se'}
+				});
+				//- return data;
+			});
+		}
+
+		socket.emit('BuildStats_req');
+		socket.on("BuildStats_res", function(stats){
+			
+	
+
+			$.jqplot('chartdivsine',  [],
+			{title:'Created Sine Data',
+			series:[{color:'#5FAB78',label: 'student grades'}],
+			legend: {show: true, location: 'se'},
+			dataRenderer: dataRenderer2
+			});
 
 
-
-
+			var result = statRender(stats);
+			//- var serverdata = $('#datareceived').text()
+			//- $('#confirmreceived').text(serverdata);
+			//- $.jqplot('chartdivtest',  [],
+			//- {title:'Data from Server',
+			//- series:[{color:'#5FAB78',label: 'student grades'}],
+			//- legend: {show: true, location: 'se'}
+			//- ,dataRenderer: statRender
+			//- });
+			}) //- end of socket.on
 		
-		$.jqplot('chartdiv',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]],
+
+
+
+
+
+
+
+
+
+
+
+
+			$.jqplot('chartdiv',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]],
 			{title:'Exponential Line',
 			axes:{yaxis:{min:-10, max:240}},
-			series:[{color:'#5FAB78',
-					label: 'student grades'}],
-			legend: {show: true,
-					location: 'se'}
+			series:[{color:'#5FAB78',label: 'student grades'}],
+			legend: {show: true,location: 'se'}
 			});
 
 
 
-		$.jqplot('chartdivtest',  [[[1, 2],[2,5.12],[3,13.1],[4,33.6],[5,85.9],[6,219.9]]],
-			{title:'Data from Server',
-			axes:{yaxis:{min:-10, max:240}},
-			series:[{color:'#5FAB78',
-					label: 'student grades'}],
-			legend: {show: true,
-					location: 'se'}
-			});
+
 
 
 

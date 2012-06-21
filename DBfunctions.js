@@ -737,10 +737,10 @@ exports.grabTestResultstest = function(userinfo, callback){
     if(!err){
       // console.log("found test object")
       // console.log("result = " + result)
-      console.log("Answers = " + result.TestResults)
+      // console.log("Answers = " + result.TestResults[0].numcorrect)
       // console.log("result = " + result);
       // console.log("result = " + result.id);
-      callback(null,result);
+      callback(null,result.TestResults);
     }//end of !eer if
     else{
       console.log("did not find test object")
