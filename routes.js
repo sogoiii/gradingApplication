@@ -95,7 +95,7 @@ app.post('/user/:id/tests/upload', ensureAuthenticated, RestirctAccess, routes.u
 
 
 app.get('/user/:id/questions', ensureAuthenticated, RestirctAccess, routes.getuserquestions);
-app.get('/user/:id/statistics', ensureAuthenticated, RestirctAccess, routes.getuserstatistics);
+app.get('/user/:id/statistics/:testid', ensureAuthenticated, RestirctAccess, routes.getTeststatistics);
 
 
 

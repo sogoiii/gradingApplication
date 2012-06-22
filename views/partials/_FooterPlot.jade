@@ -1,0 +1,57 @@
+!= renderScriptsTags(myscripts)
+script(src='/socket.io/socket.io.js')
+script(src='/javascripts/jquery.jqplot.min.js')
+script(src='/javascripts/jqplot.pieRenderer.min.js')
+script
+	$(document).ready(function () {
+		var socket = io.connect();
+		socket.emit('BuildStats_req');
+		socket.on("BuildStats_res", function(stats){
+			createResultPlot(stats);
+			}) //- end of socket.on
+
+
+
+
+		var data = [
+		['A', 12],['B', 9], ['C', 14], 
+		['D', 16],['F', 7],
+		];
+		var plot1 = jQuery.jqplot ('chart1', [data], 
+			{ 
+				title: 'Grade Distribution',
+			seriesDefaults: {
+			// Make this a pie chart.
+			renderer: jQuery.jqplot.PieRenderer, 
+			rendererOptions: {
+			// Put data labels on the pie slices.
+			// By default, labels show the percentage of the slice.
+			showDataLabels: true}
+			}, 
+			legend: { show:true, location: 'e' }
+			}
+			);
+
+
+
+
+		function createResultPlot(newstats){
+			var somedata = newstats;
+			var data = [[]];
+			for(i = 0; i < somedata.length;i++){
+				data[0].push([i,somedata[i].numcorrect])
+			}
+			$('#datareceived').text(data);
+			$.jqplot('chartdivtest',  data,
+			{title:'Test Results by Questions',
+			axes:{yaxis:{label: 'Total Correct'},
+					xaxis:{label: 'Question Number'}},
+			series:[{color:'#5FAB78',label: 'Test Results'}],
+			legend: {show: true, location: 'se'}
+			});//- end of jqplot
+		}
+
+
+
+		});//end of docment ready
+

@@ -19,6 +19,8 @@ html
   body!= body
   - if(typeof(wymeditor) != 'undefined')
         include partials/_FooterTests
+  - else if(typeof(plotjq) != 'undefined')
+        include partials/_FooterPlot
   - else
         include partials/_Footer       
             
