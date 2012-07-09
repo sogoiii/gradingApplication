@@ -16,7 +16,7 @@ var Test = require('./models/Test');
 var Question = require('./models/Questions');
 var Application = require('./models/UploadFilesTest'); //this was for uploading files, example
 var WrongAnswer = require('./models/WrongAnswers');
-
+var Standard = require('./models/Standards');
 
 /*
 //Passport Local Strategy for username authentication
@@ -37,10 +37,13 @@ passport.use(new LocalStrategy(
 passport.use(new LocalStrategy( {usernameField: 'email'},
   function(email, password, done) {
    // asynchronous verification, for effect...
+   // console.log('going to authenticate user now 1');
     process.nextTick(function () {
+      // console.log('going to authenticate user now 2');
     	var messageresult = new String();
       TeacherUsers.authenticateEmail(email, password, function(err, user, messageresult){ //before: 'user' was 'email'
-      	console.log(messageresult); //this does return the right thing to console
+      	// console.log('returning to user');
+        // console.log(messageresult); //this does return the right thing to console
       	if(messageresult == 'incorrect user') {return done(null, false, { message: 'Unkown user'});} //left side is the output of the teacher users function, the right side is what is sent to the login page
       	if(messageresult == 'wrong password') {return done(null, false, { message: 'Invalid password' })}
       	return done(err,user); //i use to return 'email' not 'user' 
@@ -765,7 +768,30 @@ function reconTestResults(userinfo, callback){ //name is misleading
 
 
 
+exports.addstandardtoDB = function(userinfo, callback){
+//userinfo = req.body
 
+  var newStandard = new Standard({
+    Title: userinfo.Title,
+    Description: userinfo.Description,
+    Grade: userinfo.Grade,
+    Subject: userinfo.Subject,
+    Abbreviation: userinfo.Abbreviation,
+    Topic: userinfo.Topic,
+    number: userinfo.Snumber,
+  });//end of question
+
+  newStandard.save(function(saverr){
+    if(!saverr){
+      //console.log('saved item will return now')
+      callback(null,'saved standard')
+    }//end of iff
+    else{
+      console.log('didnt save standard')
+      callback(saverr,null)
+    }
+  })//end of else
+}//addstandardtoDB
 
 
 

@@ -839,3 +839,86 @@ exports.gettestplot = function(req,res){
   res.render("Testviews/testplot", {title: "testingplotstuff"});
 }
 
+
+
+
+exports.getaddstandard = function(req, res){
+
+  res.render("Testviews/addstandards",{title: 'addstandard', message: req.flash('error')})
+
+}//end of getaddstandard
+
+exports.postaddstandard = function(req, res){
+  db.addstandardtoDB(req.body,function(err,done){
+    if(!err){
+      console.log('Succesfully added standard');
+      res.redirect('back');
+    }//end of !err if
+    else{
+      console.log('failed to add standard');
+      res.redirect('back');
+    }//end of else
+  });//end of addstandtodb
+}//end of getaddstandard
+
+// exports.postchangeAbbreviations = function(req,res){ //do not call this again!
+//   var testob = '4ffa93b8b30e978f15000713';
+
+//     var StandardSchema = mongoose.model('StandardSchema');
+//     StandardSchema.find({}, function(err,standards){
+//       if(!err){
+//         console.log('changed abbreviation'); 
+//         console.log('num returned standards = ' + standards.length);
+//         var index = 0;
+//         standards.forEach(function(element){
+//           var newabrev = element.Grade + '.' + element.Abbreviation;
+//           console.log('new Abbreviation = ' +  newabrev)
+//           index++;
+//           element.Abbreviation = newabrev;
+//           element.save(function(saverr){
+//             if(!saverr){
+//               console.log('saved abbreviation');
+//               // res.redirect('back');
+//               if(index == standards.length){
+//                 res.redirect('back');
+//               }//end of breakout if 
+//             }//end of if !saverr
+//             else{
+//               console.log('Failed saving new abbreviation');
+//               if(index == standards.length){
+//                 res.redirect('back');
+//               }//end of breakout if 
+//             }//end of else
+//           })//end of save question to test
+
+//               // if(index == standards.length){
+//               //   res.redirect('back');
+//               // }//end of breakout if 
+
+
+
+//           // var newabrev = standards.Grade + '.' + standards.Abbreviation;
+//           // standards.Abbreviation = newabrev;
+//           // standards.save(function(saverr){
+//           //   if(!saverr){
+//           //     console.log('saved abbreviation');
+//           //     res.redirect('back');
+//           //   }//end of if !saverr
+//           //   else{
+//           //     console.log('Failed saving new abbreviation');
+//           //     res.redirect('back');
+//           //   }//end of else
+//           // })//end of save question to test
+
+            
+
+//         })//end for each
+//       } //end of !err if       
+//       else{
+//         console.log('didnt change abbreviation');
+//         res.redirect('back');
+//       }
+//     })//end of findbyID
+
+// }
+
