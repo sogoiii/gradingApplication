@@ -922,3 +922,34 @@ exports.postaddstandard = function(req, res){
 
 // }
 
+
+exports.postaddheadline = function(req,res){
+
+    var StandardSchema = mongoose.model('StandardSchema');
+    StandardSchema.find({"Grade" : "1"}, function(err,standards){
+      if(!err){
+        console.log('num returned standards = ' + standards.length);
+        var index = 0;
+        standards.forEach(function(element){
+          var Headline = 'Grade ' + element.Grade;
+          console.log('new Highlight = ' +  Headline)
+          index++;
+          element.Headline = Headline;
+          element.save(function(saverr){
+            if(!saverr){
+              console.log('saved Headline');
+              if(index == standards.length){
+                res.redirect('back');
+              }//end of breakout if 
+            }//end of if !saverr
+            else{
+              console.log('Failed saving new Headline');
+              if(index == standards.length){
+                res.redirect('back');
+              }//end of breakout if 
+            }//end of else !saverr
+          })//end of save standard
+        })//end of for each standard
+      }//end of if !err
+    })//end of find
+}//end postaddheadline

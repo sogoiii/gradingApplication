@@ -139,7 +139,8 @@ app.post('/user/testajaxpost', routes.testajaxpost2)
 app.get('/testplot', routes.gettestplot);
 app.get('/addstandard', routes.getaddstandard);
 app.post('/addstandard', routes.postaddstandard);
-app.post('/CAB',routes.postchangeAbbreviations)
+app.post('/CAB',routes.postchangeAbbreviations);//change abbreviation
+app.post('/addheadline', routes.postaddheadline)
 }
 
 

@@ -4,14 +4,15 @@ var ObjectId = Schema.ObjectId;
 
 
 
-var StandardSchema = new Schema ({
-	Title: {type: String, required: true},
+var StandardsSchema= new Schema ({
+	Subject: {type: String, default: 'Mathematics'},
+	Headline: {type: String, required: true},
+	Section: {type: String, required: true},
+	SubSection: {type: String, required: true},
 	Description: {type: String, required: true},
-	Grade: {type: Number, required: true},
-	Subject: {type: String, default: "Mathematics"},
+	Dnumber: {type: Number, required: true},
+	GradeLevel: {type: String, required: true},
 	Abbreviation: {type: String, uppercase: true, required: true},
-	Topic: {type: String, required: true},
-	number: {type: Number, required: true},
 	Association: {type: String, default: 'Common Core State Standards'}
 })// end of standardMet
 
@@ -26,4 +27,4 @@ var StandardSchema = new Schema ({
 
 
 
-module.exports = mongoose.model('StandardSchema', StandardSchema );
+module.exports = mongoose.model('StandardsSchema', StandardsSchema );
