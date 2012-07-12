@@ -16,7 +16,7 @@ var Test = require('./models/Test');
 var Question = require('./models/Questions');
 var Application = require('./models/UploadFilesTest'); //this was for uploading files, example
 var WrongAnswer = require('./models/WrongAnswers');
-var Standard = require('./models/Standards');
+var Standard = require('./models/Standard');
 
 /*
 //Passport Local Strategy for username authentication
@@ -774,7 +774,7 @@ exports.addstandardtoDB = function(userinfo, callback){
   var newStandard = new Standard({
     Title: userinfo.Title,
     Description: userinfo.Description,
-    Grade: userinfo.Grade,
+    Headline: userinfo.Headline,
     Subject: userinfo.Subject,
     Abbreviation: userinfo.Abbreviation,
     Topic: userinfo.Topic,
@@ -795,7 +795,65 @@ exports.addstandardtoDB = function(userinfo, callback){
 
 
 
+exports.addEnglishstandardtoDB = function(userinfo, callback){
+//userinfo = req.body
 
+  var subject = new Array();
+  // subject[0] = 'English Language Arts';
+  // subject[0] = 'Literacy in History/Social Science'
+  // subject[0] = 'Science'
+  // subject[1] = 'Technical Subjects'
+  subject[0] = 'History/Social Science, Sceince and Technical Subjects'
+  // console.log('size of subjects = ' + subject.length);
+
+  for(var i = 0; i < subject.length; i++){
+    userinfo.subject = subject[i]
+    SaveSubject(userinfo,function(err,user){
+      // if(!err){
+
+      // }//end of !err if
+      // else{
+
+      // }//end of !err else
+
+    })//end of saveSubject
+  }//end of for loop
+
+
+
+  callback(null, 'test');
+
+}//addstandardtoDB
+
+function SaveSubject(userinfo, callback){ //name is misleading
+
+  // var literacyin = 'Literacy in ' + userinfo.subject;
+  // console.log(literacyin);
+  var newStandard = new Standard({
+    Title: userinfo.Title,
+    Description: userinfo.Description,
+    Headline: userinfo.Headline,
+    Subject: userinfo.subject,
+    Abbreviation: userinfo.Abbreviation,
+    Topic: userinfo.Topic,
+    number: userinfo.Snumber,
+  });//end of question
+
+
+  // // console.log('saved standard for = ' + userinfo.subject)
+  newStandard.save(function(saverr){
+    if(!saverr){
+      //console.log('saved item will return now')
+      callback(null,'saved standard')
+    }//end of iff
+    else{
+      console.log('didnt save standard = ' + userinfo.subject)
+      callback(saverr,null)
+    }//end of else
+  })//end save
+
+
+}//end of get Teacher User by ID
 
 
 

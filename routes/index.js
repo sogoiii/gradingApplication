@@ -861,6 +861,30 @@ exports.postaddstandard = function(req, res){
   });//end of addstandtodb
 }//end of getaddstandard
 
+
+exports.postaddEnglishstandard = function(req, res){
+  db.addEnglishstandardtoDB(req.body,function(err,done){
+    if(!err){
+      console.log('Added Subjects');
+      res.redirect('back');
+    }//end of !err if
+    else{
+      console.log('failed to add standard');
+      res.redirect('back');
+    }//end of else
+  });//end of addstandtodb
+}//end of getaddstandard
+
+
+
+
+
+
+
+
+
+
+
 // exports.postchangeAbbreviations = function(req,res){ //do not call this again!
 //   var testob = '4ffa93b8b30e978f15000713';
 
@@ -923,33 +947,68 @@ exports.postaddstandard = function(req, res){
 // }
 
 
-exports.postaddheadline = function(req,res){
+// exports.postaddheadline = function(req,res){
+// //add headline to grade 1-8 for math
+//     var StandardSchema = mongoose.model('StandardSchema');
+//     StandardSchema.find({"Grade" : "8"}, function(err,standards){
+//       if(!err){
+//         console.log('num returned standards = ' + standards.length);
+//         var index = 0;
+//         standards.forEach(function(element){
+//           var Headline = 'Grade ' + element.Grade;
+//           console.log('new Highlight = ' +  Headline)
+//           index++;
+//           element.Headline = Headline;
+//           element.save(function(saverr){
+//             if(!saverr){
+//               console.log('saved Headline');
+//               if(index == standards.length){
+//                 res.redirect('back');
+//               }//end of breakout if 
+//             }//end of if !saverr
+//             else{
+//               console.log('Failed saving new Headline');
+//               if(index == standards.length){
+//                 res.redirect('back');
+//               }//end of breakout if 
+//             }//end of else !saverr
+//           })//end of save standard
+//         })//end of for each standard
+//       }//end of if !err
+//     })//end of find
+// }//end postaddheadline
 
-    var StandardSchema = mongoose.model('StandardSchema');
-    StandardSchema.find({"Grade" : "1"}, function(err,standards){
-      if(!err){
-        console.log('num returned standards = ' + standards.length);
-        var index = 0;
-        standards.forEach(function(element){
-          var Headline = 'Grade ' + element.Grade;
-          console.log('new Highlight = ' +  Headline)
-          index++;
-          element.Headline = Headline;
-          element.save(function(saverr){
-            if(!saverr){
-              console.log('saved Headline');
-              if(index == standards.length){
-                res.redirect('back');
-              }//end of breakout if 
-            }//end of if !saverr
-            else{
-              console.log('Failed saving new Headline');
-              if(index == standards.length){
-                res.redirect('back');
-              }//end of breakout if 
-            }//end of else !saverr
-          })//end of save standard
-        })//end of for each standard
-      }//end of if !err
-    })//end of find
-}//end postaddheadline
+
+
+
+// exports.postaddheadline2 = function(req,res){
+// //add headline to 
+//     var StandardSchema = mongoose.model('StandardSchema');
+//     StandardSchema.find({"GradeClassifier" : "High School"}, function(err,standards){
+//       if(!err){
+//         console.log('num returned standards = ' + standards.length);
+//         var index = 0;
+//         standards.forEach(function(element){
+//           var Headline = element.GradeClassifier + ' Number and Quantity';
+//           // console.log('new Highlight = ' +  Headline)
+//           index++;
+//           element.Headline = Headline;
+//           element.save(function(saverr){
+//             if(!saverr){
+//               console.log('saved Headline');
+//               if(index == standards.length){
+//                 res.redirect('back');
+//               }//end of breakout if 
+//             }//end of if !saverr
+//             else{
+//               console.log('Failed saving new Headline');
+//               if(index == standards.length){
+//                 res.redirect('back');
+//               }//end of breakout if 
+//             }//end of else !saverr
+//           })//end of save standard
+//         })//end of for each standard
+//       }//end of if !err
+//     })//end of find
+// }//end postaddheadline
+
