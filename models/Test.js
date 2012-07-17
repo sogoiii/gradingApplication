@@ -9,6 +9,17 @@ var gridfs = require("../gridfs");
 //var QuestionSchema = require('mongoose').model('QuestionSchema');
 var QuestionSchema = require('./Questions').QuestionSchema;
 
+var AnswersSchema = new Schema({
+	Answer : {type: String},
+	IDS : {type: String},
+	correct: {type: Number, min: 0, max:1},
+	found: {type: Number, min: 0, max: 3},
+	selected:{type: Number, min:0, max: 3}
+})
+
+
+
+ 
 
 var TestSchema = new Schema({
 	TestName: {type: String, required: true},
