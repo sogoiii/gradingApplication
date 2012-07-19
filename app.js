@@ -2,15 +2,15 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , routes = require('./routes')
-  , util = require('util')
-  , fs = require('fs');
+var express = require('express');
+var routes = require('./routes');
+var util = require('util');
+var fs = require('fs');
 
 var expressValidator = require('express-validator');
 
 
-var gridfs = require("./gridfs"); //this line may not be required here   
+var gridfs = require("./gridfs"); //this line may not be required here
 
 var mongoose = require('mongoose');
 var mongoStore = require('session-mongoose');
@@ -22,17 +22,17 @@ var rabbitMQ = amqp.createConnection({ host: '127.0.0.1' });
 var rpc = new (require('./amqprpc'))(rabbitMQ);
 
 
-var passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy;
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 var DB = require('./DBfunctions');
 
 
-//load all the model files for mongoose(Mongodb) 
-var models_path = __dirname + '/models'
-var model_files = fs.readdirSync(models_path)
+//load all the model files for mongoose(Mongodb);
+var models_path = __dirname + '/models';
+var model_files = fs.readdirSync(models_path);
 model_files.forEach(function(file){
-    require(models_path+'/'+file)
+    require(models_path+'/'+file);
 });
 
 
@@ -60,7 +60,7 @@ app.configure(function(){
 
     var mongooseSessionStore = new mongoStore({
       url: "mongodb://localhost/mv",
-      interval: 3600000 
+      interval: 3600000
   });
 
 
@@ -74,11 +74,11 @@ app.configure(function(){
 
 
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
+  app.use(express.errorHandler());
 });
 
 /*
@@ -135,11 +135,11 @@ app.dynamicHelpers({
 var db = new DB.startup(dbloc);
 
 
-//Load all the route files 
-var controllers_path = __dirname + '/routes'
-var controller_files = fs.readdirSync(controllers_path)
+//Load all the route files
+var controllers_path = __dirname + '/routes';
+var controller_files = fs.readdirSync(controllers_path);
 controller_files.forEach(function(file){
-  require(controllers_path+'/'+file)
+  require(controllers_path+'/'+file);
 });
 
 
@@ -160,83 +160,81 @@ SOCKET IO STUFF!!!
 */
 
 
-io.set('log level', 1); 
+io.set('log level', 1);
 io.sockets.on('connection', function (socket) {
 
 
   //this function is called from the browser
   socket.on('RPC_request', function (data){
     console.log('Received request to send an RPC Command');
-      rpc.makeRequest('image', data, function response(err, response){
+      rpc.makeRequest('image', data, function respond(err, response){
         if(err)
           console.error('error = ' + err);
         else{
-          socket.emit('RPC_response', 'the RPC function has returned go check statistics page');  
+          socket.emit('RPC_response', 'the RPC function has returned go check statistics page');
           //console.log("response = '" + response.data + "' is of type = '" + response.contentType+"'");
           console.log("response = '" + response.data + "' To browser = '" + response.data.cool);
         }
       });//end of rpc.makerequest
-  })//end of RPC_request
+  });//end of RPC_request
 
 
   //this function is called for creating a pdf file
   socket.on('RPC_PrintPDF', function(data){
-    console.log('recieved request to create pdf')
-    rpc.makeRequest('createPDF', data, function response(err,response){
+    console.log('recieved request to create pdf');
+    rpc.makeRequest('createPDF', data, function respond(err,response){
       if(!err){
-        console.log('Returned from java')
+        console.log('Returned from java');
         response.createdid = response.data;
         var out = response.createdid.toString();
         console.log('response = ' + out);
         response.textreply = 'Click the download button';
-        socket.emit('RPC_Print_response', out)
+        socket.emit('RPC_Print_response', out);
       }//end of if
       else{
-        console.log('Failed RPC')
+        console.log('Failed RPC');
 
       }//end of else
-    })//end of rpc.makerequest
-  })//end of socket.on
+    });//end of rpc.makerequest
+  });//end of socket.on
 
+
+  //for statistics page//currently in testing mode
   socket.on("BuildStats_req", function(data,fn){
-
-    console.log("recived request to build chart!")
+    console.log("recived request to build chart!");
     var cool = "1";
     DB.grabTestResultstest(cool, function(err,result){
       if(!err){
-        // console.log("Results = " + result)
-
+         console.log("Results = " + result);
         socket.emit("BuildStats_res",result);
       }//end of !err if
       else{
-        console.log("No results " )
-
-
+        console.log("No results " );
       }//end of !err else
-    })//end of grabTestResults
+    });//end of grabTestResults
 
 
 
     socket.on("getresults", function(data,fn){
       console.log('data from client= ' + data);
-      var cool = "1"; 
+      var cool = "1";
       DB.grabTestResultstest(cool, function(err,result){
         if(!err){
           // console.log("Results = " + result)
-          fn(result)
+          fn(result);
         }//end of !err if
         else{
-          console.log("No results ")
-          fn('woot')
+          console.log("No results ");
+          fn('woot');
         }//end of !err else
-      })//end of grabTestResults
-    })
+      });//end of grabTestResults
+    });
 
 
 
 
 
-  })//end of buildstats socket.on
+  });//end of buildstats socket.on
 
 
 });//end of socket.io

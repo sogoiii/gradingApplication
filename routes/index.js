@@ -1,17 +1,17 @@
 var mongoose = require("mongoose");
-var db = require('../DBfunctions'); //access to the DB and other functions 
+var db = require('../DBfunctions'); //access to the DB and other functions
 var gridfs = require("../gridfs");
 var passport = require('passport');
 // var check = require('express-validator').check,
 //     sanitize = require('express-validator').sanitize
 var check = require('validator').check,
-    sanitize = require('validator').sanitize
+    sanitize = require('validator').sanitize;
 
 //var scripts = ['javascripts/jQuery.js', 'javascripts/bootstrap.min.js']
 
 
 /*
- * escape HTML for user input 
+ * escape HTML for user input
  */
 
 
@@ -63,11 +63,11 @@ function ensureAuthenticated(req, res, next) {
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Home', user: req.user})
+  res.render('index', { title: 'Home', user: req.user});
 };
 
 exports.about = function(req, res){
-	res.render('about', { title: 'About'})
+	res.render('about', { title: 'About'});
 };
 
 
@@ -78,13 +78,13 @@ exports.about = function(req, res){
 
 /*
   
-    Loging in and Registering 
+    Loging in and Registering
 
 */
 
-exports.getregister = function(req,res){ //add a modal frame of the term of service 
-  res.render('register', {title: 'Register', message: req.flash('error')})
-}
+exports.getregister = function(req,res){ //add a modal frame of the term of service
+  res.render('register', {title: 'Register', message: req.flash('error')});
+};
 
 //add user to the databse...aka register
 exports.postregister = function(req,res,next){
@@ -119,11 +119,11 @@ exports.postregister = function(req,res,next){
 
   //must be next: else it redirects to login. This is an ansycn issue, need to find out how to do it sync in this function npm Step?
  // next();
-}//end post register
+};//end post register
 
 exports.postregister2 = function(req, res){
-  res.redirect('/user/' + req.user._id +'/setupclass') //after authentication is done, enter user setupclass 
-}//end of post register 2. 
+  res.redirect('/user/' + req.user._id +'/setupclass');//after authentication is done, enter user setupclass
+};//end of post register 2.
 
 
 
@@ -134,26 +134,26 @@ exports.getsetup = function(req,res){
     if(!err){
       // console.log('initial = ' + results)
       // console.log('second = ' + results.classroom)
-      var temperr = req.session.errors
+      var temperr = req.session.errors;
       req.session.errors = '';
-      res.render('setupclass', {title: 'Class Setup', classinfo: results, valerrors: temperr})
+      res.render('setupclass', {title: 'Class Setup', classinfo: results, valerrors: temperr});
     }//end of if
     else{
-      res.render('setupclass', {title: 'Class Setup'})
+      res.render('setupclass', {title: 'Class Setup'});
     }//end of else
-  })//end of Get Classes
-}//end of getsetup
+  });//end of Get Classes
+};//end of getsetup
 
 
 exports.postsetup = function(req,res){ //this is called even for editing a class setup. the only difference would be a an if check which exists here now
   //console.log('you called the post version of class setup.')
-  //first check if the inputs are valid  
+  //first check if the inputs are valid
   
-  req.sanitize('ClassName').ltrim()
+  req.sanitize('ClassName').ltrim();
   req.sanitize('ClassSubject').ltrim();
   req.sanitize('ClassGrade').ltrim();
   req.sanitize('NumOfStudents').ltrim();
-  req.sanitize('ClassName').rtrim()
+  req.sanitize('ClassName').rtrim();
   req.sanitize('ClassSubject').rtrim();
   req.sanitize('ClassGrade').rtrim();
   req.sanitize('NumOfStudents').rtrim();
@@ -167,10 +167,10 @@ exports.postsetup = function(req,res){ //this is called even for editing a class
   var errors = req.validationErrors();
   //console.log('errors = ' + errors[0]);
   //console.log('error lenght = ' + errors.length)
-  req.session.errors = errors
+  req.session.errors = errors;
   if(errors.length){
     //console.log('errors = ' + errors[0].param);
-    // console.log('errors = ' + errors[0].msg);  
+    // console.log('errors = ' + errors[0].msg);
     // console.log('errors = ' + errors[0].value);
     //res.render('setupclass', {title: "Class Setup", valerrors: errors, message: req.flash('myerror')});
     res.redirect('back');
@@ -181,24 +181,24 @@ exports.postsetup = function(req,res){ //this is called even for editing a class
     db.SetupAClass(req.body, function(err, result){
       if(!err){
         //res.redirect('/user/' + req.params.id)
-        res.redirect('back')
+        res.redirect('back');
       }//end of !err
       else{
-        res.redirect('back'); 
+        res.redirect('back');
       }//end of !err else
-    })
+    });
   }//end of else
-}//end of postsetup
+};//end of postsetup
 
 exports.putsetup = function(req,res){ //this is called even for editing a class setup. the only difference would be a an if check which exists here now
   //console.log('req.body.classroom ID = ' + req.body.Edit_Class);
   //console.log('you called the put version of class setup.')
 
-  req.sanitize('ClassName').ltrim()
+  req.sanitize('ClassName').ltrim();
   req.sanitize('ClassSubject').ltrim();
   req.sanitize('ClassGrade').ltrim();
   req.sanitize('NumOfStudents').ltrim();
-  req.sanitize('ClassName').rtrim()
+  req.sanitize('ClassName').rtrim();
   req.sanitize('ClassSubject').rtrim();
   req.sanitize('ClassGrade').rtrim();
   req.sanitize('NumOfStudents').rtrim();
@@ -227,12 +227,12 @@ exports.putsetup = function(req,res){ //this is called even for editing a class 
         res.redirect('back');
         //res.redirect('/about/'); //temporary line
       }//end of !err else
-    })
+    });
   }//end of else
 
 
   //res.redirect("back");
-}//end of postsetup
+};//end of postsetup
 
 
 
@@ -240,22 +240,22 @@ exports.putsetup = function(req,res){ //this is called even for editing a class 
 exports.delsetup = function(req,res){
 //form input is an object id of the classroom embeddeddocument
 
-  console.log('setup to delete = ' + req.body)
+  console.log('setup to delete = ' + req.body);
   req.body.userid = req.params.id;
   db.DeleteAClass(req.body, function(err, result){
     if(!err){
-      console.log('result returned = ' + result)
+      console.log('result returned = ' + result);
 
     }//end !err if
     else{
-      console.log('failed to delete class')
+      console.log('failed to delete class');
     }//end of !err else
-  })//end of Delete Setup
+  });//end of Delete Setup
 
 
 
   res.redirect('back');
-}//end of delsetup
+};//end of delsetup
 
 
 
@@ -266,22 +266,22 @@ exports.delsetup = function(req,res){
 
 exports.getlogin = function(req,res){
 	res.render('login', {title: 'Login', user: req.user, message: req.flash('error') });
-}//end getlogin
+};//end getlogin
 
 exports.postlogin = function(req, res){ //save session to cookie
   // res.cookie('Firstcookieelement', 'firstcookies yAY!!!!!');
 
   res.redirect('/user/' + req.user._id);
-}//end post login
+};//end post login
 
-exports.getlogout = function(req,res){ 
+exports.getlogout = function(req,res){
   if(req.user){
     req.session.destroy(function(err){
     //console.log('logout user = ' + req.user.id);
-    })
+    });
   }
   res.redirect('/');
-}//end getlogout
+};//end getlogout
 
 
 
@@ -313,18 +313,18 @@ exports.getuserindex = function(req,res){ //make this the overview?
       //console.log('the get index first IF ')
       var testerr = req.session.CTE;
       req.session.CTE = '';
-      res.render('userindex', {title: 'Overview', CreateTestErrors: testerr, classinfo: classinfo}); 
+      res.render('userindex', {title: 'Overview', CreateTestErrors: testerr, classinfo: classinfo});
     }//end of !err and setup !null
     else if(err && setup == 'setup'){
       res.render('userindex', {title: 'Overview', setupclass: true});
     }//end of !err and setup == 'setup'
     else{
       //do something with
-      console.log('the get index else ')
+      console.log('the get index else ');
       res.render('userindex', {title: 'Overview'}); //temporary...seems like a hole at the momment
     }
-  })//end of GetClassInfo
-}//end of getuserhome
+  });//end of GetClassInfo
+};//end of getuserhome
 
 
 
@@ -343,7 +343,7 @@ exports.postcreatetest = function(req,res) {
   //when it returns redirect to the url above.
 
 
-  req.sanitize('TestName').ltrim()
+  req.sanitize('TestName').ltrim();
   req.assert('TestName', 'Test name only accepts alphanumeric').regex(/^[a-zA-Z0-9 -]+$/); //classname
   req.assert('ClassName', 'Select a class').notContains('Select Class'); //classname
 
@@ -360,7 +360,7 @@ exports.postcreatetest = function(req,res) {
     }//end of req.body.TestName if
   else{
       // req.session.CTE = ''; //since testname was included reset the error in the dom.
-      // req.session.CTCN = ''; //since class name was selected 
+      // req.session.CTCN = ''; //since class name was selected
       //console.log('postcreate = ' + req.body.TestName);
       req.body.userID = req.params.id; //need to include user ID so to ActiveTests array
       db.FindTeacherCreateTestAddAssociateTest(req.body, function(err,testid){
@@ -370,9 +370,9 @@ exports.postcreatetest = function(req,res) {
         else{
           res.redirect('/user/' + req.params.id); //res redirectback
         }
-      })//end of find teahcer by ID
+      });//end of find teahcer by ID
   }//end of req.body.Testname Else
-}//end of postcreatetest
+};//end of postcreatetest
 
 
 
@@ -386,7 +386,7 @@ function decodeQuestionHtml(Questions){
     var QuestionDecoded = sanitize(Questions[i].Questionhtml).entityDecode();
     Questions[i].Questionhtml = QuestionDecoded;
   }//end of for loop
-  return Questions
+  return Questions;
 }//end of decodeQuestionHtml
 
 
@@ -396,16 +396,16 @@ exports.getedittest = function(req,res){ //i know the test ID, i should have ass
   db.ReturnTestQuestions(req.params.testid, function(err,results){
     if(!err){
       results = decodeQuestionHtml(results); //i encoded the html so i can now decode it. (SERCURITY ISSUE POSSIBLE!!!!)
-      res.render('edittest',{title: 'Edit Test', wymeditor: true, Questions: results})
+      res.render('edittest',{title: 'Edit Test', wymeditor: true, Questions: results});
     }//if
     else if(err == 'no questions'){
-      res.render('edittest',{title: 'Edit Test', wymeditor: true, message: err})
+      res.render('edittest',{title: 'Edit Test', wymeditor: true, message: err});
     }
     else{
-      res.render('edittest',{title: 'Edit Test', wymeditor: true, message: 'Unexpected Error'})
+      res.render('edittest',{title: 'Edit Test', wymeditor: true, message: 'Unexpected Error'});
     }//end of else
   });//end of ReturnTestQuestions
-}//end of getedittest
+};//end of getedittest
 
 
 exports.putedittest = function(req,res){//user is looking at test and adds questions to test
@@ -417,7 +417,7 @@ exports.putedittest = function(req,res){//user is looking at test and adds quest
   req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
   req.sanitize('QuestionHTML').entityEncode(); //entitiy.Decode() for dispalying later
   req.body.testID = req.params.testid;
-  db.InsertQuestionToTest(req.body, function(err,done){ 
+  db.InsertQuestionToTest(req.body, function(err,done){
     if(!err){
       res.redirect('/user/' + req.params.id +'/edittest/' + req.params.testid);
     }//end of if
@@ -426,7 +426,7 @@ exports.putedittest = function(req,res){//user is looking at test and adds quest
     }//end of else
   });//end of insertQuestion
 
-}//end of putedittest
+};//end of putedittest
 
 
 
@@ -440,16 +440,16 @@ exports.getusercreatetest = function(req, res){
     var TeacherUserSchema = mongoose.model('TeacherUserSchema');
     TeacherUserSchema.findById(req.params.id, function(err,user){
       if(err){
-        console.log('GET USER error = ' + user.Tests._id); 
-        res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'DID not find user by ID'})
-      }        
+        console.log('GET USER error = ' + user.Tests._id);
+        res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'DID not find user by ID'});
+      }
       else{
         console.log('GET USER no errror = ' + user.Tests._id);
-        res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'User Exists in DB'})
+        res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'User Exists in DB'});
       }
-    })//end of findbyID
+    });//end of findbyID
   //res.render('createtest',{title: 'Create Tests', wymeditor: true})
-}
+};
 
 
 
@@ -481,12 +481,12 @@ exports.getusercreatetest = function(req, res){
 //   // console.log('error lenght = ' + errors.length)
 //   // if(errors.length){
 //   //    console.log('errors = ' + errors[0].param);
-//   //   // console.log('errors = ' + errors[0].msg);  
+//   //   // console.log('errors = ' + errors[0].msg);
 //   //   // console.log('errors = ' + errors[0].value);
 //   // }//end of if
 
 //   req.body.userID = req.params.id;
-//   db.InsertQuestion(req.body, function(err,done){ 
+//   db.InsertQuestion(req.body, function(err,done){
 
 //   });//end of insertQuestion
 
@@ -506,7 +506,7 @@ exports.getusercreatetest = function(req, res){
  */
 
 
-exports.getusertests = function(req, res){ //i want this to show all current and older tests 
+exports.getusertests = function(req, res){ //i want this to show all current and older tests
   
   var uploaderr = req.session.TestPageerrors;
   req.session.TestPageerrors = '';
@@ -515,25 +515,25 @@ exports.getusertests = function(req, res){ //i want this to show all current and
       // console.log("alltests = " +result);
       res.render('usertests',{title: 'Tests',
                              pageerror: uploaderr,
-                             AllTests: result})
+                             AllTests: result});
 
 
 
     }//end of if
-    else if(err = 'NoTests'){
-      console.log('no test found')
-      res.render('usertests',{title: 'Tests'})
+    else if(err == 'NoTests'){
+      console.log('no test found');
+      res.render('usertests',{title: 'Tests'});
     }
     else {
-      console.log('get all tests error')
-      res.render('usertests',{title: 'Tests'})
+      console.log('get all tests error');
+      res.render('usertests',{title: 'Tests'});
     }//end of else
-  })//end of GetAllTests
+  });//end of GetAllTests
 
 
 
  // res.render('usertests',{title: 'Tests', wymeditor: true})
-}//end get tests
+};//end get tests
 
 
 
@@ -542,36 +542,36 @@ exports.uploadatest = function(req,res){///user/:id/tests/upload
 //user selected a test and wanted to upload a file
 //req.file.scannedtest = the file to upload
 
-console.log('A file will be uploaded to gridfs server')
-console.log('test file = ' + req.body.testtoupload)
+console.log('A file will be uploaded to gridfs server');
+console.log('test file = ' + req.body.testtoupload);
 console.log(req.files.PDFTest.type);
 console.log(req.files.PDFTest.size);
 
 if(req.files.PDFTest.type != 'application/pdf'){
-  req.session.TestPageerrors = 'File must be a PDF!'
-  res.redirect("back"); //back is the upload page 
+  req.session.TestPageerrors = 'File must be a PDF!';
+  res.redirect("back"); //back is the upload page
 }
 else{
   req.body.PDFTest = req.files.PDFTest;
   db.SendPDFToGridfs(req.body, function(err){
     if(!err){
       //console.log('file should exisst on gridfs')
-      res.redirect('back')
+      res.redirect('back');
     }//end of if
-    else{ 
-      console.log('error sending file to gridfs')
+    else{
+      console.log('error sending file to gridfs');
       req.flash('FileType', 'wrong file type');
-      res.redirect('back')
+      res.redirect('back');
     }//end of else
-  })//end of sendpdftogridfs
-};//end of first else 
+  });//end of sendpdftogridfs
+}//end of first else
 
 
 
 
 //res.redirect('back')
 
-}//end of uploadtes
+};//end of uploadtes
 
 
 
@@ -584,7 +584,7 @@ exports.pdffile = function(req,res){
      res.end(file,'binary');
   });
 
-}//end of pdffile
+};//end of pdffile
 
 
 
@@ -601,7 +601,7 @@ exports.pdffile = function(req,res){
 
 exports.deltest = function(req,res){
   //testtodelete is the testID that i want to delete. Return back to the original page
-  console.log('test to be deleted = ' + req.body.testtodelete)
+  console.log('test to be deleted = ' + req.body.testtodelete);
   req.body.userid = req.params.id;
   db.DeleteThisTest(req.body,function(err,done){
     if(!err){
@@ -611,10 +611,10 @@ exports.deltest = function(req,res){
     else{
       res.redirect('back');
     }
-  })//end of DeleteThisTest
+  });//end of DeleteThisTest
 
 //res.redirect('back')
-}//end of deltest
+};//end of deltest
 
 
 
@@ -627,8 +627,8 @@ exports.deltest = function(req,res){
 
 exports.getuserquestions = function(req, res){
 
-  res.render('userquestions',{title: 'Questions'})
-}//end get questions
+  res.render('userquestions',{title: 'Questions'});
+};//end get questions
 
 
 
@@ -637,10 +637,11 @@ exports.getuserquestions = function(req, res){
  * GET USER STATISTICS
  */
 
-exports.getTeststatistics = function(req, res){
+exports.getTeststatistics = function(req, res){//for individual statistics
 
-  res.render('teststatistics',{title: 'Statistics', plotjq : true})
-}//end get statistics
+  console.log("id of test = " + req.params.testid);
+  res.render('teststatistics',{title: 'Statistics', plotjq : true});
+};//end get statistics
 
 
 
@@ -669,15 +670,15 @@ exports.getupload = function(req,res){
     });
 
   //res.render('UploadedFiles', {title: 'Upload'})
-}
+};
 
 
-  exports.postupload = function(req,res){ //uploadnew post 
+  exports.postupload = function(req,res){ //uploadnew post
     console.log(req.files.file.type);
     console.log(req.files.file.size);
     if(req.files.file.type != 'application/pdf'){
       req.flash('myerror', 'wrong file type');
-      res.redirect("back"); //back is the upload page 
+      res.redirect("back"); //back is the upload page
     }
     else{
       var application, opts;
@@ -690,9 +691,9 @@ exports.getupload = function(req,res){
         req.flash('myerror', 'Thank you for uploading PDF');
         res.redirect("back");
       });
-    };//end of else 
+    }//end of else
     //res.render('upload', {title: 'Register'})
-  }
+  };
 
 //file link has been clicked ('/file/:id') //this will download file directly
  exports.getshowfile = function(req, res) {
@@ -776,18 +777,18 @@ exports.getviewimages = function(req, res){
       res.render("viewimages", {
         title: "View Images"
       });
-}
+};
 
 
 
 
 exports.userlist = function(req,res){
-  res.render('userlist',{ title: 'Userlist', user: req.user})
+  res.render('userlist',{ title: 'Userlist', user: req.user});
 };
 
 
 exports.loginfailed = function(req,res){
-  res.render('loginfailed',{ title: 'Loginfailed'})
+  res.render('loginfailed',{ title: 'Loginfailed'});
 };
 
 
@@ -797,29 +798,29 @@ exports.getusers = function(req,res){
     res.render('users', {title: 'users' , teachers: docs});
   });
   //res.render('users',{username: username, password: password});
-}
+};
 
 
 
 exports.getuseroverview = function(req, res){
 
-  res.render('useroverview',{title: 'Overview', userID: req.params.id})
-}//end get overview
+  res.render('useroverview',{title: 'Overview', userID: req.params.id});
+};//end get overview
 
 
 exports.testajaxpost = function(req,res){ //note to self: if this is from an ajax call, the render or redirect will not work
-  console.log('testajax was called from client')
+  console.log('testajax was called from client');
   //console.log('the test id i got was = ' + req.params.data)
-  console.log('test i want to delete = ' + req.body.testtodelete)
+  console.log('test i want to delete = ' + req.body.testtodelete);
   //res.render("viewimages", { title: "View Images" });
   res.redirect("back");
-}
+};
 
 exports.testajaxpost2 = function(req,res){
-  console.log('testajax POST VERSION')
+  console.log('testajax POST VERSION');
   //res.render("viewimages", { title: "View Images" });
   //res.redirect('/about', { title: 'About'})
-}
+};
 
 exports.gettestplot = function(req,res){
 
@@ -836,17 +837,17 @@ exports.gettestplot = function(req,res){
   //   }//end of !err else
   // })//end of grabTestResults
 
-  res.render("Testviews/testplot", {title: "testingplotstuff"});
-}
+  res.render("Testviews/testplot", {title: "testingplotstuff" ,plotjq: true});
+};
 
 
 
 
 exports.getaddstandard = function(req, res){
 
-  res.render("Testviews/addstandards",{title: 'addstandard', message: req.flash('error')})
+  res.render("Testviews/addstandards",{title: 'addstandard', message: req.flash('error')});
 
-}//end of getaddstandard
+};//end of getaddstandard
 
 exports.postaddstandard = function(req, res){
   db.addstandardtoDB(req.body,function(err,done){
@@ -859,7 +860,7 @@ exports.postaddstandard = function(req, res){
       res.redirect('back');
     }//end of else
   });//end of addstandtodb
-}//end of getaddstandard
+};//end of getaddstandard
 
 
 exports.postaddEnglishstandard = function(req, res){
@@ -873,7 +874,7 @@ exports.postaddEnglishstandard = function(req, res){
       res.redirect('back');
     }//end of else
   });//end of addstandtodb
-}//end of getaddstandard
+};//end of getaddstandard
 
 
 
@@ -891,7 +892,7 @@ exports.postaddEnglishstandard = function(req, res){
 //     var StandardSchema = mongoose.model('StandardSchema');
 //     StandardSchema.find({}, function(err,standards){
 //       if(!err){
-//         console.log('changed abbreviation'); 
+//         console.log('changed abbreviation');
 //         console.log('num returned standards = ' + standards.length);
 //         var index = 0;
 //         standards.forEach(function(element){
@@ -905,19 +906,19 @@ exports.postaddEnglishstandard = function(req, res){
 //               // res.redirect('back');
 //               if(index == standards.length){
 //                 res.redirect('back');
-//               }//end of breakout if 
+//               }//end of breakout if
 //             }//end of if !saverr
 //             else{
 //               console.log('Failed saving new abbreviation');
 //               if(index == standards.length){
 //                 res.redirect('back');
-//               }//end of breakout if 
+//               }//end of breakout if
 //             }//end of else
 //           })//end of save question to test
 
 //               // if(index == standards.length){
 //               //   res.redirect('back');
-//               // }//end of breakout if 
+//               // }//end of breakout if
 
 
 
@@ -937,7 +938,7 @@ exports.postaddEnglishstandard = function(req, res){
             
 
 //         })//end for each
-//       } //end of !err if       
+//       } //end of !err if
 //       else{
 //         console.log('didnt change abbreviation');
 //         res.redirect('back');
@@ -964,13 +965,13 @@ exports.postaddEnglishstandard = function(req, res){
 //               console.log('saved Headline');
 //               if(index == standards.length){
 //                 res.redirect('back');
-//               }//end of breakout if 
+//               }//end of breakout if
 //             }//end of if !saverr
 //             else{
 //               console.log('Failed saving new Headline');
 //               if(index == standards.length){
 //                 res.redirect('back');
-//               }//end of breakout if 
+//               }//end of breakout if
 //             }//end of else !saverr
 //           })//end of save standard
 //         })//end of for each standard
@@ -982,7 +983,7 @@ exports.postaddEnglishstandard = function(req, res){
 
 
 // exports.postaddheadline2 = function(req,res){
-// //add headline to 
+// //add headline to
 //     var StandardSchema = mongoose.model('StandardSchema');
 //     StandardSchema.find({"GradeClassifier" : "High School"}, function(err,standards){
 //       if(!err){
@@ -998,13 +999,13 @@ exports.postaddEnglishstandard = function(req, res){
 //               console.log('saved Headline');
 //               if(index == standards.length){
 //                 res.redirect('back');
-//               }//end of breakout if 
+//               }//end of breakout if
 //             }//end of if !saverr
 //             else{
 //               console.log('Failed saving new Headline');
 //               if(index == standards.length){
 //                 res.redirect('back');
-//               }//end of breakout if 
+//               }//end of breakout if
 //             }//end of else !saverr
 //           })//end of save standard
 //         })//end of for each standard

@@ -29,6 +29,7 @@
     See AUTHORS file
 */
 
+
 // Global WYMeditor namespace.
 if (typeof (WYMeditor) === 'undefined') {
     WYMeditor = {};

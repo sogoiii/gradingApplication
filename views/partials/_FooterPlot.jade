@@ -1,55 +1,71 @@
 != renderScriptsTags(myscripts)
 script(src='/socket.io/socket.io.js')
 script(src='/javascripts/jquery.jqplot.min.js')
-script(src='/javascripts/jqplot.pieRenderer.min.js')
+
 script
 	$(document).ready(function () {
 		var socket = io.connect();
+
+		$.jqplot('chartdiv',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]],
+		{title:'Exponential Line',
+		axes:{yaxis:{min:-10, max:240}},
+		series:[{color:'#5FAB78',label: 'student grades'}],
+		legend: {show: true,location: 'se'}
+		});
+
+		var dataRenderer2 = function(){
+			var data = [[]];
+			for (var i=0; i<13; i+=0.5) {
+				data[0].push([i, Math.sin(i)]);
+			}
+			$('#sinedata').text(data);
+			return data;
+			}
+
+
 		socket.emit('BuildStats_req');
 		socket.on("BuildStats_res", function(stats){
-			createResultPlot(stats);
+			$.jqplot('chartdivsine',  [],
+			{title:'Created Sine Data',
+			series:[{color:'#5FAB78',label: 'student grades'}],
+			legend: {show: true, location: 'se'},
+			dataRenderer: dataRenderer2
+			});
+
+				var somedata = stats;
+				var data = [[]];
+				for(i = 0; i < somedata.length;i++){
+					data[0].push([i,somedata[i].CorrectlyAnswered])// CorrectlyAnswered is within the object stats
+				}
+				$('#datareceived').text(data);
+				$.jqplot('chartdivtest',  data,
+				{title:'Data from Server',
+				//- axes:{yaxis:{min:-1, max:3}},
+				//- axes:{xaxis:{min:0, max:9}},
+				series:[{color:'#5FAB78',label: 'student grades'}],
+				legend: {show: true, location: 'se'}
+				});
 			}) //- end of socket.on
+		
 
 
 
 
-		var data = [
-		['A', 12],['B', 9], ['C', 14], 
-		['D', 16],['F', 7],
-		];
-		var plot1 = jQuery.jqplot ('chart1', [data], 
-			{ 
-				title: 'Grade Distribution',
-			seriesDefaults: {
-			// Make this a pie chart.
-			renderer: jQuery.jqplot.PieRenderer, 
-			rendererOptions: {
-			// Put data labels on the pie slices.
-			// By default, labels show the percentage of the slice.
-			showDataLabels: true}
-			}, 
-			legend: { show:true, location: 'e' }
-			}
-			);
 
 
 
 
-		function createResultPlot(newstats){
-			var somedata = newstats;
-			var data = [[]];
-			for(i = 0; i < somedata.length;i++){
-				data[0].push([i,somedata[i].numcorrect])
-			}
-			$('#datareceived').text(data);
-			$.jqplot('chartdivtest',  data,
-			{title:'Test Results by Questions',
-			axes:{yaxis:{label: 'Total Correct'},
-					xaxis:{label: 'Question Number'}},
-			series:[{color:'#5FAB78',label: 'Test Results'}],
-			legend: {show: true, location: 'se'}
-			});//- end of jqplot
-		}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

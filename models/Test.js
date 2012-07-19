@@ -1,4 +1,4 @@
-var mongoose = require('mongoose')
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var mongooseTypes = require('mongoose-types');
 mongooseTypes.loadTypes(mongoose, "email");
@@ -15,7 +15,7 @@ var AnswersSchema = new Schema({
 	correct: {type: Number, min: 0, max:1},
 	found: {type: Number, min: 0, max: 3},
 	selected:{type: Number, min:0, max: 3}
-})
+});
 
 
 
@@ -34,7 +34,8 @@ var TestSchema = new Schema({
 	TestCreated: {type: Date, default: Date.now},
 	PDFTest: [mongoose.Schema.Mixed],
 	CreatedPDF: [mongoose.Schema.Mixed],
-	TestResults: [mongoose.Schema.Mixed]
+	TestResults: [mongoose.Schema.Mixed],
+	TRbyQuestions: [mongoose.Schema.Mixed]
 });
 
 

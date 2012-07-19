@@ -2,10 +2,10 @@
 var mongoose = require('mongoose');
 var	Schema = mongoose.Schema;
 var ObjectId = require('mongoose').Types.ObjectId;
-var Query = require('mongoose').Query
-var passport = require('passport')
+var Query = require('mongoose').Query;
+var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var gridfs = require("./gridfs"); //this file should be inside here 
+var gridfs = require("./gridfs"); //this file should be inside here
 
 
 // Model includes
@@ -20,15 +20,15 @@ var Standard = require('./models/Standard');
 
 /*
 //Passport Local Strategy for username authentication
-passport.use(new LocalStrategy( 
+passport.use(new LocalStrategy(
   function(user, password, done) {
    // asynchronous verification, for effect...
     process.nextTick(function () {
       TeacherUsers.authenticate(user, password, function(err, user){
-      	return done(err,user);
+      return done(err,user);
       });//end authenticate
     });
-  }//end username password done 
+  }//end username password done
 ));
 */
 
@@ -40,16 +40,16 @@ passport.use(new LocalStrategy( {usernameField: 'email'},
    // console.log('going to authenticate user now 1');
     process.nextTick(function () {
       // console.log('going to authenticate user now 2');
-    	var messageresult = new String();
+      var messageresult = null;
       TeacherUsers.authenticateEmail(email, password, function(err, user, messageresult){ //before: 'user' was 'email'
-      	// console.log('returning to user');
+        // console.log('returning to user');
         // console.log(messageresult); //this does return the right thing to console
-      	if(messageresult == 'incorrect user') {return done(null, false, { message: 'Unkown user'});} //left side is the output of the teacher users function, the right side is what is sent to the login page
-      	if(messageresult == 'wrong password') {return done(null, false, { message: 'Invalid password' })}
-      	return done(err,user); //i use to return 'email' not 'user' 
+        if(messageresult == 'incorrect user') {return done(null, false, { message: 'Unkown user'});} //left side is the output of the teacher users function, the right side is what is sent to the login page
+        if(messageresult == 'wrong password') {return done(null, false, { message: 'Invalid password' });}
+        return done(err,user); //i use to return 'email' not 'user'
       });//end authenticate
     });
-  }//end username password done 
+  }//end username password done
 ));
 
 //serialize user login
@@ -77,13 +77,13 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
         //console.log('did not find user');
         return callback(err,null);
       }//end of else
-    })
+    });
   }//end of get Teacher User by ID
 
 
 
   function CreateTest(classroom, testname, callback){ //userinfo is actually the tearcherSchema, pageinfo is from post information
-    //classroom is the class  
+    //classroom is the class
     //put variabels into my newly created test
     //console.log('Create Test Data = ' + userinfo.classroom);
     var newTest = new Test({
@@ -92,7 +92,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
       NumberOfStudents: classroom.NumberOfStudents,
       Gradeyear: classroom.Gradeyear,
       Subject: classroom.Subject
-    })
+    });
     // console.log('new test looks like = ' + newTest)
     //return callback(null,null)
     newTest.save(function(err){
@@ -103,10 +103,9 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
       else{
         console.log('did not save test');
         console.log(err);
-        return callback(err, null);//save error into callback 
+        return callback(err, null);//save error into callback
       }//end of else err
-    })//end of save
-
+    });//end of save
   }//end of CreateTest
 
 
@@ -119,12 +118,12 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
     // Check connection to mongoDB
     mongoose.connection.on('open', function() {
       console.log('We have connected to mongodb');
-    }); 
-  }//end of startup 
+    });
+  };//end of startup
 
 
 
-  // //create test instance for a specific user 
+  // //create test instance for a specific user
   // exports.CreateTest = function(userinfo, callback){ // this one is no longer used
   //   //put variabels into my newly created test
 
@@ -137,7 +136,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
   //   newTest.save(function(err){
   //     if(err){
   //       console.log('did not save test');
-  //       return callback(err, null);//save error into callback 
+  //       return callback(err, null);//save error into callback
   //     }//end of if err
   //     else{
   //       console.log('saved test');
@@ -157,7 +156,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
   //       user.ActiveTests.push(userinfo.testID);
   //       user.save(function(saverr){
   //         if(!saverr){console.log('saved objectID in ActiveTests')}
-  //         else{console.log('error adding ObjectID into ActiveTests')}  
+  //         else{console.log('error adding ObjectID into ActiveTests')}
   //       })//end of save
   //     }//end of if
   //     else{
@@ -172,7 +171,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
   exports.FindTeacherCreateTestAddAssociateTest = function(pageinfo,callback){ //called from postcreatetest
     //pageinfo  = .userID , .TestName, .ClassName
     //find teacher
-    // using selected class name find the correct class 
+    // using selected class name find the correct class
     //creat test and add user variables
     //save test and associate test
 
@@ -200,27 +199,27 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
                   user.save(function(saverr){
                   if(!saverr){
                     //console.log('saved objectID in ActiveTests')
-                    callback(null,testid)
+                    callback(null,testid);
                   }
                   else{
-                    console.log('error adding ObjectID into ActiveTests')
-                    callback(saverr, null)
-                  }  
-                  })//end of save
+                    console.log('error adding ObjectID into ActiveTests');
+                    callback(saverr, null);
+                  }
+                  });//end of save
                 }//end of !CTerr if
                 else{
-                  console.log('error saving test')
-                  callback(CTerr, null)
+                  console.log('error saving test');
+                  callback(CTerr, null);
                 }//end of !CTerr else
-        })//end of Create Test
+        });//end of Create Test
       }//end of if !err
-      else{ 
+      else{
         console.log('could not find user');
-        callback(err, null)
+        callback(err, null);
       }//end of else
-    })//end of getwholeteacherUserbyID
+    });//end of getwholeteacherUserbyID
 
-  }//end of FindTeacherCreateTestAddAssociateTest
+  };//end of FindTeacherCreateTestAddAssociateTest
 
 
 
@@ -288,7 +287,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
               if(size != 0){
                   //console.log('size of AT is larger than 0, hence i work normally')
                     if(typeof(AT[0].ActiveTests) != 'undefined'){
-                      AT[0].ActiveTests.forEach(function(element) {  
+                      AT[0].ActiveTests.forEach(function(element) {
                           //console.log('in !err, i guess if found something')
                           //console.warn('active tests element = ' + element)
                           //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
@@ -301,27 +300,27 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
                             if(AllTests.length == AT[0].ActiveTests.length){
                               callback(null, AllTests);
                             }
-                            if(secerr){
-                              callback(sacerr,null)
+                            if(secerr){ //why is this not an else? (i noticed after i was done doing this)
+                              callback(sacerr,null);
                             }
-                          })//end second find
-                      })//end of ForEach AT[0]
+                          });//end second find
+                      });//end of ForEach AT[0]
                     }//end of undefined if
                     else{
-                      callback('undefined', null)
-                    } //end of typeof(AT[0].ActiveTests) != undefiend else 
+                      callback('undefined', null);
+                    } //end of typeof(AT[0].ActiveTests) != undefiend else
               }//end of AT size check IF
               else{
-                console.log('size of AT was zero hence ill return with custome error')
-                callback('NoTests', null)
-              }      
+                console.log('size of AT was zero hence ill return with custome error');
+                callback('NoTests', null);
+              }
       }//end of if !err
       else{
-        console.log('did not find teacher hence ill exit')
+        console.log('did not find teacher hence ill exit');
         callback(err,null);
       }//end of else
-    })//end of find teacherusers
-  }//end of GetAllTests
+    });//end of find teacherusers
+  };//end of GetAllTests
 
 
 
@@ -345,15 +344,15 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
           }//end of if
           else{
             //console.log('size was equal to zero')
-            callback('size of classroom array = 0', null, 'setup')//
-          }//end of else     
+            callback('size of classroom array = 0', null, 'setup');//
+          }//end of else
         }//end of !err if
         else {
           console.log('Did not find user '+ userinfo);
           callback(err,null,'nothing');
         }//end of !err else
-    })//end of findbyID
-  }//end of GetClassInfo
+    });//end of findbyID
+  };//end of GetClassInfo
 
 
 
@@ -365,16 +364,16 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
 
 
 exports.InsertQuestionToTest = function(userinfo, callback){//user put a question into a specific test
-  //userinfo.testID 
+  //userinfo.testID
   var newQuestion = new Question({
     Questionhtml: userinfo.QuestionHTML,
     CorrectAnswertext: userinfo.CorrectAnswer
-  })//end of question
+  });//end of question
 
   //create wrong answers
-  var WA1 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer1})//wrong answer 1
-  var WA2 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer2})//wrong answer 2
-  var WA3 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer3})//wrong answer 3
+  var WA1 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer1});//wrong answer 1
+  var WA2 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer2});//wrong answer 2
+  var WA3 = new WrongAnswer({ WrongAnswertext: userinfo.WrongAnswer3});//wrong answer 3
   newQuestion.WrongAnswers.push(WA1);
   newQuestion.WrongAnswers.push(WA2);
   newQuestion.WrongAnswers.push(WA3);
@@ -394,22 +393,22 @@ exports.InsertQuestionToTest = function(userinfo, callback){//user put a questio
               console.log('Failed saving question to test instance');
               callback(saverr, null);
             }//end of else
-          })//end of save question to test
+          });//end of save question to test
         }//end of if !err
         else{
           console.log('Could not find the testID');
           callback(err,null);
         }//end of else
-      })//end of test.findbyid
+      });//end of test.findbyid
     }
     else{
-      console.log('Error Saving Single Question Instance')
+      console.log('Error Saving Single Question Instance');
       callback(Qerr,null);
     }
-  })//end of newQuestion.save
+  });//end of newQuestion.save
 
 
-}//end of InsertQuestionToTest
+};//end of InsertQuestionToTest
 
 
 
@@ -422,20 +421,20 @@ exports.ReturnTestQuestions = function(userinfo, callback){
     if(!err){
       //console.log('grabed all questions for this test')
       //console.log('questions = ' + questions.Questions)
-      console.log('size of questions = ' + questions.Questions.length)
+      console.log('size of questions = ' + questions.Questions.length);
       if(questions.Questions.length != 0){
           callback(null,questions.Questions);
       }//end of if
       else{ //if questions.Questions.length == 0
-          callback('No Questions Exist!', null)
+          callback('No Questions Exist!', null);
       }//end of else
     }//end of if
     else{
-      console.log('could not find testID')
+      console.log('could not find testID');
       callback(err,null);
     }//end of else
-  })//end of find by id
-}//end of ReturnTestQuestions
+  });//end of find by id
+};//end of ReturnTestQuestions
 
 
 
@@ -461,7 +460,7 @@ exports.ReturnTestQuestions = function(userinfo, callback){
   //   //     console.log('Save Error: NewQuestion');
   //   //     console.log('QHTML = ' + err.errors.Questionhtml)
   //   //     console.log('CAT = ' + err.errors.CorrectAnswertext)
-  //   //     //callback(err,done);//return back to the routes index.js with err and done 
+  //   //     //callback(err,done);//return back to the routes index.js with err and done
   //   //   }
   //   //   else
   //   //     console.log('Saved New Question To DB')
@@ -509,30 +508,30 @@ exports.ReturnTestQuestions = function(userinfo, callback){
       if(!err){
         //console.log('found active tests = ' + user)
         //console.log('search for test = ' + userinfo.testtodelete)
-        var index = user.ActiveTests.indexOf(userinfo.testtodelete)
+        var index = user.ActiveTests.indexOf(userinfo.testtodelete);
         if(index != -1){
           user.ActiveTests.splice(index,1);
           user.save(function(saverr){
             if(!saverr){
-              callback(null,user)
+              callback(null,user);
             }//end of saverr if
             else{
-              console.log('failed to save newly altered Active Tests array')
-              callback(saverr,null)
+              console.log('failed to save newly altered Active Tests array');
+              callback(saverr,null);
             }//end of saverr else
-          })
+          });
         }//end of index if
         else{
-          console.log('Failed to find the test in Active Tests')
-          callback('failed to find test in Active Tests array', null)
+          console.log('Failed to find the test in Active Tests');
+          callback('failed to find test in Active Tests array', null);
         }//end of index if
       }//end of if
       else{
-        console.log('failed to find user')
-        callback(err,null)
+        console.log('failed to find user');
+        callback(err,null);
       }//end of else
-    })//end of findbyid
-  }//end of DeleteThisTest
+    });//end of findbyid
+  };//end of DeleteThisTest
 
 
 
@@ -550,7 +549,7 @@ exports.ReturnTestQuestions = function(userinfo, callback){
         test.save(function(saverr1){
           if(!saverr1){
                 gridfs.putFile(userinfo.PDFTest.path,userinfo.PDFTest.filename, opts, function(err,result){
-                  test.PDFTest.push(result) //should have just grabbed the object id instead of the whole result...
+                  test.PDFTest.push(result); //should have just grabbed the object id instead of the whole result...
                   test.markModified('PDFTest');
                   test.save(function(saverr){
                       if(!saverr){
@@ -560,23 +559,23 @@ exports.ReturnTestQuestions = function(userinfo, callback){
                       else{
                         console.log('did not pdf file');
                         console.log(err);
-                        return callback(saverr);//save error into callback 
+                        return callback(saverr);//save error into callback
                       }//end of else err
-                    })//end of save
+                    });//end of save
                 //return callback(null);
-                })//end of gridfs putfile
+                });//end of gridfs putfile
           }//end of first save if
           else{
-            return callback(saverr1)
+            return callback(saverr1);
           }//end of first save else
-        })//end of first save
+        });//end of first save
       }//end of if !err
       else{
         console.log('Could not find the testID');
         callback(err);
       }//end of else
-    })//end of test.findbyid
-  }//end of sendpdftogridfs
+    });//end of test.findbyid
+  };//end of sendpdftogridfs
 
 
 
@@ -589,30 +588,30 @@ exports.ReturnTestQuestions = function(userinfo, callback){
     //console.log('userinfo userid = ' +userinfo.userid )
     TeacherUsers.findById(userinfo.userid, function(err,teacher){
       if(!err){
-        var newclass = new Classroom({ 
+        var newclass = new Classroom({
             Subject: userinfo.ClassSubject,
             Gradeyear: userinfo.ClassGrade,
             ClassName: userinfo.ClassName,
             NumberOfStudents: userinfo.NumOfStudents
         });
-        teacher.classroom.push(newclass)
+        teacher.classroom.push(newclass);
         teacher.save(function(saverr){
           if(!saverr){
-              //console.log('saved the classroom data') 
-              callback(null,teacher)
-          }//end of !err    
+              //console.log('saved the classroom data')
+              callback(null,teacher);
+          }//end of !err
           else{
-              console.log('Save Error: ClassSetup')
-              callback(saverr,null)
+              console.log('Save Error: ClassSetup');
+              callback(saverr,null);
           }//end of else
-        })//end of user
+        });//end of user
       }//end of if !err
       else{
         console.log('error finding teacher with id');
-        callback(err,null)
+        callback(err,null);
       }//end of else !err
-    })//end of find by id
-  }//end of SetupAClass
+    });//end of find by id
+  };//end of SetupAClass
 
 
 
@@ -639,25 +638,25 @@ exports.EditAClass = function(userinfo, callback){
       result.classroom[index].Subject = userinfo.ClassSubject;
       result.classroom[index].NumberOfStudents = userinfo.NumOfStudents;
 
-      result.markModified('classroom')
+      result.markModified('classroom');
 
       result.save(function(saverr){
         if(!saverr){
           //console.log('saved item will return now')
-          callback(null,result)
+          callback(null,result);
         }//end of iff
         else{
-          console.log('didnt save item')
-          callback(saverr,null)
+          console.log('didnt save item');
+          callback(saverr,null);
         }//end of else
-      })//end of save function
+      });//end of save function
     }//endof !err
     else{
-      console.log('failed to find class to edit')
-      callback(err,null)
+      console.log('failed to find class to edit');
+      callback(err,null);
     }//end of !err else
-  })//end of find by id
-}//end of EditAClass
+  });//end of find by id
+};//end of EditAClass
 
 
 
@@ -668,14 +667,14 @@ exports.GetClasses = function(userinfo, callback){ //for setup class page (getse
   TeacherUsers.findById(userinfo, ['classroom'], function(err,result){
     if(!err){
       //console.log(result);
-      callback(null, result.classroom)
+      callback(null, result.classroom);
     }//end of if !err
     else{
       console.log('failed to find teacher by id');
-      callback(err,null)
+      callback(err,null);
     }//end of !err else
-  })//end of findbyid
-}//end of GetClasses
+  });//end of findbyid
+};//end of GetClasses
 
 
 
@@ -694,14 +693,14 @@ exports.DeleteAClass = function(userinfo, callback){//called from delsetup
             break;
           }//end of if
         }//end of for loop
-        console.log('going to remove class name = ' + result.classroom[index].ClassName)
+        console.log('going to remove class name = ' + result.classroom[index].ClassName);
         var theid  = result.classroom[index]._id;
-        console.log('going to remove class ID = ' + theid)
+        console.log('going to remove class ID = ' + theid);
         //result.id(theid).remove();
         //result.classroom.remove()
 
-        var idx = result.classroom.indexOf(result.classroom[index])
-        console.log('index of element = '+ idx)
+        var idx = result.classroom.indexOf(result.classroom[index]);
+        console.log('index of element = '+ idx);
         var oldclass = result.classroom;
         oldclass.splice(idx,1);
         result.classroom = oldclass;
@@ -709,24 +708,24 @@ exports.DeleteAClass = function(userinfo, callback){//called from delsetup
 
         result.save(function(saverr){
           if(!saverr){
-            console.log('saved after removing item')
-            callback(null,result)
+            console.log('saved after removing item');
+            callback(null,result);
           }
           else{
-            console.log('failed to save item')
-            callback(saverr,null)
+            console.log('failed to save item');
+            callback(saverr,null);
           }
-        })//end of save
+        });//end of save
       }//end of !err if
       else{
         console.log('didnt find the teacher user');
         callback(err,null);
       }// endof !err else
-  })//end of findbyID
+  });//end of findbyID
 
 
 
-}//end of DeleteAClass
+};//end of DeleteAClass
 
 
 
@@ -736,21 +735,39 @@ exports.grabTestResultstest = function(userinfo, callback){
   //userinfo = testobjetid = 4fda1af52f910cc6200000d3
 
 
-  Test.findById("4fda1af52f910cc6200000d3",function(err,result){
+  Test.findById("4fda1af52f910cc6200000d3",["TRbyQuestions"],function(err,result){
     if(!err){
-      // console.log("found test object")
-      // console.log("result = " + result)
-      // console.log("Answers = " + result.TestResults[0].numcorrect)
-      // console.log("result = " + result);
-      // console.log("result = " + result.id);
-      callback(null,result.TestResults);
-    }//end of !eer if
+      // var resultbycorrect = [];
+      //     // console.log("result = " + result.TRbyQuestions[0].CorrectlyAnswered);
+      //     result.TRbyQuestions.forEach(function(element) {
+      //           resultbycorrect.push(element.CorrectlyAnswered);
+      //           // console.log("num correct = " + element.CorrectlyAnswered);
+      //           // console.log("resultbycorrect = " + resultbycorrect.length );
+      //           // console.log("result = " + result.TRbyQuestions.length );
+      //           if(resultbycorrect.length == result.TRbyQuestions.length){
+      //             // console.log("will exit to return");
+      //             callback(null, resultbycorrect);
+      //           }
+      //     });//end of ForEach
+      callback(null,result.TRbyQuestions);
+    }//end of !err if
+
+    //   // console.log("found test object")
+    //    console.log("result = " + result);
+    //   // console.log("Answers = " + result.TestResults[0].numcorrect)
+    //   // console.log("result = " + result);
+    //   // console.log("result = " + result.id);
+    //   callback(null,result.TestResults);
+    // }//end of !eer if
     else{
-      console.log("did not find test object")
+      console.log("did not find test object");
       callback(err,null);
     }//end of !err else
-  })//end of findbyid
-}//end of grabTestResults
+  });//end of findbyid
+};//end of grabTestResults
+
+
+
 
 function reconTestResults(userinfo, callback){ //name is misleading
 
@@ -778,20 +795,20 @@ exports.addstandardtoDB = function(userinfo, callback){
     Subject: userinfo.Subject,
     Abbreviation: userinfo.Abbreviation,
     Topic: userinfo.Topic,
-    number: userinfo.Snumber,
+    number: userinfo.Snumber
   });//end of question
 
   newStandard.save(function(saverr){
     if(!saverr){
       //console.log('saved item will return now')
-      callback(null,'saved standard')
+      callback(null,'saved standard');
     }//end of iff
     else{
-      console.log('didnt save standard')
-      callback(saverr,null)
+      console.log('didnt save standard');
+      callback(saverr,null);
     }
-  })//end of else
-}//addstandardtoDB
+  });//end of else
+};//addstandardtoDB
 
 
 
@@ -803,11 +820,11 @@ exports.addEnglishstandardtoDB = function(userinfo, callback){
   // subject[0] = 'Literacy in History/Social Science'
   // subject[0] = 'Science'
   // subject[1] = 'Technical Subjects'
-  subject[0] = 'History/Social Science, Sceince and Technical Subjects'
-  // console.log('size of subjects = ' + subject.length);
+  subject[0] = 'History/Social Science, Sceince and Technical Subjects';
+    // console.log('size of subjects = ' + subject.length);
 
   for(var i = 0; i < subject.length; i++){
-    userinfo.subject = subject[i]
+    userinfo.subject = subject[i];
     SaveSubject(userinfo,function(err,user){
       // if(!err){
 
@@ -816,14 +833,14 @@ exports.addEnglishstandardtoDB = function(userinfo, callback){
 
       // }//end of !err else
 
-    })//end of saveSubject
+    });//end of saveSubject
   }//end of for loop
 
 
 
   callback(null, 'test');
 
-}//addstandardtoDB
+};//addstandardtoDB
 
 function SaveSubject(userinfo, callback){ //name is misleading
 
@@ -836,7 +853,7 @@ function SaveSubject(userinfo, callback){ //name is misleading
     Subject: userinfo.subject,
     Abbreviation: userinfo.Abbreviation,
     Topic: userinfo.Topic,
-    number: userinfo.Snumber,
+    number: userinfo.Snumber
   });//end of question
 
 
@@ -844,13 +861,13 @@ function SaveSubject(userinfo, callback){ //name is misleading
   newStandard.save(function(saverr){
     if(!saverr){
       //console.log('saved item will return now')
-      callback(null,'saved standard')
+      callback(null,'saved standard');
     }//end of iff
     else{
-      console.log('didnt save standard = ' + userinfo.subject)
-      callback(saverr,null)
+      console.log('didnt save standard = ' + userinfo.subject);
+      callback(saverr,null);
     }//end of else
-  })//end save
+  });//end save
 
 
 }//end of get Teacher User by ID
@@ -893,26 +910,26 @@ function SaveSubject(userinfo, callback){ //name is misleading
 /* //this function only saved the password, and the username is undefined can remove i suppose
   //save Teacher User to DB
   SaveTeacherUser: function(userinfo,callback){
-  	  //create Teacher User Variables
-  	  //var TeacherUserSchema = mongoose.model('TeacherUserSchema');
+    //create Teacher User Variables
+    //var TeacherUserSchema = mongoose.model('TeacherUserSchema');
 
 console.log("user = " + userinfo.username);
 console.log("password = " + userinfo.password);
 
-	  var newTeacher = new TeacherUsers({
+    var newTeacher = new TeacherUsers({
       user: userinfo.username,
-	  password: userinfo.password
-	  });
+  password: userinfo.password
+  });
 
-	  console.log("newTeacher  = " + newTeacher.username);
+  console.log("newTeacher  = " + newTeacher.username);
 console.log("newTeacher password = " + newTeacher.password);
       //Save TeacherUser Variables to DB
       newTeacher.save(function (err) {
         if (!err) {
-        	callback(null,userinfo);
+          callback(null,userinfo);
             //return console.log("created");
         } else {
-        	throw err;
+          throw err;
             //return console.log(err);
         }
       });
