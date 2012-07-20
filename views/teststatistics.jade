@@ -6,6 +6,17 @@
       .span8
         h1 This is the user Statistics page
           p #{title}
-        #chartdivtest(style='height: 300px; width: 400px;')
-        #chart1(style='height: 300px; width: 400px;')
+          if(typeof(testid) != 'undefined')
+            input#testID(type='hidden', name='testID', value='#{testid}')
+          if(typeof(Statdata) != 'undefined')
+            p  statdatae exists
+            != "<script type='text/javascript'>"
+            != "var Correct = [];"
+            != "var Incorrect = [];"
+            each question in Statdata
+              != "Correct.push(" + question.CorrectlyAnswered +");"
+              != "Incorrect.push(" + question.IncorrectlyAnswered +");"
+            != "</script>"  
+          p#testout  
+        #TRbyQuestion(style='height: 300px; width: 400px;')
         

@@ -639,8 +639,18 @@ exports.getuserquestions = function(req, res){
 
 exports.getTeststatistics = function(req, res){//for individual statistics
 
-  console.log("id of test = " + req.params.testid);
-  res.render('teststatistics',{title: 'Statistics', plotjq : true});
+  // console.log("id of test = " + req.params.testid);
+  db.grabTestResultstest(req.params.testid, function(err,result){
+      if(!err){
+         // console.log("Results = " + result);
+        res.render('teststatistics',{title: 'Statistics', plotjq : true, Statdata: result, testid: req.params.testid});
+      }//end of !err if
+      else{
+        console.log("No results " );
+        res.render('teststatistics',{title: 'Statistics', plotjq : true});
+      }//end of !err else
+ });//end of grabtestresults
+  // res.render('teststatistics',{title: 'Statistics', plotjq : true});
 };//end get statistics
 
 
@@ -837,7 +847,7 @@ exports.gettestplot = function(req,res){
   //   }//end of !err else
   // })//end of grabTestResults
 
-  res.render("Testviews/testplot", {title: "testingplotstuff" ,plotjq: true});
+  res.render("Testviews/testplot", {title: "testingplotstuff"});
 };
 
 

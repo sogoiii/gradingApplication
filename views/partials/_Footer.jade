@@ -155,7 +155,7 @@ script
 				var somedata = stats;
 				var data = [[]];
 				for(i = 0; i < somedata.length;i++){
-					data[0].push([i,somedata[i].numcorrect])
+					data[0].push([i,somedata[i].CorrectlyAnswered])
 				}
 				$('#datareceived').text(data);
 				$.jqplot('chartdivtest',  data,

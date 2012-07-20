@@ -1,71 +1,44 @@
 != renderScriptsTags(myscripts)
-script(src='/socket.io/socket.io.js')
+// script(src='/socket.io/socket.io.js')
 script(src='/javascripts/jquery.jqplot.min.js')
+script(src='/dist/plugins/jqplot.canvasTextRenderer.min.js')
+script(src='/dist/plugins/jqplot.canvasAxisLabelRenderer.min.js')
 
 script
-	$(document).ready(function () {
-		var socket = io.connect();
-
-		$.jqplot('chartdiv',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]],
-		{title:'Exponential Line',
-		axes:{yaxis:{min:-10, max:240}},
-		series:[{color:'#5FAB78',label: 'student grades'}],
-		legend: {show: true,location: 'se'}
-		});
-
-		var dataRenderer2 = function(){
-			var data = [[]];
-			for (var i=0; i<13; i+=0.5) {
-				data[0].push([i, Math.sin(i)]);
-			}
-			$('#sinedata').text(data);
-			return data;
-			}
-
-
-		socket.emit('BuildStats_req');
-		socket.on("BuildStats_res", function(stats){
-			$.jqplot('chartdivsine',  [],
-			{title:'Created Sine Data',
-			series:[{color:'#5FAB78',label: 'student grades'}],
-			legend: {show: true, location: 'se'},
-			dataRenderer: dataRenderer2
+	$(document).ready(function () {	
+		$('#testout').text(Correct);
+		// var socket = io.connect();
+		var testID = $('#testID').val();
+			$.jqplot('TRbyQuestion',  [Correct,Incorrect] ,
+			{title:'Results by Question',
+			axes:{yaxis:{label:'Result',ticks: [-0.5,0,1,2,2.5],labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
+				xaxis:{label:'Question'}
+				},
+			series:[{color:'#5FAB78',label: 'Correct'},
+			{label: 'Incorrect'}],
+			legend: {show: true, location: 'se'}
 			});
 
-				var somedata = stats;
-				var data = [[]];
-				for(i = 0; i < somedata.length;i++){
-					data[0].push([i,somedata[i].CorrectlyAnswered])// CorrectlyAnswered is within the object stats
-				}
-				$('#datareceived').text(data);
-				$.jqplot('chartdivtest',  data,
-				{title:'Data from Server',
-				//- axes:{yaxis:{min:-1, max:3}},
-				//- axes:{xaxis:{min:0, max:9}},
-				series:[{color:'#5FAB78',label: 'student grades'}],
-				legend: {show: true, location: 'se'}
-				});
-			}) //- end of socket.on
-		
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		// socket.emit('BuildStats_req',{tesid: testID});
+		// socket.on("BuildStats_res", function(stats){
+		// 	var somedata = stats;
+		// 	var Correct = [];
+		// 	var Incorrect = [];
+		// 	for(i = 0; i < somedata.length;i++){
+		// 		Correct.push([i,somedata[i].CorrectlyAnswered])// CorrectlyAnswered is within the object stats
+		// 		Incorrect.push([i,somedata[i].IncorrectlyAnswered])
+		// 	}
+		// 	$.jqplot('TRbyQuestion',  [Correct, Incorrect] ,
+		// 	{title:'Results by Question',
+		// 	axes:{yaxis:{label:'Result',ticks: [-0.5,0,1,2,2.5]},
+		// 		xaxis:{label:'Question'}
+		// 		},
+		// 	series:[{color:'#5FAB78',label: 'Correct'},
+		// 	{label: 'Incorrect'}],
+		// 	legend: {show: true, location: 'se'}
+		// 	});
+		// }) //- end of socket.on
 
 
 

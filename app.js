@@ -200,43 +200,38 @@ io.sockets.on('connection', function (socket) {
 
 
   //for statistics page//currently in testing mode
-  socket.on("BuildStats_req", function(data,fn){
+  socket.on("BuildStats_req", function(data){
     console.log("recived request to build chart!");
-    var cool = "1";
-    DB.grabTestResultstest(cool, function(err,result){
-      if(!err){
-         console.log("Results = " + result);
-        socket.emit("BuildStats_res",result);
-      }//end of !err if
-      else{
-        console.log("No results " );
-      }//end of !err else
-    });//end of grabTestResults
+    // var cool = "1";
+    console.log("Client wants to get info on test = " + data.tesid);
+    // DB.grabTestResultstest(cool, function(err,result){
+    //   if(!err){
+    //      // console.log("Results = " + result);
+    //     socket.emit("BuildStats_res",result);
+    //   }//end of !err if
+    //   else{
+    //     console.log("No results " );
+    //   }//end of !err else
+    // });//end of grabTestResults
 
 
 
-    socket.on("getresults", function(data,fn){
-      console.log('data from client= ' + data);
-      var cool = "1";
-      DB.grabTestResultstest(cool, function(err,result){
-        if(!err){
-          // console.log("Results = " + result)
-          fn(result);
-        }//end of !err if
-        else{
-          console.log("No results ");
-          fn('woot');
-        }//end of !err else
-      });//end of grabTestResults
-    });
-
-
-
-
+    // socket.on("getresults", function(data,fn){
+    //   console.log('data from client= ' + data);
+    //   var cool = "1";
+    //   DB.grabTestResultstest(cool, function(err,result){
+    //     if(!err){
+    //       // console.log("Results = " + result)
+    //       fn(result);
+    //     }//end of !err if
+    //     else{
+    //       console.log("No results ");
+    //       fn('woot');
+    //     }//end of !err else
+    //   });//end of grabTestResults
+    // });
 
   });//end of buildstats socket.on
-
-
 });//end of socket.io
 
 
