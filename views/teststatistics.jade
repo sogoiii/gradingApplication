@@ -1,6 +1,6 @@
 !=partial('partials/_TopBarLoggedIn')
-  .container-fluid
-    .row-fluid
+  .container
+    .row
       .span2
         include partials/_SideBar
       .span8
@@ -16,7 +16,18 @@
             each question in Statdata
               != "Correct.push(" + question.CorrectlyAnswered +");"
               != "Incorrect.push(" + question.IncorrectlyAnswered +");"
-            != "</script>"  
-          p#testout  
-        #TRbyQuestion(style='height: 300px; width: 400px;')
+            != "</script>"
+        .row
+          .span4
+            #TRbyQuestion(style='height: 300px; width: 400px;')
+            #TRbyQuestion2(style='height: 300px; width: 400px;')
+          .span4
+            h3.center Question with Percent Correct
+            dl.dl-horizontal
+              if(typeof(QuestionText) != 'undefined')
+                each question in QuestionText
+                  dt 100%
+                  dd #{question.Questionhtml}
+                
+        
         

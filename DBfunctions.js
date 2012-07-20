@@ -731,7 +731,7 @@ exports.grabTestResults = function(userinfo, callback){
   //userinfo = testobjetid = 4fda1af52f910cc6200000d3
 
 
-  Test.findById(userinfo.testid,["TRbyQuestions"],function(err,result){
+  Test.findById(userinfo,["TRbyQuestions", "Questions"],function(err,result){
     if(!err){
       // var resultbycorrect = [];
       //     // console.log("result = " + result.TRbyQuestions[0].CorrectlyAnswered);
@@ -745,7 +745,7 @@ exports.grabTestResults = function(userinfo, callback){
       //             callback(null, resultbycorrect);
       //           }
       //     });//end of ForEach
-      callback(null,result.TRbyQuestions);
+      callback(null,result);
     }//end of !err if
 
     //   // console.log("found test object")
@@ -765,10 +765,10 @@ exports.grabTestResults = function(userinfo, callback){
 
 
 exports.grabTestResultstest = function(userinfo, callback){
-  //userinfo = testobjetid = 4fda1af52f910cc6200000d3
+  //userinfo = req.params.testid = 4fda1af52f910cc6200000d3 //testing
 
 
-  Test.findById("4fda1af52f910cc6200000d3",["TRbyQuestions"],function(err,result){
+  Test.findById(userinfo,["TRbyQuestions"],function(err,result){
     if(!err){
       // var resultbycorrect = [];
       //     // console.log("result = " + result.TRbyQuestions[0].CorrectlyAnswered);

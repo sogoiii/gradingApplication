@@ -6,10 +6,10 @@ script(src='/dist/plugins/jqplot.canvasAxisLabelRenderer.min.js')
 
 script
 	$(document).ready(function () {	
-		$('#testout').text(Correct);
+		// $('#testout').text(Correct);
 		// var socket = io.connect();
 		var testID = $('#testID').val();
-			$.jqplot('TRbyQuestion',  [Correct,Incorrect] ,
+			$.jqplot('TRbyQuestion',  [Correct] ,
 			{title:'Results by Question',
 			axes:{yaxis:{label:'Result',ticks: [-0.5,0,1,2,2.5],labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
 				xaxis:{label:'Question'}
@@ -18,7 +18,15 @@ script
 			{label: 'Incorrect'}],
 			legend: {show: true, location: 'se'}
 			});
-
+			$.jqplot('TRbyQuestion2',  [Incorrect] ,
+			{title:'Results by Question',
+			axes:{yaxis:{label:'Result',ticks: [-0.5,0,1,2,2.5],labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
+				xaxis:{label:'Question'}
+				},
+			series:[{color:'#5FAB78',label: 'Inorrect'},
+			{label: 'Incorrect'}],
+			legend: {show: true, location: 'se'}
+			});
 
 		// socket.emit('BuildStats_req',{tesid: testID});
 		// socket.on("BuildStats_res", function(stats){

@@ -66,8 +66,13 @@ a.notavailable {
 }
 
 
+/*table dt, table dd {
+    text-align: left;
+}*/
 
-
+h3.center{
+  text-align: center;
+}
 
 
 

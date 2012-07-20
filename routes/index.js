@@ -396,6 +396,7 @@ exports.getedittest = function(req,res){ //i know the test ID, i should have ass
   db.ReturnTestQuestions(req.params.testid, function(err,results){
     if(!err){
       results = decodeQuestionHtml(results); //i encoded the html so i can now decode it. (SERCURITY ISSUE POSSIBLE!!!!)
+      results = removehtml(results);
       res.render('edittest',{title: 'Edit Test', wymeditor: true, Questions: results});
     }//if
     else if(err == 'no questions'){
@@ -637,13 +638,30 @@ exports.getuserquestions = function(req, res){
  * GET USER STATISTICS
  */
 
+function removehtml(Questions){
+  for(i = 0; i < Questions.length;i++){
+    var nohtmlQuestion = Questions[i].Questionhtml.replace(/<(?:.|\n)*?>/gm, '');
+    Questions[i].Questionhtml = nohtmlQuestion;
+  }//end of for loop
+  return Questions;
+}//end of removehtml function
+
 exports.getTeststatistics = function(req, res){//for individual statistics
 
   // console.log("id of test = " + req.params.testid);
-  db.grabTestResultstest(req.params.testid, function(err,result){
+  db.grabTestResults(req.params.testid, function(err,result){
       if(!err){
-         // console.log("Results = " + result);
-        res.render('teststatistics',{title: 'Statistics', plotjq : true, Statdata: result, testid: req.params.testid});
+         var nohtmlquestions = decodeQuestionHtml(result.Questions);
+         nohtmlquestions = removehtml(nohtmlquestions);
+         console.log("output 1 = " + nohtmlquestions[4].Questionhtml);
+         console.log("output 2 = " + nohtmlquestions[4].Questionhtml.replace(/<(?:.|\n)*?>/gm, ''));
+
+         // console.log("Results = " + result[2].CorrectlyAnswered);
+         // console.log("Results = " + result.CorrectAnswertext);
+        res.render('teststatistics',{title: 'Statistics', plotjq : true,
+                                    Statdata: result.TRbyQuestions,
+                                    QuestionText: nohtmlquestions,
+                                    testid: req.params.testid});
       }//end of !err if
       else{
         console.log("No results " );
