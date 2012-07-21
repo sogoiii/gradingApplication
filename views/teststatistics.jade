@@ -3,31 +3,37 @@
     .row
       .span2
         include partials/_SideBar
-      .span8
-        h1 This is the user Statistics page
-          p #{title}
-          if(typeof(testid) != 'undefined')
-            input#testID(type='hidden', name='testID', value='#{testid}')
-          if(typeof(Statdata) != 'undefined')
-            p  statdatae exists
-            != "<script type='text/javascript'>"
-            != "var Correct = [];"
-            != "var Incorrect = [];"
-            each question in Statdata
-              != "Correct.push(" + question.CorrectlyAnswered +");"
-              != "Incorrect.push(" + question.IncorrectlyAnswered +");"
-            != "</script>"
+      .span10
+        h1 This is the user Statistics page for whats its worth 
+        p #{title}
+        if(typeof(testid) != 'undefined')
+          input#testID(type='hidden', name='testID', value='#{testid}')
+        if(typeof(Statdata) != 'undefined')
+          != "<script type='text/javascript'>"
+          != "var Correctbyquestion = [];"
+          != "var Incorrectbyquestion = [];"
+          != "var Correctbystudent = [];"
+          != "var Incorrectbystudent = [];"
+          each question in Statdata.TRbyQuestions
+            != "Correctbyquestion.push(" + question.CorrectlyAnswered +");"
+            != "Incorrectbyquestion.push(" + question.IncorrectlyAnswered +");"
+          each student in Statdata.TRbyStudents
+             != "Correctbystudent.push(" + student.CorrectlyAnswered +");"
+             != "Incorrectbystudent.push(" + student.IncorrectlyAnswered +");"
+          != "</script>"
         .row
-          .span4
+          .span5
             #TRbyQuestion(style='height: 300px; width: 400px;')
+            br
+            span#info1 Click Bar Graph
             #TRbyQuestion2(style='height: 300px; width: 400px;')
-          .span4
+          .span5
             h3.center Question with Percent Correct
             dl.dl-horizontal
               if(typeof(QuestionText) != 'undefined')
                 each question in QuestionText
-                  dt 100%
-                  dd #{question.Questionhtml}
+                  .alert.alert-success.span4
+                      p
+                        strong 100%  
+                        |  #{question.Questionhtml}
                 
-        
-        

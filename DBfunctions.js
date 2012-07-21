@@ -731,7 +731,7 @@ exports.grabTestResults = function(userinfo, callback){
   //userinfo = testobjetid = 4fda1af52f910cc6200000d3
 
 
-  Test.findById(userinfo,["TRbyQuestions", "Questions"],function(err,result){
+  Test.findById(userinfo,["TRbyQuestions", "Questions", "TRbyStudents"],function(err,result){
     if(!err){
       // var resultbycorrect = [];
       //     // console.log("result = " + result.TRbyQuestions[0].CorrectlyAnswered);

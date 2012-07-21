@@ -1,12 +1,12 @@
 body {
     padding-top: 60px;
-    padding-bottom: 40px;
+    padding-bottom: 0px; /*was 40*/
   /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
 }
 .sidebar-nav {
     padding: 9px 0;
 }
-
+/*
 ul#canada{width: 940px;max-width: 940px;}ul#about{width: 240px;max-width: 240px;}ul#about a:hover, ul#lggdin a:hover{background-color: #F1962E;color: #fff;}
 #mainmenu.navbar-inner{background: none repeat scroll 0 0 #222;}.navbar .nav .active > .dropdown-toggle, .navbar .nav .open.active > .dropdown-toggle{background-color: rgba(0, 0, 0, 0.5);}#mainmenu li{font-size: 14px;text-transform: uppercase;font-weight: bold;}#mainmenu ul.dropdown-menu li{font-size: 13px;text-transform: none;font-weight: normal;}
 form#lm{padding: 12px 20px;background: #f5f5f5;margin: 12px 0;border-top: 1px solid #B4B6AC;border-bottom: 1px solid #B4B6AC;}
@@ -14,6 +14,9 @@ input#lme{margin-bottom: 4px;}
 form#lm label{width: 75px;}
 #email, #e-mail, #emailadress{display: none;}
 ul#login{width: 340px;max-width: 340px;}ul#login input.btn-primary{color: #fff;margin-top: 0;}ul#login li{padding: 0;}ul#login a{display: inline;padding: 0;margin: 0;text-decoration: underline;}ul#login li div{padding: 0 20px;margin: 12px 0;}ul#login input#sbmt{width: 75px;}
+
+
+*/
 /*
 a {
   color: #00B7FF;
@@ -52,7 +55,7 @@ a {
 }
 
 
-a.notavailable {    
+a.notavailable {
   color: #838B8B;
 }
 
@@ -73,6 +76,6 @@ a.notavailable {
 h3.center{
   text-align: center;
 }
-
-
-
+/*
+.navbar .container { width: @gridRowWidth; }
+*/

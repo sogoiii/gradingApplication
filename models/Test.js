@@ -35,7 +35,8 @@ var TestSchema = new Schema({
 	PDFTest: [mongoose.Schema.Mixed],
 	CreatedPDF: [mongoose.Schema.Mixed],
 	TestResults: [mongoose.Schema.Mixed],
-	TRbyQuestions: [mongoose.Schema.Mixed]
+	TRbyQuestions: [mongoose.Schema.Mixed],
+	TRbyStudents: [mongoose.Schema.Mixed]
 });
 
 

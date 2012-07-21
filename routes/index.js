@@ -653,13 +653,11 @@ exports.getTeststatistics = function(req, res){//for individual statistics
       if(!err){
          var nohtmlquestions = decodeQuestionHtml(result.Questions);
          nohtmlquestions = removehtml(nohtmlquestions);
-         console.log("output 1 = " + nohtmlquestions[4].Questionhtml);
-         console.log("output 2 = " + nohtmlquestions[4].Questionhtml.replace(/<(?:.|\n)*?>/gm, ''));
-
+         console.log("trbystudent = " + result.TRbyStudents);
          // console.log("Results = " + result[2].CorrectlyAnswered);
          // console.log("Results = " + result.CorrectAnswertext);
         res.render('teststatistics',{title: 'Statistics', plotjq : true,
-                                    Statdata: result.TRbyQuestions,
+                                    Statdata: result,
                                     QuestionText: nohtmlquestions,
                                     testid: req.params.testid});
       }//end of !err if
