@@ -73,9 +73,10 @@ a.notavailable {
     text-align: left;
 }*/
 
-h3.center{
+h1.center, h3.center{
   text-align: center;
 }
+
 /*
 .navbar .container { width: @gridRowWidth; }
 */

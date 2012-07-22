@@ -1,43 +1,42 @@
 !=partial('partials/_TopBarLoggedIn')
-	.container-fluid
-		.row-fluid
+	.container
+		.row
 			.span2
 				include partials/_SideBar
 			.span8
-				h1 This is the user Tests page
-				p #{title}
+				h1.center Add questions to test
 				form.form-horizontal(method='post', action='')
 					fieldset
-						.control-group
-							.span2
-								select.span2(name='Class', size='1')
-									option class 1
-							.span2
-								select.span2(name='Grade', size='1')
-									option grade 1
-									option grade 2
-							.span2
-								select.span2(name='Subject', size='1')
-									option subject 1
-									option subject 2
+						h2 1) Question
+						br			
 						.control-group			
-							textarea.wymeditor(name='QuestionHTML')			
+							textarea.wymeditor(name='QuestionHTML')	
+						h2 2) Possible Responses
+						br			
 						.control-group.success
-							label.control-label(for='focusedInput') Correct Answer
+							label.control-label(for='CorrectAnswer') Correct Answer
 							.controls
-								input(type='text', name= 'CorrectAnswer')
+								input#CorrectAnswer(type='text', name= 'CorrectAnswer')
 						.control-group.error
-							label.control-label(for='inputError') Wrong Answer
+							label.control-label(for='WrongAnswer1') Wrong Answer
 							.controls
-								input(type='text', name= 'WrongAnswer1')
+								input#WrongAnswer1(type='text', name= 'WrongAnswer1')
 						.control-group.error
-							label.control-label(for='inputWarning') Wrong Answer
+							label.control-label(for='WrongAnswer2') Wrong Answer
 							.controls
-								input(type='text', name= 'WrongAnswer2')
+								input#WrongAnswer2(type='text', name= 'WrongAnswer2')
 						.control-group.error
-							label.control-label(for='inputWarning') Wrong Answer
+							label.control-label(for='WrongAnswer3') Wrong Answer
 							.controls
-								input(type='text', name= 'WrongAnswer3') Add Question
+								input#WrongAnswer3(type='text', name= 'WrongAnswer3') Add Question
+						h2 3) Score Weight
+						br	
+						.control-group
+							label.control-label(for='Score') Score
+							.controls
+								input#Score.span1(type='text', name= 'Score') Score
+						h2 4) Associate Standards
+						br	
 						input(type='hidden', name='_method', value='put')			
 					button.btn.btn-primary.wymupdate(type='submit') Add Question
 				- if(typeof(message) != 'undefined')		

@@ -394,12 +394,13 @@ function decodeQuestionHtml(Questions){
 exports.getedittest = function(req,res){ //i know the test ID, i should have associated data to the test already
   //Check test and grab all questions to be displayed
   db.ReturnTestQuestions(req.params.testid, function(err,results){
+    console.log("err returned = " + err);
     if(!err){
       results = decodeQuestionHtml(results); //i encoded the html so i can now decode it. (SERCURITY ISSUE POSSIBLE!!!!)
       results = removehtml(results);
       res.render('edittest',{title: 'Edit Test', wymeditor: true, Questions: results});
     }//if
-    else if(err == 'no questions'){
+    else if(err == 'No Questions Exist!'){
       res.render('edittest',{title: 'Edit Test', wymeditor: true, message: err});
     }
     else{
@@ -653,11 +654,11 @@ exports.getTeststatistics = function(req, res){//for individual statistics
       if(!err){
          var nohtmlquestions = decodeQuestionHtml(result.Questions);
          result.Questions = removehtml(nohtmlquestions);
-         console.log('question text = ' + result.Questions[2].Questionhtml);
+         // console.log('question text = ' + result.Questions[2].Questionhtml);
          //console.log("trbystudent = " + result.TRbyStudents);
          // console.log("Results = " + result[2].CorrectlyAnswered);
          // console.log("Results = " + result.CorrectAnswertext);
-        res.render('teststatistics',{title: 'Statistics', plotjq : true,
+        res.render('teststatistics',{title: 'Single Test Statistics', plotjq : true,
                                     Statdata: result,
                                     QuestionText: result.Questions,
                                     testid: req.params.testid});
@@ -671,7 +672,11 @@ exports.getTeststatistics = function(req, res){//for individual statistics
 };//end get statistics
 
 
+exports.getselfperformance = function(req, res){
 
+res.render('selfperformance', {title: 'Performance'});
+
+};//end of getselfperformance
 
 
 
@@ -876,36 +881,41 @@ exports.getaddstandard = function(req, res){
 
 };//end of getaddstandard
 
-exports.postaddstandard = function(req, res){
-  db.addstandardtoDB(req.body,function(err,done){
-    if(!err){
-      console.log('Succesfully added standard');
-      res.redirect('back');
-    }//end of !err if
-    else{
-      console.log('failed to add standard');
-      res.redirect('back');
-    }//end of else
-  });//end of addstandtodb
-};//end of getaddstandard
+// exports.postaddstandard = function(req, res){
+//   db.addstandardtoDB(req.body,function(err,done){
+//     if(!err){
+//       console.log('Succesfully added standard');
+//       res.redirect('back');
+//     }//end of !err if
+//     else{
+//       console.log('failed to add standard');
+//       res.redirect('back');
+//     }//end of else
+//   });//end of addstandtodb
+// };//end of getaddstandard
 
 
-exports.postaddEnglishstandard = function(req, res){
-  db.addEnglishstandardtoDB(req.body,function(err,done){
-    if(!err){
-      console.log('Added Subjects');
-      res.redirect('back');
-    }//end of !err if
-    else{
-      console.log('failed to add standard');
-      res.redirect('back');
-    }//end of else
-  });//end of addstandtodb
-};//end of getaddstandard
+// exports.postaddEnglishstandard = function(req, res){
+//   db.addEnglishstandardtoDB(req.body,function(err,done){
+//     if(!err){
+//       console.log('Added Subjects');
+//       res.redirect('back');
+//     }//end of !err if
+//     else{
+//       console.log('failed to add standard');
+//       res.redirect('back');
+//     }//end of else
+//   });//end of addstandtodb
+// };//end of getaddstandard
 
 
 
+exports.getAddStandardTest = function(req, res){
 
+
+res.render('Testviews/AddStandardTest', {title: 'addstandard'});
+
+};//end of AddStandardTest
 
 
 

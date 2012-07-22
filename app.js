@@ -199,7 +199,7 @@ io.sockets.on('connection', function (socket) {
   });//end of socket.on
 
 
-  //for statistics page//currently in testing mode
+  //for statistics page//currently in testing mode //NO LONGER USED
   socket.on("BuildStats_req", function(data){
     console.log("recived request to build chart!");
     // var cool = "1";
@@ -232,6 +232,12 @@ io.sockets.on('connection', function (socket) {
     // });
 
   });//end of buildstats socket.on
+
+
+
+
+
+
 });//end of socket.io
 
 

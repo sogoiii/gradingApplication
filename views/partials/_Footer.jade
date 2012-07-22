@@ -180,7 +180,11 @@ script
 
 
 
-
+	      $('#INC3').click(function(){
+        	var incomefound = GrabCalculatedValue();
+            $('#BR3').prop('value', incomefound);
+            $('#BR3').trigger('change');
+          });
 
 
 

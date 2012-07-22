@@ -1,0 +1,32 @@
+#FindAddStandard.modal.hide.fade
+  .modal-header
+    a.close(href='#', data-dismiss='modal') ×
+    h3 Add Standard
+  .modal-body
+    ul.unstyled
+      li
+        button.btn.btn-info(href='#') English
+      li
+        button.btn.btn-info(href='#') Math
+  .modal-footer
+      a.btn.btn-primary#PDFURL() Open PDF
+
+
+!=partial('partials/_TopBarLoggedIn')
+  .container
+    .row
+      .span2
+
+      .span10
+        h1 add Standard  
+        br
+        button.btn.btn-info(href='#', data-toggle='modal', data-target='#FindAddStandard') Add Standard
+
+
+
+
+
+
+
+
+                

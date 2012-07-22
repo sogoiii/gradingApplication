@@ -424,15 +424,15 @@ exports.ReturnTestQuestions = function(userinfo, callback){
       console.log('size of questions = ' + questions.Questions.length);
       if(questions.Questions.length != 0){
           callback(null,questions.Questions);
-      }//end of if
+      }//end of length if
       else{ //if questions.Questions.length == 0
           callback('No Questions Exist!', null);
-      }//end of else
-    }//end of if
+      }//end of length else
+    }//end of !err if
     else{
       console.log('could not find testID');
       callback(err,null);
-    }//end of else
+    }//end of !err else
   });//end of find by id
 };//end of ReturnTestQuestions
 

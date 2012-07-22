@@ -96,7 +96,7 @@ app.post('/user/:id/tests/upload', ensureAuthenticated, RestirctAccess, routes.u
 
 app.get('/user/:id/questions', ensureAuthenticated, RestirctAccess, routes.getuserquestions);
 app.get('/user/:id/statistics/:testid', ensureAuthenticated, RestirctAccess, routes.getTeststatistics);
-
+app.get('/user/:id/performance', ensureAuthenticated, RestirctAccess, routes.getselfperformance);
 
 
 
@@ -137,13 +137,18 @@ app.del('/user/testajaxpost', routes.testajaxpost);
 app.post('/user/testajaxpost', routes.testajaxpost2);
 
 app.get('/testplot', routes.gettestplot);
-app.get('/addstandard', routes.getaddstandard);
-app.post('/addstandard', routes.postaddstandard);
+// app.get('/addstandard', routes.getaddstandard);
+// app.post('/addstandard', routes.postaddstandard);
 
 app.post('/testsubject', routes.postaddEnglishstandard);
 // app.post('/CAB',routes.postchangeAbbreviations);//change abbreviation
 // app.post('/addheadline', routes.postaddheadline2)//was 1 for grade 1-8 for math
-};
+
+
+app.get('/addstandardtest', routes.getAddStandardTest);
+
+
+};//end of file
 
 
 
