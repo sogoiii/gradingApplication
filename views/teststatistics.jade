@@ -30,10 +30,29 @@
           .span5
             h3.center Question with Percent Correct
             dl.dl-horizontal
-              if(typeof(QuestionText) != 'undefined')
-                each question in QuestionText
-                  .alert.alert-success.span4
-                      p
-                        strong 100%  
-                        |  #{question.Questionhtml}
+              if(typeof(Statdata) != 'undefined')
+                each question, i in Statdata.Questions
+                  if(Statdata.TRbyQuestions[i].PercentCorrect < 50)
+                    .alert.alert-danger.span4
+                        p
+                          strong #{Statdata.TRbyQuestions[i].PercentCorrect}%
+                          |  #{question.Questionhtml}
+                  else if(Statdata.TRbyQuestions[i].PercentCorrect < 75)
+                    .alert.alert-warning.span4
+                        p
+                          strong #{Statdata.TRbyQuestions[i].PercentCorrect}%
+                          |  #{question.Questionhtml}
+                  else
+                    .alert.alert-success.span4
+                        p
+                          strong #{Statdata.TRbyQuestions[i].PercentCorrect}%
+                          |  #{question.Questionhtml}
+
+
+
+
+
+
+
+
                 

@@ -45,16 +45,16 @@ app.get('/about', routes.about);
 
 /*
   
-    Loging in and Registering 
+    Loging in and Registering
 
 */
 
 
 app.get('/register', routes.getregister);
-app.post('/register', routes.postregister, passport.authenticate('local', { failureRedirect: '/register' , failureFlash: true }), routes.postregister2); 
+app.post('/register', routes.postregister, passport.authenticate('local', { failureRedirect: '/register' , failureFlash: true }), routes.postregister2);
 
 app.get('/login', routes.getlogin);
-app.post('/login', 
+app.post('/login',
   passport.authenticate('local', { failureRedirect: '/login' , failureFlash: true }),
   routes.postlogin
 );
@@ -72,10 +72,10 @@ app.get('/logout', routes.getlogout);
     USER OVERVIEW - TESTS - QUESTIONS - STATISTICS
 
 */
-app.get('/user/:id/setupclass', ensureAuthenticated, RestirctAccess, routes.getsetup)
-app.post('/user/:id/setupclass', ensureAuthenticated, RestirctAccess, routes.postsetup) //put and post are nearly identical.
-app.put('/user/:id/setupclass',ensureAuthenticated, RestirctAccess, routes.putsetup) //put and post are nearly identical.
-app.del('/user/:id/setupclass',ensureAuthenticated, RestirctAccess, routes.delsetup )
+app.get('/user/:id/setupclass', ensureAuthenticated, RestirctAccess, routes.getsetup);
+app.post('/user/:id/setupclass', ensureAuthenticated, RestirctAccess, routes.postsetup);//put and post are nearly identical.
+app.put('/user/:id/setupclass',ensureAuthenticated, RestirctAccess, routes.putsetup); //put and post are nearly identical.
+app.del('/user/:id/setupclass',ensureAuthenticated, RestirctAccess, routes.delsetup );
 
 app.get('/user/:id', ensureAuthenticated, RestirctAccess, routes.getuserindex);
 
@@ -83,7 +83,7 @@ app.post('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.pos
 app.get('/user/:id/edittest/:testid', ensureAuthenticated, RestirctAccess, routes.getedittest);
 app.put('/user/:id/edittest/:testid', ensureAuthenticated, RestirctAccess, routes.putedittest);
 app.del('/user/:id/testdelete/:testid', ensureAuthenticated, RestirctAccess, routes.deltest);
-app.get('/pdffile/:fileid',  routes.pdffile)
+app.get('/pdffile/:fileid',  routes.pdffile);
 
 
 // app.get('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.getusercreatetest);
@@ -112,8 +112,8 @@ app.get('/user/:id/statistics/:testid', ensureAuthenticated, RestirctAccess, rou
 //uploading a file examples
 app.get('/uploadtest', routes.getupload);
 app.post('/uploadnew',routes.postupload);
-app.get('/file/:id', routes.getshowfile2)
-app.get('/filePDF/:id', routes.getshowfile3)
+app.get('/file/:id', routes.getshowfile2);
+app.get('/filePDF/:id', routes.getshowfile3);
 
 
 
@@ -133,8 +133,8 @@ app.get('/loginfailed', routes.loginfailed);
 app.get('/userlist', ensureAuthenticated,  routes.userlist);
 app.get('/user/:id/overview', ensureAuthenticated, RestirctAccess, routes.getuseroverview);
 
-app.del('/user/testajaxpost', routes.testajaxpost)
-app.post('/user/testajaxpost', routes.testajaxpost2)
+app.del('/user/testajaxpost', routes.testajaxpost);
+app.post('/user/testajaxpost', routes.testajaxpost2);
 
 app.get('/testplot', routes.gettestplot);
 app.get('/addstandard', routes.getaddstandard);
@@ -143,7 +143,7 @@ app.post('/addstandard', routes.postaddstandard);
 app.post('/testsubject', routes.postaddEnglishstandard);
 // app.post('/CAB',routes.postchangeAbbreviations);//change abbreviation
 // app.post('/addheadline', routes.postaddheadline2)//was 1 for grade 1-8 for math
-}
+};
 
 
 

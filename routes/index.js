@@ -652,13 +652,14 @@ exports.getTeststatistics = function(req, res){//for individual statistics
   db.grabTestResults(req.params.testid, function(err,result){
       if(!err){
          var nohtmlquestions = decodeQuestionHtml(result.Questions);
-         nohtmlquestions = removehtml(nohtmlquestions);
-         console.log("trbystudent = " + result.TRbyStudents);
+         result.Questions = removehtml(nohtmlquestions);
+         console.log('question text = ' + result.Questions[2].Questionhtml);
+         //console.log("trbystudent = " + result.TRbyStudents);
          // console.log("Results = " + result[2].CorrectlyAnswered);
          // console.log("Results = " + result.CorrectAnswertext);
         res.render('teststatistics',{title: 'Statistics', plotjq : true,
                                     Statdata: result,
-                                    QuestionText: nohtmlquestions,
+                                    QuestionText: result.Questions,
                                     testid: req.params.testid});
       }//end of !err if
       else{

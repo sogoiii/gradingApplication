@@ -29,8 +29,8 @@ script
 				},
 				// pointLabels: {show: true}
 			},
-			series:[{color:'#007C10',label: 'Correct'},
-			{color: '#F70D01',label: 'Incorrect'}],
+			series:[{color:'#46a546',label: 'Correct'},
+			{color: '#9d261d',label: 'Incorrect'}],
 			legend: {show: true, location: 'se'}
 			});
 			var plot1 = $.jqplot('TRbyQuestion2',  [Correctbystudent,Incorrectbystudent] , {
@@ -48,8 +48,8 @@ script
 				},
 				// pointLabels: {show: true}
 			},
-			series:[{color:'#007C10',label: 'Correct'},
-			{color: '#F70D01',label: 'Incorrect'}],
+			series:[{color:'#46a546',label: 'Correct'},
+			{color: '#9d261d',label: 'Incorrect'}],
 			axes:{yaxis:{label:'Result',labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
 				xaxis:{label:'Student',renderer: $.jqplot.CategoryAxisRenderer}
 				},
@@ -63,7 +63,7 @@ script
 					// $('#info1').html('Correctly Answered '+data[1] + ' Questions');
 				}
 				else{
-					clickedString = clickedString + 'inorrectly answered '+data[1] + ' Questions';
+					clickedString = clickedString + 'incorrectly answered '+data[1] + ' Questions';
 					// $('#info1').html('Inorrectly Answered '+data[1] + ' Questions');
 				}
 				$('#info1').html(clickedString);
