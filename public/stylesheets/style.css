@@ -77,6 +77,12 @@ h1.center, h3.center{
   text-align: center;
 }
 
+/*ul.center{
+  position: relative;
+  left: 20px;
+}*/
+
+
 /*
 .navbar .container { width: @gridRowWidth; }
 */

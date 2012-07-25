@@ -3,7 +3,7 @@
 		.row
 			.span2
 				include partials/_SideBar
-			.span8
+			.span10
 				h1.center Add questions to test
 				form.form-horizontal(method='post', action='')
 					fieldset
@@ -31,12 +31,14 @@
 								input#WrongAnswer3(type='text', name= 'WrongAnswer3') Add Question
 						h2 3) Score Weight
 						br	
-						.control-group
+						.control-group#scoreError
 							label.control-label(for='Score') Score
 							.controls
 								input#Score.span1(type='text', name= 'Score') Score
-						h2 4) Associate Standards
+								span.help-inline#scorehelp Decimals allowed
+						h2 4) Associate Standards (INCOMPLETE)
 						br	
+						p#testscorechange
 						input(type='hidden', name='_method', value='put')			
 					button.btn.btn-primary.wymupdate(type='submit') Add Question
 				- if(typeof(message) != 'undefined')		
@@ -47,14 +49,29 @@
 				- if(typeof(Questions) != 'undefined')
 					each elm in Questions
 						.alert.alert-success.alert-block
-							!{elm.Questionhtml}
-							p Correct Answer = #{elm.CorrectAnswertext}
-							each WA in elm.WrongAnswers
-								each val, key in WA
-									- if(key == 'WrongAnswertext')
-											p Wrong answer = #{val}
-			.span2 
-				h3 Mearly test content
-				p #{title}
+							strong Question: 
+							|  !{elm.Questionhtml}
+							br
+							br
+							table.table.table-condensed.tableclass
+								thread
+									th Correct
+									th Wrong Answer 1
+									th Wrong Answer 2
+									th Wrong Answer 3
+									th Score
+								tbody
+									td #{elm.CorrectAnswertext}
+									each WA in elm.WrongAnswers
+										each val, key in WA
+											- if(key == 'WrongAnswertext')
+												td #{val}						
+									td #{elm.Score}
 
+
+
+
+- myscripts.push('wymeditor/jquery.wymeditor.min.js')
+- myscripts.push('wymeditorandvalidation.js')
+!= renderScriptsTags(myscripts)
 

@@ -394,7 +394,7 @@ function decodeQuestionHtml(Questions){
 exports.getedittest = function(req,res){ //i know the test ID, i should have associated data to the test already
   //Check test and grab all questions to be displayed
   db.ReturnTestQuestions(req.params.testid, function(err,results){
-    console.log("err returned = " + err);
+    // console.log("err returned = " + err);
     if(!err){
       results = decodeQuestionHtml(results); //i encoded the html so i can now decode it. (SERCURITY ISSUE POSSIBLE!!!!)
       results = removehtml(results);
@@ -414,6 +414,7 @@ exports.putedittest = function(req,res){//user is looking at test and adds quest
   //Check all variables exist
   //sanitize and encode variables
   //Create Question and embedd into test
+  console.log("score input = " + req.body.Score);
 
   //console.log('inside put edit test!!')
   req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
@@ -910,10 +911,10 @@ exports.getaddstandard = function(req, res){
 
 
 
-exports.getAddStandardTest = function(req, res){
+exports.getAddStandardTest = function(req, res){//for testing purposes/prototyping
 
 
-res.render('Testviews/AddStandardTest', {title: 'addstandard'});
+res.render('Testviews/AddStandardTest', {title: 'addstandard', addstand: 'exists'});
 
 };//end of AddStandardTest
 

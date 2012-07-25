@@ -2,6 +2,7 @@
 script(src='/socket.io/socket.io.js')
 script(src='/javascripts/jquery.jqplot.min.js')
 
+
 script
 	$(document).ready(function () {
 		var socket = io.connect();
@@ -103,7 +104,7 @@ script
 
 
 
-
+		//- below is the jqplot testing stuff
 
 
 		$.jqplot('chartdiv',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]],
@@ -172,19 +173,27 @@ script
 
 
 			}) //- end of socket.on
-		
 
 
 
 
 
+		//- Code below is for adding standards
+
+			$('.nav-tabs').button();
+			$('#MathSubject').click(function(){
+				$('#BCbar').empty();
+			})
 
 
-	      $('#INC3').click(function(){
-        	var incomefound = GrabCalculatedValue();
-            $('#BR3').prop('value', incomefound);
-            $('#BR3').trigger('change');
-          });
+
+		//
+			$('#StandEngilsh').click(function(){
+				$(this).at
+			var incomefound = GrabCalculatedValue();
+			$('#BR3').prop('value', incomefound);
+			$('#BR3').trigger('change');
+			});
 
 
 

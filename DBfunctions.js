@@ -367,7 +367,8 @@ exports.InsertQuestionToTest = function(userinfo, callback){//user put a questio
   //userinfo.testID
   var newQuestion = new Question({
     Questionhtml: userinfo.QuestionHTML,
-    CorrectAnswertext: userinfo.CorrectAnswer
+    CorrectAnswertext: userinfo.CorrectAnswer,
+    Score: userinfo.Score
   });//end of question
 
   //create wrong answers
@@ -421,7 +422,7 @@ exports.ReturnTestQuestions = function(userinfo, callback){
     if(!err){
       //console.log('grabed all questions for this test')
       //console.log('questions = ' + questions.Questions)
-      console.log('size of questions = ' + questions.Questions.length);
+      // console.log('size of questions = ' + questions.Questions.length);
       if(questions.Questions.length != 0){
           callback(null,questions.Questions);
       }//end of length if

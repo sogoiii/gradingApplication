@@ -3,13 +3,25 @@
     a.close(href='#', data-dismiss='modal') ×
     h3 Add Standard
   .modal-body
-    ul.unstyled
-      li
-        button.btn.btn-info(href='#') English
-      li
-        button.btn.btn-info(href='#') Math
+    .row
+      .span6
+        div.ul.breadcrumb#BCbar
+          li
+            a(href='#') English
+            span.divider /
+          li
+            a(href='#') Level
+            span.divider /
+           li.active Topic
+    .row
+      .span6
+        btn.btn.btn-primary.span2#MathSubject(href='#') Math
+        span#testclick
+
+
+
   .modal-footer
-      a.btn.btn-primary#PDFURL() Open PDF
+      a.btn.btn-primary#PDFURL() Add Standards
 
 
 !=partial('partials/_TopBarLoggedIn')

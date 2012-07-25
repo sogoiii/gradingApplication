@@ -9,11 +9,11 @@ var WrongAnswerSchema = require('./WrongAnswers').WrongAnswerSchema;
 var StandardMetSchema = new Schema ({
 	StandardMet: {type: String},
 	Percentage: {type: Number}
-})// end of standardMet
+});// end of standardMet
 
 
 
-//NOTE: I may have to have the html and text areas for every question Correct and Wrong answer 
+//NOTE: I may have to have the html and text areas for every question Correct and Wrong answer
 
 //this schema will have its own unique _id for every instance that is created
 var QuestionSchema = new Schema({
@@ -23,7 +23,8 @@ var QuestionSchema = new Schema({
 	CorrectAnswertext: {type: String, required: true, max: 140, match:/^[a-zA-Z0-9 -"]/ },
 	WrongAnswers: [WrongAnswerSchema],
 	//StandardMet: [StandardMetSchema],
-	QuestionCreated: {type: Date, default: Date.now}
+	QuestionCreated: {type: Date, default: Date.now},
+	Score: {type: Number, required: true}
 	//NumberOfTimesQuestionUsed: {type: Number}, //this number will be updated every time it is used/ must be atomic - performance hit here
 });//end of QuestionSchema
 
