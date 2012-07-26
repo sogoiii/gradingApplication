@@ -110,7 +110,7 @@ app.dynamicHelpers({
   myscripts: function() {
       //scripts to load on every page
       //return ['jQuery.js','wymeditor/jquery.wymeditor.min.js' ,'bootstrap.min.js'];
-      return ['jQuery.js','bootstrap.js'];
+      return ['jQuery.min.js','bootstrap.js'];
       //return ['jQuery.js','bootstrap.min.js'];
   }
 });

@@ -821,7 +821,7 @@ exports.getshowfile3 = function(req, res){
 
 exports.getviewimages = function(req, res){
 
-      res.render("viewimages", {
+      res.render("Testviews/viewimages", {
         title: "View Images"
       });
 };
@@ -830,7 +830,7 @@ exports.getviewimages = function(req, res){
 
 
 exports.userlist = function(req,res){
-  res.render('userlist',{ title: 'Userlist', user: req.user});
+  res.render('Testviews/userlist',{ title: 'Userlist', user: req.user});
 };
 
 
@@ -842,16 +842,16 @@ exports.loginfailed = function(req,res){
 exports.getusers = function(req,res){
   var TeacherUser = mongoose.model('TeacherUserSchema');
   TeacherUser.find({}, function(err, docs){
-    res.render('users', {title: 'users' , teachers: docs});
+    res.render('Testviews/users', {title: 'users' , teachers: docs});
   });
   //res.render('users',{username: username, password: password});
 };
 
 
 
-exports.getuseroverview = function(req, res){
+exports.getuseroverview = function(req, res){ //this was removed
 
-  res.render('useroverview',{title: 'Overview', userID: req.params.id});
+  res.render('Testviews/useroverview',{title: 'Overview', userID: req.params.id});
 };//end get overview
 
 
