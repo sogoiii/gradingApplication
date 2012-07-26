@@ -16,15 +16,7 @@ html
     link(rel='apple-touch-icon', sizes='72x72', href='image/apple-touch-icon-72x72.png')
     link(rel='apple-touch-icon', sizes='114x114', href='image/apple-touch-icon-114x114.png')
 
-  body!= body
-  - if(typeof(wymeditor) != 'undefined')
-       //include partials/_FooterTests
-  - else if(typeof(plotjq) != 'undefined')
-        include partials/_FooterPlot
-  - else if(typeof(addstand) != 'undefined')
-        include partials/_ScriptsAddStand
-  - else
-        include partials/_Footer       
+  body!= body 
             
 
 

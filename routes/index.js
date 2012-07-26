@@ -203,7 +203,7 @@ exports.putsetup = function(req,res){ //this is called even for editing a class 
   req.sanitize('ClassGrade').rtrim();
   req.sanitize('NumOfStudents').rtrim();
   req.assert('ClassName', 'Class Name only accepts alphanumeric').regex(/^[a-zA-Z0-9 -]+$/); //classname
-  req.assert('ClassGrade', 'Class Grade only accepts numbers').isInt(); //grade
+
   req.assert('ClassSubject', 'Class Subject only accepts alphanumeric ').regex(/^[a-zA-Z0-9 -]+$/); //subject
   req.assert('NumOfStudents', 'Number of Students only accepts numbers').isInt(); //grade
   
@@ -398,13 +398,13 @@ exports.getedittest = function(req,res){ //i know the test ID, i should have ass
     if(!err){
       results = decodeQuestionHtml(results); //i encoded the html so i can now decode it. (SERCURITY ISSUE POSSIBLE!!!!)
       results = removehtml(results);
-      res.render('edittest',{title: 'Edit Test', wymeditor: true, Questions: results});
+      res.render('edittest',{title: 'Edit Test', Questions: results});
     }//if
     else if(err == 'No Questions Exist!'){
-      res.render('edittest',{title: 'Edit Test', wymeditor: true, message: err});
+      res.render('edittest',{title: 'Edit Test', message: err});
     }
     else{
-      res.render('edittest',{title: 'Edit Test', wymeditor: true, message: 'Unexpected Error'});
+      res.render('edittest',{title: 'Edit Test', message: 'Unexpected Error'});
     }//end of else
   });//end of ReturnTestQuestions
 };//end of getedittest
@@ -414,11 +414,25 @@ exports.putedittest = function(req,res){//user is looking at test and adds quest
   //Check all variables exist
   //sanitize and encode variables
   //Create Question and embedd into test
-  console.log("score input = " + req.body.Score);
+  req.assert('Score', 'Can only accept numbers').isInt(); //Score
+  // console.log("score input = " + req.body.Score);
 
   //console.log('inside put edit test!!')
   req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
   req.sanitize('QuestionHTML').entityEncode(); //entitiy.Decode() for dispalying later
+  req.sanitize('CorrectAnswer').rtrim();
+  req.sanitize('CorrectAnswer').rtrim();
+  req.assert('CorrectAnswer', 'Cam only accept alphanumeric').regex(/^[a-zA-Z0-9 -]+$/); //CorrectAnswer
+  req.sanitize('WrongAnswer1').rtrim();
+  req.sanitize('WrongAnswer1').rtrim();
+  req.assert('WrongAnswer1', 'Cam only accept alphanumeric').regex(/^[a-zA-Z0-9 -]+$/); //WrongAnswer1
+  req.sanitize('WrongAnswer2').rtrim();
+  req.sanitize('WrongAnswer2').rtrim();
+  req.assert('WrongAnswer2', 'Cam only accept alphanumeric').regex(/^[a-zA-Z0-9 -]+$/); //WrongAnswer2
+  req.sanitize('WrongAnswer3').rtrim();
+  req.sanitize('WrongAnswer3').rtrim();
+  req.assert('WrongAnswer3', 'Cam only accept alphanumeric').regex(/^[a-zA-Z0-9 -]+$/); //WrongAnswer3
+
   req.body.testID = req.params.testid;
   db.InsertQuestionToTest(req.body, function(err,done){
     if(!err){
@@ -444,11 +458,11 @@ exports.getusercreatetest = function(req, res){
     TeacherUserSchema.findById(req.params.id, function(err,user){
       if(err){
         console.log('GET USER error = ' + user.Tests._id);
-        res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'DID not find user by ID'});
+        res.render('createtest',{title: 'Create Tests',  message: 'DID not find user by ID'});
       }
       else{
         console.log('GET USER no errror = ' + user.Tests._id);
-        res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'User Exists in DB'});
+        res.render('createtest',{title: 'Create Tests',  message: 'User Exists in DB'});
       }
     });//end of findbyID
   //res.render('createtest',{title: 'Create Tests', wymeditor: true})
@@ -659,17 +673,17 @@ exports.getTeststatistics = function(req, res){//for individual statistics
          //console.log("trbystudent = " + result.TRbyStudents);
          // console.log("Results = " + result[2].CorrectlyAnswered);
          // console.log("Results = " + result.CorrectAnswertext);
-        res.render('teststatistics',{title: 'Single Test Statistics', plotjq : true,
+        res.render('teststatistics',{title: 'Single Test Statistics',
                                     Statdata: result,
                                     QuestionText: result.Questions,
                                     testid: req.params.testid});
       }//end of !err if
       else{
         console.log("No results " );
-        res.render('teststatistics',{title: 'Statistics', plotjq : true});
+        res.render('teststatistics',{title: 'Statistics'});
       }//end of !err else
  });//end of grabtestresults
-  // res.render('teststatistics',{title: 'Statistics', plotjq : true});
+  // res.render('teststatistics',{title: 'Statistics'});
 };//end get statistics
 
 
@@ -914,7 +928,7 @@ exports.getaddstandard = function(req, res){
 exports.getAddStandardTest = function(req, res){//for testing purposes/prototyping
 
 
-res.render('Testviews/AddStandardTest', {title: 'addstandard', addstand: 'exists'});
+res.render('Testviews/AddStandardTest', {title: 'addstandard'});
 
 };//end of AddStandardTest
 

@@ -8,11 +8,11 @@
 				form.form-horizontal(method='post', action='')
 					fieldset
 						h2 1) Question
-						br			
-						.control-group			
-							textarea.wymeditor(name='QuestionHTML')	
+						br
+						.control-group
+							textarea.wymeditor(name='QuestionHTML')
 						h2 2) Possible Responses
-						br			
+						br
 						.control-group.success
 							label.control-label(for='CorrectAnswer') Correct Answer
 							.controls
@@ -30,18 +30,18 @@
 							.controls
 								input#WrongAnswer3(type='text', name= 'WrongAnswer3') Add Question
 						h2 3) Score Weight
-						br	
+						br
 						.control-group#scoreError
 							label.control-label(for='Score') Score
 							.controls
 								input#Score.span1(type='text', name= 'Score') Score
 								span.help-inline#scorehelp Decimals allowed
 						h2 4) Associate Standards (INCOMPLETE)
-						br	
+						br
 						p#testscorechange
-						input(type='hidden', name='_method', value='put')			
+						input(type='hidden', name='_method', value='put')
 					button.btn.btn-primary.wymupdate(type='submit') Add Question
-				- if(typeof(message) != 'undefined')		
+				- if(typeof(message) != 'undefined')
 					.alert.alert-error.alert-block
 						a.close(data-dismiss='alert', href='#') ×
 						h4.alert-heading Question
@@ -65,7 +65,7 @@
 									each WA in elm.WrongAnswers
 										each val, key in WA
 											- if(key == 'WrongAnswertext')
-												td #{val}						
+												td #{val}
 									td #{elm.Score}
 
 

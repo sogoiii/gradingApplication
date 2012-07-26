@@ -80,5 +80,24 @@
 				p #{title}
 			
 
+!= renderScriptsTags(myscripts)
+
+script
+	$(document).ready(function () {
+		$('.editclass').click(function(e){
+			var nam = $(this).closest('.row-fluid').find('.classnametext').text()             
+			var sub = $(this).closest('.row-fluid').find('.subject').text()
+			var gr = $(this).closest('.row-fluid').find('.grade').text()
+			var nos = $(this).closest('.row-fluid').find('.NOS').text()
+			$('.classname').val(nam)           
+			$('.classsubject').val(sub)
+			$('.classgrade').val(gr)
+			$('.numberofstudents').val(nos)
+			$('.submitform').text('Edit Class')
+			var CRID = $(this).closest('.row-fluid').find('.classroomid').val()
+			$('.Editing').prop('value', CRID)
+			$('.reqtype').prop('value', 'PUT')
+		})
+	});//end of docment ready
 
 

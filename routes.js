@@ -145,7 +145,7 @@ app.post('/testsubject', routes.postaddEnglishstandard);
 // app.post('/addheadline', routes.postaddheadline2)//was 1 for grade 1-8 for math
 
 
-app.get('/addstandardtest', routes.getAddStandardTest);
+app.get('/addstandardtest', routes.getAddStandardTest);//testing how to add a standard
 
 
 };//end of file

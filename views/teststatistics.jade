@@ -1,3 +1,19 @@
+mixin resulttable(data)
+  table.table.table-condensed.tableclass
+    thread
+      th Correct
+      th % Correct
+      th Mean
+    tbody
+      td #{data.CorrectlyAnswered}
+      td #{data.PercentCorrect}
+      td #{data.Mean}
+
+mixin QuestionData(data, i)
+  p #{[i+1]}) #{data.Questions[i].Questionhtml}
+    mixin resulttable(data.TRbyQuestions[i])
+
+
 !=partial('partials/_TopBarLoggedIn')
   .container
     .row
@@ -34,24 +50,23 @@
                 each question, i in Statdata.Questions
                   if(Statdata.TRbyQuestions[i].PercentCorrect < 50)
                     .alert.alert-danger.span4
-                        p
-                          strong #{Statdata.TRbyQuestions[i].PercentCorrect}%
-                          |  #{question.Questionhtml}
+                      mixin QuestionData(Statdata, i)
                   else if(Statdata.TRbyQuestions[i].PercentCorrect < 75)
                     .alert.alert-warning.span4
-                        p
-                          strong #{Statdata.TRbyQuestions[i].PercentCorrect}%
-                          |  #{question.Questionhtml}
+                      mixin QuestionData(Statdata, i)
                   else
                     .alert.alert-success.span4
-                        p
-                          strong #{Statdata.TRbyQuestions[i].PercentCorrect}%
-                          |  #{question.Questionhtml}
+                      mixin QuestionData(Statdata, i)  
 
 
-
-
-
+- myscripts.push('jqplot/jquery.jqplot.min.js')
+- myscripts.push('jqplot/plugins/jqplot.canvasTextRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.barRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.categoryAxisRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.pointLabels.min.js')
+- myscripts.push('myjqplotscripts.js')
+!= renderScriptsTags(myscripts)
 
 
 

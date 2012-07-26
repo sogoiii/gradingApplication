@@ -407,9 +407,9 @@ exports.InsertQuestionToTest = function(userinfo, callback){//user put a questio
       callback(Qerr,null);
     }
   });//end of newQuestion.save
-
-
 };//end of InsertQuestionToTest
+
+
 
 
 
@@ -728,7 +728,7 @@ exports.DeleteAClass = function(userinfo, callback){//called from delsetup
 
 };//end of DeleteAClass
 
-exports.grabTestResults = function(userinfo, callback){
+exports.grabTestResults = function(userinfo, callback){ //test statistics
   //userinfo = testobjetid = 4fda1af52f910cc6200000d3
 
 
@@ -765,40 +765,49 @@ exports.grabTestResults = function(userinfo, callback){
 
 
 
-exports.grabTestResultstest = function(userinfo, callback){
-  //userinfo = req.params.testid = 4fda1af52f910cc6200000d3 //testing
+exports.graballtests = function(userinfo,callback){//self performance
+//userinfo=userid
 
 
-  Test.findById(userinfo,["TRbyQuestions"],function(err,result){
-    if(!err){
-      // var resultbycorrect = [];
-      //     // console.log("result = " + result.TRbyQuestions[0].CorrectlyAnswered);
-      //     result.TRbyQuestions.forEach(function(element) {
-      //           resultbycorrect.push(element.CorrectlyAnswered);
-      //           // console.log("num correct = " + element.CorrectlyAnswered);
-      //           // console.log("resultbycorrect = " + resultbycorrect.length );
-      //           // console.log("result = " + result.TRbyQuestions.length );
-      //           if(resultbycorrect.length == result.TRbyQuestions.length){
-      //             // console.log("will exit to return");
-      //             callback(null, resultbycorrect);
-      //           }
-      //     });//end of ForEach
-      callback(null,result.TRbyQuestions);
-    }//end of !err if
 
-    //   // console.log("found test object")
-    //    console.log("result = " + result);
-    //   // console.log("Answers = " + result.TestResults[0].numcorrect)
-    //   // console.log("result = " + result);
-    //   // console.log("result = " + result.id);
-    //   callback(null,result.TestResults);
-    // }//end of !eer if
-    else{
-      console.log("did not find test object");
-      callback(err,null);
-    }//end of !err else
-  });//end of findbyid
-};//end of grabTestResults
+};//end of graballtests
+
+
+
+// exports.grabTestResultstest = function(userinfo, callback){ //removed
+//   //userinfo = req.params.testid = 4fda1af52f910cc6200000d3 //testing
+
+
+//   Test.findById(userinfo,["TRbyQuestions"],function(err,result){
+//     if(!err){
+//       // var resultbycorrect = [];
+//       //     // console.log("result = " + result.TRbyQuestions[0].CorrectlyAnswered);
+//       //     result.TRbyQuestions.forEach(function(element) {
+//       //           resultbycorrect.push(element.CorrectlyAnswered);
+//       //           // console.log("num correct = " + element.CorrectlyAnswered);
+//       //           // console.log("resultbycorrect = " + resultbycorrect.length );
+//       //           // console.log("result = " + result.TRbyQuestions.length );
+//       //           if(resultbycorrect.length == result.TRbyQuestions.length){
+//       //             // console.log("will exit to return");
+//       //             callback(null, resultbycorrect);
+//       //           }
+//       //     });//end of ForEach
+//       callback(null,result.TRbyQuestions);
+//     }//end of !err if
+
+//     //   // console.log("found test object")
+//     //    console.log("result = " + result);
+//     //   // console.log("Answers = " + result.TestResults[0].numcorrect)
+//     //   // console.log("result = " + result);
+//     //   // console.log("result = " + result.id);
+//     //   callback(null,result.TestResults);
+//     // }//end of !eer if
+//     else{
+//       console.log("did not find test object");
+//       callback(err,null);
+//     }//end of !err else
+//   });//end of findbyid
+// };//end of grabTestResults
 
 
 
