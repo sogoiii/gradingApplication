@@ -30,21 +30,25 @@ mixin QuestionData(data, i)
           != "var Incorrectbyquestion = [];"
           != "var Correctbystudent = [];"
           != "var Incorrectbystudent = [];"
+          != "var ScoreTotals = [];"
           each question in Statdata.TRbyQuestions
             != "Correctbyquestion.push(" + question.CorrectlyAnswered +");"
             != "Incorrectbyquestion.push(" + question.IncorrectlyAnswered +");"
           each student in Statdata.TRbyStudents
              != "Correctbystudent.push(" + student.CorrectlyAnswered +");"
              != "Incorrectbystudent.push(" + student.IncorrectlyAnswered +");"
+             != "ScoreTotals.push(" + student.ScoreTotal +");"
           != "</script>"
         .row
           .span5
             #TRbyQuestion(style='height: 300px; width: 400px;')
             br
             span#info1 Click Bar Graph
-            #TRbyQuestion2(style='height: 300px; width: 400px;')
+            #TRbyStudents(style='height: 300px; width: 400px;')
+            br
+            #TRbyStudentScores(style='height: 300px; width: 400px;')
           .span5
-            h3.center Question with Percent Correct
+            h3.center Individual Questions
             dl.dl-horizontal
               if(typeof(Statdata) != 'undefined')
                 each question, i in Statdata.Questions

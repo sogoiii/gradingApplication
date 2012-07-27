@@ -1,16 +1,16 @@
 mixin resulttable(data,i)
   table.table.table-condensed.tableclass
     thread
-      th STD
       th % Correct
       th Mean Score
+      th STD
     tbody
-      td.STD #{data[i].TRbyTest.STD}
       td #{data[i].TRbyTest.PercentCorrect}
       td #{data[i].TRbyTest.Mean}
+      td #{data[i].TRbyTest.STD}
 
 mixin QuestionData(data, i)
-  p 1) #{data[i].TestName}
+  p #{[i+1]}) #{data[i].TestName}
     mixin resulttable(data, i)
     
 
@@ -21,7 +21,7 @@ mixin QuestionData(data, i)
         include partials/_SideBar
       .span10
         h1 Performance  
-        p #{title}
+        br
         if(typeof(Statdata) != 'undefined')
           != "<script type='text/javascript'>"
           != "var Mean = [];"
@@ -45,7 +45,7 @@ mixin QuestionData(data, i)
 - myscripts.push('jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js')
 - myscripts.push('jqplot/plugins/jqplot.barRenderer.min.js')
 - myscripts.push('jqplot/plugins/jqplot.categoryAxisRenderer.min.js')
-//- myscripts.push('jqplot/plugins/jqplot.pointLabels.min.js')
+- myscripts.push('jqplot/plugins/jqplot.pointLabels.min.js')
 - myscripts.push('performanceplots.js')
 != renderScriptsTags(myscripts)
 
