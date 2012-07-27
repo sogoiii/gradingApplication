@@ -449,24 +449,20 @@ exports.putedittest = function(req,res){//user is looking at test and adds quest
 
 
 
-
-
-
-
-exports.getusercreatetest = function(req, res){
-    var TeacherUserSchema = mongoose.model('TeacherUserSchema');
-    TeacherUserSchema.findById(req.params.id, function(err,user){
-      if(err){
-        console.log('GET USER error = ' + user.Tests._id);
-        res.render('createtest',{title: 'Create Tests',  message: 'DID not find user by ID'});
-      }
-      else{
-        console.log('GET USER no errror = ' + user.Tests._id);
-        res.render('createtest',{title: 'Create Tests',  message: 'User Exists in DB'});
-      }
-    });//end of findbyID
-  //res.render('createtest',{title: 'Create Tests', wymeditor: true})
-};
+// exports.getusercreatetest = function(req, res){ // was removed in routes
+//     var TeacherUserSchema = mongoose.model('TeacherUserSchema');
+//     TeacherUserSchema.findById(req.params.id, function(err,user){
+//       if(err){
+//         console.log('GET USER error = ' + user.Tests._id);
+//         res.render('TestViews/createtest',{title: 'Create Tests',  message: 'DID not find user by ID'});
+//       }
+//       else{
+//         console.log('GET USER no errror = ' + user.Tests._id);
+//         res.render('TestViews/createtest',{title: 'Create Tests',  message: 'User Exists in DB'});
+//       }
+//     });//end of findbyID
+//   //res.render('createtest',{title: 'Create Tests', wymeditor: true})
+// };
 
 
 
@@ -529,13 +525,9 @@ exports.getusertests = function(req, res){ //i want this to show all current and
   req.session.TestPageerrors = '';
   db.GetAllTests(req.params.id, function(err, result){
     if(!err){
-      // console.log("alltests = " +result);
       res.render('usertests',{title: 'Tests',
                              pageerror: uploaderr,
                              AllTests: result});
-
-
-
     }//end of if
     else if(err == 'NoTests'){
       console.log('no test found');
@@ -722,7 +714,7 @@ exports.getselfperformance = function(req, res){//compute performance of the tea
 exports.getupload = function(req,res){
   Application = mongoose.model("application", ApplicationSchema);
   Application.find({}, function(err, applications) {
-      res.render("uploadtest", {
+      res.render("Testviews/uploadtest", {
         title: "GridFS Example",
         applications: applications,
         message: req.flash('myerror')

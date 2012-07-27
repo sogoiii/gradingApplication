@@ -291,7 +291,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
                           //console.log('in !err, i guess if found something')
                           //console.warn('active tests element = ' + element)
                           //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
-                          Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'ClassName', 'NumberOfStudents', 'PDFTest', 'CreatedPDF']).execFind(function(secerr, atest){ //get only PDFCreated[0].filename ???
+                          Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'ClassName', 'NumberOfStudents', 'PDFTest', 'CreatedPDF', 'TestGraded']).execFind(function(secerr, atest){ //get only PDFCreated[0].filename ???
                             //console.log('found test = ' + atest)
                             //console.log('pdftest inside = ' + atest[0].PDFTest.length);
 

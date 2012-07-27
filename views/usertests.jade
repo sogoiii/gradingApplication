@@ -64,8 +64,8 @@
 
 
 !=partial('partials/_TopBarLoggedIn')
-	.container-fluid
-		.row-fluid
+	.container
+		.row
 			.span2
 				include partials/_SideBar
 			.span8
@@ -79,8 +79,8 @@
 				- if(typeof(AllTests) != 'undefined')
 					each test in AllTests
 						.alert.alert-info.alert-block
-							.row-fluid
-								.span6
+							.row
+								.span4
 									h2.alert-heading.classnametext #{test.TestName}
 									table.table.table-condensed.tableclass
 										thread
@@ -93,7 +93,7 @@
 											td.subject #{test.Subject}
 											td.grade #{test.Gradeyear}
 											td.NOS #{test.NumberOfStudents}
-								.span6
+								.span3
 									.btn-group.pull-right
 										button.btn.btn-info.dropdown-toggle(data-toggle='dropdown')
 											| Actions
@@ -114,17 +114,17 @@
 											- else
 												li
 													a.notavailable(href='#') Grade
-	
-											li
-												a(href='/user/#{userID}/statistics/#{test._id}') Statistics
+											- if(test.TestGraded.WasGraded == '1')
+												li
+													a(href='/user/#{userID}/statistics/#{test._id}') Statistics
+											- else
+												li
+													a.notavailable(href='#') Statistics												
 											li 
 												a(href='/user/#{userID}/edittest/#{test._id}') Edit
 											li.divider
 											li
-												a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#DeleteTest') Delete Test				
-			.span2 
-				h3 Mearly test content
-				p some cool content here!
+												a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#DeleteTest') Delete Test
 				
 
 

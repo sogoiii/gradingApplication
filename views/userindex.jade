@@ -1,6 +1,6 @@
 !=partial('partials/_TopBarLoggedIn')
-  .container-fluid
-    .row-fluid
+  .container
+    .row
       .span2
         include partials/_SideBar
       .span8
@@ -38,3 +38,4 @@
       .span2 
         h3 Placeholder Data
         p #{title}
+!= renderScriptsTags(myscripts)

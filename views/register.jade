@@ -3,7 +3,7 @@ if(DynsessionLoggedIn != true)
 else
   !=partial('partials/_TopBarLoggedIn')
 .container
-  .row-fluid
+  .row
     .span4
       h2 Register
       form.well.form(action='/register', method='post')
@@ -22,3 +22,4 @@ else
            a.close(data-dismiss='alert', href='#') ×
            h4.alert-heading You already registered
            button.btn.btn-info(href='/login') Login 
+!= renderScriptsTags(myscripts)
