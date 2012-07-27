@@ -665,18 +665,18 @@ function removehtml(Questions){
 exports.getTeststatistics = function(req, res){//for individual statistics
 
   // console.log("id of test = " + req.params.testid);
-  db.grabTestResults(req.params.testid, function(err,result){
+  db.getSingleTestStatistics(req.params.testid, function(err,result){
       if(!err){
          var nohtmlquestions = decodeQuestionHtml(result.Questions);
          result.Questions = removehtml(nohtmlquestions);
+         // console.log("got all statistics correctly");
          // console.log('question text = ' + result.Questions[2].Questionhtml);
          //console.log("trbystudent = " + result.TRbyStudents);
          // console.log("Results = " + result[2].CorrectlyAnswered);
          // console.log("Results = " + result.CorrectAnswertext);
         res.render('teststatistics',{title: 'Single Test Statistics',
                                     Statdata: result,
-                                    QuestionText: result.Questions,
-                                    testid: req.params.testid});
+                                    QuestionText: result.Questions});
       }//end of !err if
       else{
         console.log("No results " );
@@ -687,10 +687,23 @@ exports.getTeststatistics = function(req, res){//for individual statistics
 };//end get statistics
 
 
-exports.getselfperformance = function(req, res){
-
-res.render('selfperformance', {title: 'Performance'});
-
+exports.getselfperformance = function(req, res){//compute performance of the teacher
+  db.getMultiTestStatistics(req.params.id, function(err, result){
+    if(!err){
+      // console.log("result = " + result);
+      // console.log("  ");
+      // console.log("result[0].TestGraded  = " + result[0].TestGraded);
+      // console.log("  ");
+      // console.log("result[0].TRbyTest = " + result[0].TRbyTest);
+      // console.log("  ");
+      // console.log("result[0].TRbyTest.Mean = " + result[0].TRbyTest.Mean);
+      res.render('selfperformance', {title: 'Performance', Statdata: result});
+    }//end of !err if
+    else{
+      console.log("error has occured pelase refresh");
+      res.render('selfperformance', {title: 'Performance'});
+    }//end of !err else
+  });//end of getMultiTestStatistics
 };//end of getselfperformance
 
 

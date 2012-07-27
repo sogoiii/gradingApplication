@@ -728,7 +728,7 @@ exports.DeleteAClass = function(userinfo, callback){//called from delsetup
 
 };//end of DeleteAClass
 
-exports.grabTestResults = function(userinfo, callback){ //test statistics
+exports.getSingleTestStatistics = function(userinfo, callback){ //test statistics
   //userinfo = testobjetid = 4fda1af52f910cc6200000d3
 
 
@@ -746,7 +746,14 @@ exports.grabTestResults = function(userinfo, callback){ //test statistics
       //             callback(null, resultbycorrect);
       //           }
       //     });//end of ForEach
-      callback(null,result);
+      var index = 0;
+      result.TRbyQuestions.forEach(function(element) { //need to reduce demial places for STD only
+        element.STD = element.STD.toFixed(2);
+        index++;
+        if(index == result.TRbyQuestions.length ){
+          callback(null,result);
+        }//end of escape check 
+      });//end of foreach TRbyQuestions      
     }//end of !err if
 
     //   // console.log("found test object")
@@ -761,12 +768,65 @@ exports.grabTestResults = function(userinfo, callback){ //test statistics
       callback(err,null);
     }//end of !err else
   });//end of findbyid
-};//end of grabTestResults
+};//end of getSingleTestStatistics
 
 
 
-exports.graballtests = function(userinfo,callback){//self performance
+exports.getMultiTestStatistics = function(userinfo,callback){//self performance
 //userinfo=userid
+  var AllTests = [];
+  var numtestschecked = 0;
+  // var theid = "4fda1af52f910cc6200000d3";
+    TeacherUsers.find({_id: userinfo}, ['ActiveTests']).execFind(function(err, AT) {
+      //console.log('going to check if err exists')
+      if(!err){
+          //console.log('!err hence ill look at each value in AT[0]')
+          //console.log('size of AT = ' + AT[0].ActiveTests)
+            var size = AT[0].ActiveTests.length;
+            //console.log('size of Active Tests array = ' + size)
+              if(size != 0){
+                  //console.log('size of AT is larger than 0, hence i work normally')
+                    if(typeof(AT[0].ActiveTests) != 'undefined'){
+                      AT[0].ActiveTests.forEach(function(element) {
+                          //console.log('in !err, i guess if found something')
+                          //console.warn('active tests element = ' + element)
+                          //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
+                          Test.find({_id: element},['TestGraded', 'TRbyTest','TestName']).execFind(function(secerr, atest){ //check TestGraded.GradedOn = 1, else do not push
+                            //console.log('found test = ' + atest)
+                            //console.log('pdftest inside = ' + atest[0].PDFTest.length);
+                            // console.log("was graded = " + atest[0].TestGraded.WasGraded);
+                            numtestschecked++;
+                            if(atest[0].TestGraded.WasGraded == 1){
+                                // console.log("std = " + atest[0].TRbyTest.STD.toFixed(2));
+                                atest[0].TRbyTest.STD = atest[0].TRbyTest.STD.toFixed(2);
+                                AllTests.push(atest[0]);
+                            }//checks if it was graded
+
+                            //console.warn('size of all tests found = ' + AllTests.length)
+                            if(numtestschecked == AT[0].ActiveTests.length){
+                              callback(null, AllTests);
+                            }
+                            if(secerr){ //why is this not an else? (i noticed after i was done doing this)
+                              callback(sacerr,null);
+                            }
+                          });//end second find
+                      });//end of ForEach AT[0]
+                    }//end of undefined if
+                    else{
+                      callback('undefined', null);
+                    } //end of typeof(AT[0].ActiveTests) != undefiend else
+              }//end of AT size check IF
+              else{
+                console.log('size of AT was zero hence ill return with custome error');
+                callback('NoTests', null);
+              }
+      }//end of if !err
+      else{
+        console.log('did not find teacher hence ill exit');
+        callback(err,null);
+      }//end of else
+    });//end of find teacherusers
+
 
 
 

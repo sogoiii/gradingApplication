@@ -1,3 +1,19 @@
+mixin resulttable(data,i)
+  table.table.table-condensed.tableclass
+    thread
+      th STD
+      th % Correct
+      th Mean Score
+    tbody
+      td.STD #{data[i].TRbyTest.STD}
+      td #{data[i].TRbyTest.PercentCorrect}
+      td #{data[i].TRbyTest.Mean}
+
+mixin QuestionData(data, i)
+  p 1) #{data[i].TestName}
+    mixin resulttable(data, i)
+    
+
 !=partial('partials/_TopBarLoggedIn')
   .container
     .row
@@ -6,9 +22,32 @@
       .span10
         h1 Performance  
         p #{title}
+        if(typeof(Statdata) != 'undefined')
+          != "<script type='text/javascript'>"
+          != "var Mean = [];"
+          each test in Statdata
+            != "Mean.push(" + test.TRbyTest.Mean +");"
+          != "</script>"
+        .row
+          .span5
+            #TRbyTests(style='height: 300px; width: 400px;')
+            br
+          .span5
+            h3.center Individual Tests
+            dl.dl-horizontal
+              if(typeof(Statdata) != 'undefined')
+                each test, i in Statdata
+                    .alert.alert-success.span4
+                      mixin QuestionData(Statdata, i) 
 
-
-
+- myscripts.push('jqplot/jquery.jqplot.min.js')
+- myscripts.push('jqplot/plugins/jqplot.canvasTextRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.barRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.categoryAxisRenderer.min.js')
+//- myscripts.push('jqplot/plugins/jqplot.pointLabels.min.js')
+- myscripts.push('performanceplots.js')
+!= renderScriptsTags(myscripts)
 
 
                 

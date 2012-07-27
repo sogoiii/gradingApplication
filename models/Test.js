@@ -17,7 +17,10 @@ var AnswersSchema = new Schema({
 	selected:{type: Number, min:0, max: 3}
 });
 
-
+var TestGradedSchema = new Schema({
+	WasGraded : {type: Number, default: 0},
+	GradedOn: {type: Date}
+});
 
  
 
@@ -36,7 +39,18 @@ var TestSchema = new Schema({
 	CreatedPDF: [mongoose.Schema.Mixed],
 	TestResults: [mongoose.Schema.Mixed],
 	TRbyQuestions: [mongoose.Schema.Mixed],
-	TRbyStudents: [mongoose.Schema.Mixed]
+	TRbyStudents: [mongoose.Schema.Mixed],
+	TRbyTest:{
+		Mean: {type: Number},
+		PercentCorrect: {type: Number},
+		PercentIncorrect: {type: Number},
+		STD: {type: Number},
+		_id: Schema.ObjectId
+	},
+	TestGraded: {
+		WasGraded : {type: Number, default: 0},
+		GradedOn: {type: Date}
+	}
 });
 
 

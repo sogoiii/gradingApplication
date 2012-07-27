@@ -4,10 +4,12 @@ mixin resulttable(data)
       th Correct
       th % Correct
       th Mean
+      th STD
     tbody
       td #{data.CorrectlyAnswered}
       td #{data.PercentCorrect}
       td #{data.Mean}
+      td #{data.STD}
 
 mixin QuestionData(data, i)
   p #{[i+1]}) #{data.Questions[i].Questionhtml}
@@ -22,8 +24,6 @@ mixin QuestionData(data, i)
       .span10
         h1 Statistics  
         br
-        if(typeof(testid) != 'undefined')
-          input#testID(type='hidden', name='testID', value='#{testid}')
         if(typeof(Statdata) != 'undefined')
           != "<script type='text/javascript'>"
           != "var Correctbyquestion = [];"
