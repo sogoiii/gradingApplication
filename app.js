@@ -165,15 +165,15 @@ io.sockets.on('connection', function (socket) {
 
 
   //this function is called from the browser
-  socket.on('RPC_request', function (data){
+  socket.on('RPC_request', function (data){//grading a document in the backend
     console.log('Received request to send an RPC Command');
       rpc.makeRequest('image', data, function respond(err, response){
         if(err)
           console.error('error = ' + err);
         else{
-          socket.emit('RPC_response', 'the RPC function has returned go check statistics page');
-          //console.log("response = '" + response.data + "' is of type = '" + response.contentType+"'");
           console.log("response = '" + response.data + "' To browser = '" + response.data.cool);
+          socket.emit('RPC_response_Graded', 'the RPC function has returned go check statistics page');
+          //console.log("response = '" + response.data + "' is of type = '" + response.contentType+"'");
         }
       });//end of rpc.makerequest
   });//end of RPC_request

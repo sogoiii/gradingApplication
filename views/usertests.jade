@@ -21,7 +21,7 @@
 		a.close(href='#', data-dismiss='modal') ×
 		h3 Upload PDF of Test!
 	.modal-body
-		p Do not refresh page, it will happen automatically!
+		p.uploadComment Do not refresh page
 		p.person Please select the correct file!
 	.modal-footer
 		form.UploadFile.control-group(action='', method='POST',enctype="multipart/form-data")
@@ -35,14 +35,9 @@
 		a.close(href='#', data-dismiss='modal') ×
 		h3 Get some coffee, grading has begun!
 	.modal-body
-		p This page will update when completed.
-		p.ConfirmDone
+		p.gradeComment Please wait while the grading is comenced
 		#Spinner.Spinner
 	.modal-footer
-		form.UploadFile.control-group(action='', method='POST',enctype="multipart/form-data")
-			input(type="file", name="PDFTest") Select File
-			input.hiddentest(type='hidden', name='testtoupload')
-			button.btn.btn-primary(type='submit') Start Upload
 
 
 #CreatePDF.modal.hide.fade	
@@ -50,9 +45,7 @@
 		a.close(href='#', data-dismiss='modal') ×
 		h3 Get some coffee, grading has begun!
 	.modal-body
-		p This page will update when completed.
-		p.ConfirmDone
-		p.CreatedPDFID
+		p.createpdfComment Please wait while the pdf is generated
 		#CreatePDFSpinner.Spinner
 	.modal-footer
 			a.btn.btn-primary#PDFURL() Open PDF
@@ -69,7 +62,7 @@
 			.span2
 				include partials/_SideBar
 			.span8
-				h1 Your Test instances are below!
+				h1 Your Tests
 				br
 				- if(pageerror == 'File must be a PDF!' )
 					.alert.alert-error.alert-block
