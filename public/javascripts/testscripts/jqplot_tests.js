@@ -2,8 +2,8 @@ $(document).ready(function () {
 	 // var plot1 = $.jqplot ('chartdiv', [[3,7,9,1,4,6,8,2,5]]);
 
 
-		$.jqplot('SchoolAdmin-TeacherStandards',  [[250,311,298,264]], {
-			title:'Raw Total Passed Standards',
+		$.jqplot('SchoolAdmin-TeacherStandards',  [[250,311,298,264], [220,180,270,211]], {
+			title:'Raw Total Standards',
 			seriesDefaults:{
 				// renderer:$.jqplot.BarRenderer,
 				rendererOptions: {
@@ -15,7 +15,11 @@ $(document).ready(function () {
 				},
 				pointLabels: {show: true}
 			},
-			series:[{label: 'Standards'}],
+			series:[
+				{label: 'Exposed'},
+				{color:'#46a546',label: 'Passed'}
+
+			],
 			axes:{yaxis:{label:'Number of Standards',labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
 				xaxis:{label:'Teacher',renderer: $.jqplot.CategoryAxisRenderer}
 				},
@@ -45,8 +49,8 @@ $(document).ready(function () {
 			});
 
 
-		$.jqplot('SchoolAdmin-StudentStandardExsosure',  [[66,56,71,82,69,76]], {
-			title:'Raw Total Exsposed Standards',
+		$.jqplot('SchoolAdmin-StudentTotalStandardPercentage',  [[88,57.8,90.6,79.9]], {
+			title:'Raw Total Standards Passed (%)',
 			seriesDefaults:{
 				// renderer:$.jqplot.BarRenderer,
 				rendererOptions: {
@@ -58,8 +62,8 @@ $(document).ready(function () {
 				},
 				pointLabels: {show: true}
 			},
-			series:[{label: 'Standards'}],
-			axes:{yaxis:{label:'Number',labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
+			series:[{label: 'Percent'}],
+			axes:{yaxis:{label:'Percentage',labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
 				xaxis:{label:'Teacher',renderer: $.jqplot.CategoryAxisRenderer}
 				},
 			legend: {show: true, location: 'se'}
@@ -110,8 +114,8 @@ $(document).ready(function () {
 
 
 
-		$.jqplot('SchoolDistricts-SchoolStandards',  [[1350,800,1500,1135]], {
-			title:'Raw Total Passed Standards',
+		$.jqplot('SchoolDistricts-SchoolStandards',  [[4200,3700,4400,4100],[3950,3357,4098,3508]], {
+			title:'Raw Total Standards',
 			seriesDefaults:{
 				// renderer:$.jqplot.BarRenderer,
 				rendererOptions: {
@@ -123,7 +127,10 @@ $(document).ready(function () {
 				},
 				pointLabels: {show: true}
 			},
-			series:[{label: 'Standards'}],
+			series:[
+				{label: 'Exposed'},
+				{color:'#46a546',label: 'Passed'}
+			],
 			axes:{yaxis:{label:'Number',labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
 				xaxis:{label:'School',renderer: $.jqplot.CategoryAxisRenderer}
 				},
@@ -152,8 +159,8 @@ $(document).ready(function () {
 			});
 
 
-		$.jqplot('SchoolDistricts-SchoolStandardExsosure',  [[4200,3700,4400,4100]], {
-			title:'Raw Exsposure to Standards',
+		$.jqplot('SchoolDistricts-SchoolTotalStandardPercentage',  [[94,90.7,93.1,85.5]], {
+			title:'Raw Total Standards Passed (%)',
 			seriesDefaults:{
 				// renderer:$.jqplot.BarRenderer,
 				rendererOptions: {
@@ -165,8 +172,8 @@ $(document).ready(function () {
 				},
 				pointLabels: {show: true}
 			},
-			series:[{label: 'Standards'}],
-			axes:{yaxis:{label:'Number',labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
+			series:[{label: 'Percent'}],
+			axes:{yaxis:{label:'Percentage',labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
 				xaxis:{label:'School',renderer: $.jqplot.CategoryAxisRenderer}
 				},
 			legend: {show: true, location: 'se'}
