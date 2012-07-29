@@ -1,19 +1,34 @@
 !=partial('partials/_TopBarLoggedIn')
-.container-fluid
-  .row-fluid
-    .span4
-      #chartdiv(style='height: 300px; width: 400px;')
+.container
+  .row
+    .span6
+      h1 School Administrators
       br
-      #chartdivsine(style='height: 300px; width: 400px;')
+      #SchoolAdmin-TeacherStandards(style='height: 300px; width: 400px;')
       br
+      #SchoolAdmin-Studentspassing(style='height: 300px; width: 400px;')
       br
-      p#sinedata
+      #SchoolAdmin-StudentStandardExsosure(style='height: 300px; width: 400px;')
       br
+      #SchoolAdmin-StandardSpecific(style='height: 300px; width: 400px;')
       br
-      #chartdivtest(style='height: 300px; width: 400px;')
+    .span6
+      h1 School Districts
       br
+      #SchoolDistricts-SchoolStandards(style='height: 300px; width: 400px;')
       br
-      p#datareceived
+      #SchoolDistricts-Schoolspassing(style='height: 300px; width: 400px;')
       br
+      #SchoolDistricts-SchoolStandardExsosure(style='height: 300px; width: 400px;')
       br
-      p#confirmreceived
+
+
+
+- myscripts.push('jqplot/jquery.jqplot.min.js')
+- myscripts.push('jqplot/plugins/jqplot.canvasTextRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.barRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.categoryAxisRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.pointLabels.min.js')
+- myscripts.push('testscripts/jqplot_tests.js')
+!= renderScriptsTags(myscripts)

@@ -892,7 +892,13 @@ exports.gettestplot = function(req,res){
   res.render("Testviews/testplot", {title: "testingplotstuff"});
 };
 
+exports.gettestplotteacher = function(req, res){
+  res.render("Testviews/testplot-teachers", {title: "testingplotstuff"});
+};
 
+exports.gettestplotteacher2 = function(req, res){
+  res.render("Testviews/testplot-teachers2", {title: "testingplotstuff-2"});
+};
 
 
 exports.getaddstandard = function(req, res){

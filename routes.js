@@ -137,6 +137,8 @@ app.del('/user/testajaxpost', routes.testajaxpost);
 app.post('/user/testajaxpost', routes.testajaxpost2);
 
 app.get('/testplot', routes.gettestplot);
+app.get('/testplot-teachers', routes.gettestplotteacher);
+app.get('/testplot-teachers2', routes.gettestplotteacher2);
 // app.get('/addstandard', routes.getaddstandard);
 // app.post('/addstandard', routes.postaddstandard);
 

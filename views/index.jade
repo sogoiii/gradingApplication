@@ -10,65 +10,111 @@ else
       a.btn.btn-primary.btn-large(href='/register') Create Account
   .row
     .span12
-      h1.well(align='right') Create, Find, and Customize Tests          
+      h1.well(align='left') For Teachers: 
   .row
     .span6
-      h3 What Happens after you create test?
+      h3 Raise the quality of your teaching 
       br
-      ul
-        li Randomized Questions
-        li Automatic Grading
-        li Personalize tests
-        li Accreditation statistics
-    .span4
-      img(src = "/180150.png")
+      ol
+        li Automatic grading and scoring
+        li Statistics by question and student
+        li View what the students have and have not understood
+        li See question response distribution
+        li Randomize question and selection order
+        li Track performance of your curriculum
+        li View how well individual students perform by subject standards
+        li Export what you learn and make it accessible to others 
+    .span6
+      #myCarousel.carousel.slide
+        .carousel-inner
+          .active.item 
+            img(src = "images/im4.png")
+          .item
+            img(src = "images/im3.png")
+          .item
+            img(src = "images/im5.png")
+          .item
+            img(src = "images/im6.png")
+          .item
+            img(src = "images/im7.png")
+        a.carousel-control.left(href='#myCarousel', data-slide='prev') ‹
+        a.carousel-control.right(href='#myCarousel', data-slide='next') ›
    br
    br
    br   
   .row
     .span12
-      h1.well(align='left') Single Test    ---> Multiple version 
+      h1.well(align='left') For School Administrators:
   .row
     .span6
-      img(src = "/180150.png")
+      #myCarousel2.carousel.slide
+        .carousel-inner
+          .active.item 
+            img(src = "images/im8.png")
+          .item
+            img(src = "images/im6.png")
+        a.carousel-control.left(href='#myCarousel2', data-slide='prev') ‹
+        a.carousel-control.right(href='#myCarousel2', data-slide='next') ›
       br
       br
       br  
-    .span4
-      h3 Remove cheating from teseting
+    .span5
+      h3  Data to improve school performance at a weekly level
       br
-      ul
-        li Maintaint information of performance
+      ol
+        li Yearly state practice test information at a weekly level
+        li Aggregate data accross subjects to observe trends
         li Manage school performance across teachers and subjects
-        li Create year end reports statistics, Data is given to you to interpret 
-        li Accreditation statistics 
+        li Create year end statistic reports by (Standard, Teacher, Student etc.)
+        li Prioritize resources to help poorly perofming teachers
   .row
     .span12
-      h1.well(align='right') Observe Statistics on Results     
+      h1.well(align='left') For School Districts:
   .row
     .span6
-      h3 Raise the quality of your teaching by understanding what your students think
+      h3 Data for grants made accessible
       br
-      ul
-        li See what was understood by your students!      
-        li See correct answer statistics
-        li See wrong answer statistics
-        li See question response distribution
+      ol
+        li Classify schools based on performance metrics      
+        li Easily aggregate data accross your district 
+        li Monitor school performance at a weekly level
+        li Prioritize resources to assist poorly performing schools
       br
       br
       br  
-    .span4
-      img(src = "/180150.png")
+    .span6
+      img(src = "images/180150.png")
       br
       br
       br  
 
 
   hr
-  footer
-    p © Company 2012
+
+
+
+
+
+
+
+
+
+
+
 
 != renderScriptsTags(myscripts)
+script
+  $(document).ready(function () {
+    $('#myCarousel').carousel({
+      interval:6000
+    });
+    $('#myCarousel2').carousel({
+      interval:6000
+    });
+
+    
+  });
+  
 
 
 

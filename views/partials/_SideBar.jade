@@ -11,13 +11,7 @@ ul.nav.nav-list
       a(href='/user/#{userID}/tests') Tests
   else
     li 
-      a(href='/user/#{userID}/tests') Tests  
-  if title == 'Questions'
-    li.active
-      a(href='/user/#{userID}/questions') Questions
-  else
-    li 
-      a(href='/user/#{userID}/questions') Questions  
+      a(href='/user/#{userID}/tests') Tests   
   if title == 'Performance'
     li.active
       a(href='/user/#{userID}/performance') Performance
