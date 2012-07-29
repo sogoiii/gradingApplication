@@ -26,7 +26,28 @@ $(document).ready(function () {
 		});
 
 
-
+	$.jqplot('Teacher-Standardbypercentage',  [[70.5,85,25,55]], {
+		title:'Standards Performance (%)',
+		seriesDefaults:{
+			// renderer:$.jqplot.BarRenderer,
+			rendererOptions: {
+			// Put a 30 pixel margin between bars.
+			barMargin: 30,
+			// Highlight bars when mouse button pressed.
+			// Disables default highlighting on mouse over.
+			highlightMouseDown: true
+			},
+			pointLabels: {show: true}
+		},
+		series:[
+			{color:'#46a546',label: 'Passed'},
+			{label: 'Instances'}
+		],
+		axes:{yaxis:{label:'Percentage (%)',labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
+			xaxis:{label:'Standard',renderer: $.jqplot.CategoryAxisRenderer}
+			},
+		legend: {show: true, location: 'se'}
+		});
 
 
 
@@ -64,6 +85,32 @@ $(document).ready(function () {
 			},
 		legend: {show: true, location: 'se'}
 		});
+
+
+
+	$.jqplot('Teacher-TestStandardSpecific',  [[70,45,null,91]], {
+		title:'Percentage Standard Sx passed by Teacher Y',
+		seriesDefaults:{
+			// renderer:$.jqplot.BarRenderer,
+			rendererOptions: {
+			// Put a 30 pixel margin between bars.
+			barMargin: 30,
+			// Highlight bars when mouse button pressed.
+			// Disables default highlighting on mouse over.
+			highlightMouseDown: true
+			},
+			pointLabels: {show: true}
+		},
+		series:[
+			{label: '% Passed'}
+		],
+		axes:{yaxis:{label:'Percentage',labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
+			xaxis:{label:'Test',renderer: $.jqplot.CategoryAxisRenderer}
+			},
+		legend: {show: true, location: 'se'}
+		});
+
+
 
 
 

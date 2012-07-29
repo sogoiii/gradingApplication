@@ -45,25 +45,6 @@ $(document).ready(function () {
 			legend: {show: true, location: 'se'}
 			});
 
-		$.jqplot('Teacher-Scoresbystudent',  [[65,80,100,95]], {
-			title:'Exposed Standards',
-			seriesDefaults:{
-				// renderer:$.jqplot.BarRenderer,
-				rendererOptions: {
-				// Put a 30 pixel margin between bars.
-				barMargin: 30,
-				// Highlight bars when mouse button pressed.
-				// Disables default highlighting on mouse over.
-				highlightMouseDown: true
-				},
-				pointLabels: {show: true}
-			},
-			series:[{color:'#46a546',label: 'Standards'}],
-			axes:{yaxis:{label:'Number of Standards',labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
-				xaxis:{label:'Student',renderer: $.jqplot.CategoryAxisRenderer}
-				},
-			legend: {show: true, location: 'se'}
-			});
 
 
 
