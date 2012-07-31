@@ -50,7 +50,7 @@ $(document).ready(function () {
 
 
 		$.jqplot('SchoolAdmin-StudentTotalStandardPercentage',  [[88,57.8,90.6,79.9]], {
-			title:'Raw Total Standards Passed (%)',
+			title:'Percent of Standards Passed',
 			seriesDefaults:{
 				// renderer:$.jqplot.BarRenderer,
 				rendererOptions: {
@@ -160,7 +160,7 @@ $(document).ready(function () {
 
 
 		$.jqplot('SchoolDistricts-SchoolTotalStandardPercentage',  [[94,90.7,93.1,85.5]], {
-			title:'Raw Total Standards Passed (%)',
+			title:'Percent Standards Passed',
 			seriesDefaults:{
 				// renderer:$.jqplot.BarRenderer,
 				rendererOptions: {

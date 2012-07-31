@@ -7,7 +7,9 @@ var WrongAnswerSchema = require('./WrongAnswers').WrongAnswerSchema;
 
 
 var StandardMetSchema = new Schema ({
-	StandardMet: {type: String},
+	Name: {type: String},
+	Abbreviation: {type: String},
+	StandardMet: {type: Number},
 	Percentage: {type: Number}
 });// end of standardMet
 

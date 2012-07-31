@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
 		$.jqplot('Teacher-Standardsbystudent',  [[30,30,30,30],[25,21,30,29]], {
-			title:'Total Passed Standards',
+			title:'Raw Total Standards',
 			seriesDefaults:{
 				// renderer:$.jqplot.BarRenderer,
 				rendererOptions: {
@@ -49,7 +49,7 @@ $(document).ready(function () {
 
 
 		$.jqplot('Teacher-MeanScoresAcrossTests',  [[74,87,92,82], [74+4,87+2,92+8,82+3],[74-4,87-2,92-8,82-3] ],{
-			title:'Mean Score Across Tests',
+			title:'Mean Percentage Across Tests',
 			// stackSeries: true,
 			seriesDefaults:{
 				// renderer:$.jqplot.BarRenderer,
@@ -59,8 +59,8 @@ $(document).ready(function () {
 				// Highlight bars when mouse button pressed.
 				// Disables default highlighting on mouse over.
 				highlightMouseDown: true
-				}
-				// pointLabels: {show: true}
+				},
+				pointLabels: {show: true}
 			},
 			series:[
 				{color:'#46a546',label: 'Mean Score'},
@@ -110,10 +110,11 @@ $(document).ready(function () {
 				highlightMouseDown: true
 				},
 				pointLabels: {show: true}
+
 			},
 			series:[{color:'#46a546',label: 'Correct'},
 			{color: '#9d261d',label: 'Incorrect'}],
-			axes:{yaxis:{label:'Number of Instances',labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
+			axes:{yaxis:{label:'Number of Questions',labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
 				xaxis:{label:'Question',renderer: $.jqplot.CategoryAxisRenderer}
 				},
 			legend: {show: true, location: 'se'}
@@ -132,8 +133,8 @@ $(document).ready(function () {
 				// Highlight bars when mouse button pressed.
 				// Disables default highlighting on mouse over.
 				highlightMouseDown: true
-				}
-				// pointLabels: {show: true}
+				},
+				pointLabels: {show: true}
 			},
 			series:[
 				{color:'#46a546',label: 'Mean Score'},

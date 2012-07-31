@@ -65,7 +65,7 @@ $(document).ready(function () {
 
 
 	$.jqplot('Teacher-TestStandard',  [[18,25,13,11]], {
-		title:'Standards in Test',
+		title:'Raw Total Standards in Test',
 		seriesDefaults:{
 			// renderer:$.jqplot.BarRenderer,
 			rendererOptions: {

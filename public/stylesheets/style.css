@@ -86,3 +86,10 @@ h1.center, h3.center{
 /*
 .navbar .container { width: @gridRowWidth; }
 */
+
+
+
+.imggraphs{
+  height:320px;
+  width:400px;
+}
