@@ -4,8 +4,8 @@ var gridfs = require("../gridfs");
 var passport = require('passport');
 // var check = require('express-validator').check,
 //     sanitize = require('express-validator').sanitize
-var check = require('validator').check,
-    sanitize = require('validator').sanitize;
+// var check = require('validator').check,
+//     sanitize = require('validator').sanitize;
 
 //var scripts = ['javascripts/jQuery.js', 'javascripts/bootstrap.min.js']
 
@@ -63,7 +63,7 @@ function ensureAuthenticated(req, res, next) {
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Home', user: req.user});
+  res.render('index.jade', { title: 'Home'});
 };
 
 exports.about = function(req, res){
@@ -83,7 +83,7 @@ exports.about = function(req, res){
 */
 
 exports.getregister = function(req,res){ //add a modal frame of the term of service
-  res.render('register', {title: 'Register', message: req.flash('error')});
+  res.render('register', {title: 'Register', message: 'getregister error'});
 };
 
 //add user to the databse...aka register
@@ -91,7 +91,7 @@ exports.postregister = function(req,res,next){
   var TeacherUserSchema = mongoose.model('TeacherUserSchema');
     var TeacherUser = new TeacherUserSchema({
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password //virtual that has a function called on it
   });
 
   TeacherUser.save(function (err) {
@@ -111,7 +111,6 @@ exports.postregister = function(req,res,next){
         else{
             //console.log('err has returned and this means the entry was not an email.')
             res.render('register', {title: 'Register', message: 'Not a valid email address'}); //input was not an email
-        
         }
 
       }//end of !err else
@@ -265,7 +264,7 @@ exports.delsetup = function(req,res){
 
 
 exports.getlogin = function(req,res){
-	res.render('login', {title: 'Login', user: req.user, message: req.flash('error') });
+	res.render('login', {title: 'Login', user: req.user, message: 'getlogin error' });
 };//end getlogin
 
 exports.postlogin = function(req, res){ //save session to cookie
@@ -569,7 +568,7 @@ else{
     }//end of if
     else{
       console.log('error sending file to gridfs');
-      req.flash('FileType', 'wrong file type');
+      // req.flash('FileType', 'wrong file type');
       res.redirect('back');
     }//end of else
   });//end of sendpdftogridfs
@@ -717,7 +716,7 @@ exports.getupload = function(req,res){
       res.render("Testviews/uploadtest", {
         title: "GridFS Example",
         applications: applications,
-        message: req.flash('myerror')
+        message: 'get upload error'
       });
     });
 
@@ -729,7 +728,7 @@ exports.getupload = function(req,res){
     console.log(req.files.file.type);
     console.log(req.files.file.size);
     if(req.files.file.type != 'application/pdf'){
-      req.flash('myerror', 'wrong file type');
+      // req.flash('myerror', 'wrong file type');
       res.redirect("back"); //back is the upload page
     }
     else{
@@ -740,7 +739,7 @@ exports.getupload = function(req,res){
         content_type: req.files.file.type
       };
       application.addFile(req.files.file, opts, function(err, result) {
-        req.flash('myerror', 'Thank you for uploading PDF');
+        // req.flash('myerror', 'Thank you for uploading PDF');
         res.redirect("back");
       });
     }//end of else
@@ -903,7 +902,7 @@ exports.gettestplotteacher2 = function(req, res){
 
 exports.getaddstandard = function(req, res){
 
-  res.render("Testviews/addstandards",{title: 'addstandard', message: req.flash('error')});
+  res.render("Testviews/addstandards",{title: 'addstandard', message: 'getaddstandard ERRROR'});
 
 };//end of getaddstandard
 
@@ -1076,3 +1075,15 @@ res.render('Testviews/AddStandardTest', {title: 'addstandard'});
 //     })//end of find
 // }//end postaddheadline
 
+
+
+
+
+exports.rabbitmq = function(req, res){
+
+
+res.render('./Testviews/rabbitMQ.jade', {title: 'rabbitmq'})
+
+
+
+};//endo f rabbitmq

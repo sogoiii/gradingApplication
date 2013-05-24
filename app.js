@@ -7,7 +7,7 @@ var routes = require('./routes');
 var util = require('util');
 var fs = require('fs');
 
-var expressValidator = require('express-validator');
+// var expressValidator = require('express-validator');
 
 
 var gridfs = require("./gridfs"); //this line may not be required here
@@ -36,8 +36,18 @@ model_files.forEach(function(file){
 });
 
 
-var app = module.exports = express.createServer();
-var io = require('socket.io').listen(app);
+
+//v1
+// var app = module.exports = express.createServer();
+// var io = require('socket.io').listen(app);
+
+
+//v2
+var http = require('http');
+var port = process.env.PORT || 4000;
+var app = express();
+var server = http.createServer(app).listen(port);
+var io = require('socket.io')(server);
 
 //Database
 var dbloc = 'mongodb://localhost/ecomm_database';
@@ -54,7 +64,7 @@ app.configure(function(){
   app.use(express.cookieParser());
   //app.use(express.limit('2mb')); //limit file accepted here for testing only
   app.use(express.bodyParser());
-  app.use(expressValidator);
+  // app.use(expressValidator);
   app.use(express.methodOverride());
 
 
@@ -96,37 +106,37 @@ app.helpers({
 
 */
 
-app.helpers({
-  renderScriptsTags: function (all) {
-    if (all != undefined) {
-      return all.map(function(script) {
-        return '<script src="/javascripts/' + script + '"></script>';
-      }).join('\n ');
-    }
-  }
-});
+// app.helpers({
+//   renderScriptsTags: function (all) {
+//     if (all != undefined) {
+//       return all.map(function(script) {
+//         return '<script src="/javascripts/' + script + '"></script>';
+//       }).join('\n ');
+//     }
+//   }
+// });
 
-app.dynamicHelpers({
-  myscripts: function() {
-      //scripts to load on every page
-      //return ['jQuery.js','wymeditor/jquery.wymeditor.min.js' ,'bootstrap.min.js'];
-      return ['jQuery.min.js','bootstrap.js'];
-      //return ['jQuery.js','bootstrap.min.js'];
-  }
-});
+// app.dynamicHelpers({
+//   myscripts: function() {
+//       //scripts to load on every page
+//       //return ['jQuery.js','wymeditor/jquery.wymeditor.min.js' ,'bootstrap.min.js'];
+//       return ['jQuery.min.js','bootstrap.js'];
+//       //return ['jQuery.js','bootstrap.min.js'];
+//   }
+// });
 
-app.dynamicHelpers({
-  DynsessionLoggedIn: function(req,res) {
-      return req.session.loggedIn;
-  }
-});
+// app.dynamicHelpers({
+//   DynsessionLoggedIn: function(req,res) {
+//       return req.session.loggedIn;
+//   }
+// });
 
 
-app.dynamicHelpers({
-  userID: function(req,res) {
-      return req.params.id;
-  }
-});
+// app.dynamicHelpers({
+//   userID: function(req,res) {
+//       return req.params.id;
+//   }
+// });
 
 
 
@@ -254,9 +264,11 @@ io.sockets.on('connection', function (socket) {
 
 
 
+server.listen(function() {
+  console.log("APP: http server listening on port %d in %s mode", server.address().port, app.settings.env);
+});
 
 
 
-
-app.listen(3000);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+// app.listen(3000);
+// console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

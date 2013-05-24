@@ -1,0 +1,27 @@
+extends ../layout
+
+
+block content
+
+  include ../partials/_TopBar
+  .container
+    p i am in rabbitmq jade
+
+    button.btn.btn-large.btn-primary.offset3#amqpButton Click for amqp
+
+
+append footer
+  script(src='/socket.io/socket.io.js', type='text/javascript');
+  script
+    $(document).ready(function () {
+     var socket = io.connect();
+
+      $('#amqpButton').click(function(){
+
+        console.log('i clicked amqp')
+
+        socket.emit('RPC_request', {testid: 'testID_shouldEXIST', userid: 'user_shouldEXIST'});          
+      })
+
+    });
+  

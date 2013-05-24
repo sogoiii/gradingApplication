@@ -3,9 +3,10 @@
   , "version": "0.0.1"
   , "private": true
   , "dependencies": {
-      "express": "2.5.4"
+      "express": "3.2.x"
     , "jade": ">= 0.0.1"
-    , "passport": ">= 0.0.0"
+    , "passport": ">= 0.0.0",
+    "mongoose" : "3.6.x"
     ,"passport-local": ">= 0.0.0"
   }
 }

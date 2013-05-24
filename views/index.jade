@@ -1,528 +1,531 @@
-if(DynsessionLoggedIn != true)
-  !=partial('partials/_TopBar')
-else
-  !=partial('partials/_TopBarLoggedIn')
-.container
-  .hero-unit
-    h1 Correct and Analyze Tests
-    p Tired of grading simple tests? Want detailed information on the results?
-    p Your teaching experince can expand furhter than you 
-    p Your experience teaching can be transformed to be understood by others
-    p Experiences you learn from, availble to others
-    p Grade and Score paper tests
-    br
-    a.btn.btn-primary.btn-large(href='/register') Create Account
-  ul#myTab.nav.nav-tabs
-    li.active
-      a(href='#Overview', data-toggle='tab') Overview
-    li
-      a(href='#Teachers', data-toggle='tab') Teachers
-    li
-      a(href='#Admins', data-toggle='tab') Administrators
-    li
-      a(href='#Districts', data-toggle='tab') School Districts
-  .tab-content
-    #Overview.tab-pane.active
-      .row
-        .span12
-          h1.well(align='left') For Teachers: 
-      .row
-        .span6
-          h3 Raise the quality of your teaching 
-          br
-          ol
-            li Automatic grading and scoring
-            li Statistics by question and student
-            li View what the students have and have not understood
-            li See question response distribution
-            li Randomize question and selection order
-            li Track performance of your curriculum
-            li View how well individual students perform by subject standards
-            li Export what you learn and make it accessible to others 
-            li construct year end reports
-        .span6
-          #myCarousel.carousel.slide
-            .carousel-inner
-              .active.item 
-                img(src = "images/im4.png")
-              .item
-                img(src = "images/im3.png")
-              .item
-                img(src = "images/im5.png")
-              .item
-                img(src = "images/im6.png")
-              .item
-                img(src = "images/im7.png")
-            a.carousel-control.left(href='#myCarousel', data-slide='prev') ‹
-            a.carousel-control.right(href='#myCarousel', data-slide='next') ›
-      .row
-        .span12
-          h1.well(align='left') For School Administrators:
-      .row
-        .span6
-          #myCarousel2.carousel.slide
-            .carousel-inner
-              .active.item 
-                img(src = "images/SchoolAdmin-byTeacher-RawTotalStandards.png")
-              .item
-                img(src = "images/SchoolAdmin-byTeacher-PercentStandadsPassed.png")
-              .item
-                img(src = "images/SchoolAdmin-byTeacher-PassibilityofStandardSx.png")
-            a.carousel-control.left(href='#myCarousel2', data-slide='prev') ‹
-            a.carousel-control.right(href='#myCarousel2', data-slide='next') ›
-        .span5
-          h3  Data to improve school performance at a weekly level
-          br
-          ol
-            li Yearly state practice test information at a weekly level
-            li Aggregate data accross subjects to observe trends
-            li Manage school performance across teachers and subjects
-            li Create year end statistic reports by (Standard, Teacher, Student etc.)
-            li Prioritize resources to help poorly perofming teachers
-      .row
-        .span12
-          h1.well(align='left') For School Districts:
-      .row
-        .span6
-          h3 Data for grants made accessible
-          br
-          ol
-            li Classify schools based on performance metrics      
-            li Easily aggregate data accross your district 
-            li Monitor school performance at a weekly level
-            li Prioritize resources to assist poorly performing schools
-        .span6
-          #myCarousel3.carousel.slide
-            .carousel-inner
-              .active.item 
-                img(src = "images/SchoolDistrict-bySchool-RawTotalStandards.png")
-              .item
-                img(src = "images/SchoolDistrict-bySchool-PercentStandardsPassed.png")
-              .item
-                img(src = "images/SchoolDistrict-bySchool-PassibilityofStandardSx.png")
-            a.carousel-control.left(href='#myCarousel3', data-slide='prev') ‹
-            a.carousel-control.right(href='#myCarousel3', data-slide='next') ›
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    #Teachers.tab-pane
-      .row
-        .span12
-          h1.well(align='left') Available Graphs
-      .row
-        .span6
-          img.imggraphs(src = "images/Teacher-byQuestion-TotCorInc.png")
-        .span6
-          br
-          h3 Information
-          ol
-            li Describes the frequency a specific question is answered correctly
-            li Responses are either correct or incorrect (multiple choice problems)
-          h3 Conclusions
-          ol
-            li Question 1 is well understood
-            li Question 2 needs impormvent
-            li Question 3 can be improved
-            li Question 4 is poorly understood
-          h3 Actions
-          ol
-            li What did i do to get good results on question 1? 
-            li How do i transform that type of understanding to the other questions?
-            li Did i cover question 4 well enough?
-      .row
-        .span6
-          br
-          br
-          br
-          img.imggraphs(src = "images/Teacher-byQuestion-MeanScores.png")
-        .span6
-          br
-          br
-          br
-          br
-          h3 Information
-          ol
-            li Scored questions that have a range (Example: max points = 5)
-            li Describes the distribution of scores around mean
-          h3 Conclusions
-          ol
-            li Question 3 has worst response
-            li Question 4 distirbution is large. Kids must guessing
-          h3 Actions 
-          ol
-            li Ask kids about question 4, something was misunderstood
-            li Quick review about question 3 
-
-      .row
-        .span6
-          br
-          br
-          br
-          img.imggraphs(src = "images/Teacher-byStandard-StandardPerformance.png")
-        .span6
-          br
-          br
-          br
-          br
-          h3 Information
-          ol
-            li Test can track number of standards associated with test questions
-            li Tracks correctly answered questions and sums passing
-          h3 Conclusions
-          ol
-            li Should this test include more tests?
-            li Question 4 has alriht score, but distirbution is large. Kids must guessing
-          h3 Actions 
-          ol
-            li Possibly add standards
-            li Reorganize test by adding or removing questions 
-
-
-      .row
-        .span6
-          br
-          br
-          br
-          img.imggraphs(src = "images/Teacher-byStudent-MeanScoresAcrossTests.png")
-        .span6
-          br
-          br
-          br
-          br
-          h3 Information
-          ol
-            li Describes the mean score for each student for a specific test
-            li Track student progress through your tests 
-          h3 Conclusions
-          ol
-            li Student 1 is consistent, but doing poorly
-            li Student 3 is inconsistent, but managable
-          h3 Actions 
-          ol
-            li Bring up issues with student 1 at next group teacher meeting (with data)
-            li Speak with student 3's parents to find out cause of inconsistency 
-
-
-      .row
-        .span6
-          br
-          br
-          br
-          img.imggraphs(src = "images/Teacher-byStudent-TotalPassedStandards.png")
-        .span6
-          br
-          br
-          br
-          br
-          h3 Information
-          ol
-            li Describes the number of standards for all tests
-            li Describes sum of the correctly questions associated standards 
-          h3 Conclusions
-          ol
-            li Student 2 may not be responding to curriculum well
-          h3 Actions 
-          ol
-            li Think of ways to engage student 2
-            li My teaching strategy is good for stuents similar to student 3 
-
-      .row
-        .span6
-          br
-          br
-          br
-          img.imggraphs(src = "images/Teacher-byStudent-TotCorInc.png")
-        .span6
-          br
-          br
-          br
-          br
-          h3 Information
-          ol
-            li Describes the number of correclty and incorrectly answered questions 
-          h3 Conclusions
-          ol
-            li Questions 2,3,4 performed well
-            li Question 1 was not understood well
-          h3 Actions 
-          ol
-            li Review question 1 with students
-            li Think about my actions that possibly caused students 2-4 to respond well 
-
-      .row
-        .span6
-          br
-          br
-          br
-          img.imggraphs(src = "images/Teacher-byTest-RawTotalStandardsInTest.png")
-        .span6
-          br
-          br
-          br
-          br
-          h3 Information
-          ol
-            li Describes number of standards that exist for your tests 
-          h3 Conclusions
-          ol
-            li Test 4 has too few standards
-          h3 Actions 
-          ol
-            li Possibly add standard questions to test 4
-
-
-
-
-      .row
-        .span6
-          br
-          br
-          br
-          img.imggraphs(src = "images/Teacher-byTest-TestMeanScores.png")
-        .span6
-          br
-          br
-          br
-          br
-          h3 Information
-          ol
-            li Mean scores for any tests with distributions
-          h3 Conclusions
-          ol
-            li Test 1-3 have normal distributions
-            li Test 4 has homogenous understanding for all students
-          h3 Actions 
-          ol
-            li Review test 4 questions with student to understand what they missed
-
-
-      .row
-        .span6
-          br
-          br
-          br
-          img.imggraphs(src = "images/Teacher-byTest-TestPercentages.png")
-        .span6
-          br
-          br
-          br
-          br
-          h3 Information
-          ol
-            li Percentage of Mean scores for any tests with distributions
-          h3 Conclusions
-          ol
-            li Test 1-3 have normal distributions
-            li Test 4 has homogenous understanding for all students
-          h3 Actions 
-          ol
-            li Review test 4 questions with student to understand what they missed
-            li review questions, they may have been too narrow
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    #Admins.tab-pane
-      .row
-        .span12
-          h1.well(align='left') Available Graphs
-      .row
-        .span6
-          img.imggraphs(src = "images/SchoolAdmin-byTeacher-RawTotalStandards.png")
-        .span6
-          br
-          h3 Information
-          ol
-            li Depitcs the raw total number of standards the teacher is exposing to students
-          h3 Conclusions
-          ol
-            li Teacher 1 may need to include more standards, but she has high passing rate
-            li Teacher 2 seems to be doing poorly despite high standard exposure
-          h3 Actions 
-          ol
-            li Review course with teacher 1 to address possible increase in standard exposur count 
-            li Review course with teacher 2 to address problems she may be having
-
-
-
-      .row
-        .span6
-          br
-          br
-          br
-          img.imggraphs(src = "images/SchoolAdmin-byTeacher-PercentStandadsPassed.png")
-        .span6
-          br
-          br
-          br
-          br
-          h3 Information
-          ol
-            li Percentage of exposed standards that are passed by teachers
-          h3 Conclusions
-          ol
-            li Teachers 1,3,4 have decent passing rate 
-            li Test 4 has homogenous understanding for all students
-          h3 Actions 
-          ol
-            li Discuss with Teachers 1,3,4 on what they think they are doing properly
-            li Have discussion with Teacher 2 to help improve her scores
-
-
-
-      .row
-        .span6
-          br
-          br
-          br
-          img.imggraphs(src = "images/SchoolAdmin-byTeacher-PassibilityofStandardSx.png")
-        .span6
-          br
-          br
-          br
-          br
-          h3 Information
-          ol
-            li Sx is a specific standard that is address by your teachers
-            li Addresses how well a teacher can is performing on a specic standard
-            li Passibility = [sum(Sx in teacher tests)/(sum(Sx passed in teacher tests)]
-          h3 Conclusions
-          ol
-            li Teachers 1 is consistent
-            li Teacher 3 has large distributions for passiblity
-              ul
-                li May have a large distirbution of student abilitie
-          h3 Actions 
-          ol
-            li Review with teacher 1 on what she does to get consistentcy
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    #Districts.tab-pane
-      .row
-        .span12
-          h1.well(align='left') Available Graphs
-      .row
-        .span6
-          img.imggraphs(src = "images/SchoolDistrict-bySchool-RawTotalStandards.png")
-        .span6
-          br
-          h3 Information
-          ol
-            li Depitcs the raw total number of standards the teacher is exposing to students
-          h3 Conclusions
-          ol
-            li Schools 1,3,4 have met our 4000 standard goal 
-            li Schools 2 has not 
-          h3 Actions 
-          ol
-            li Congradualte schools for meeting exposure metric 
-            li Speak with school 2 principal on raising standard exposure
-
-
-      .row
-        .span6
-          img.imggraphs(src = "images/SchoolDistrict-bySchool-PercentStandardsPassed.png")
-        .span6
-          br
-          h3 Information
-          ol
-            li Percentage of standards that are passed by schools
-          h3 Conclusions
-          ol
-            li Schools 1,3,4 have met our 4000 standard goal 
-            li Schools 2 has not 
-          h3 Actions 
-          ol
-            li Congradulate schools 1-3 for having favorable percentages 
-            li Speak with school 4 principal on raising standard passing percentages
-
-
-
-
-      .row
-        .span6
-          img(src = "images/SchoolDistrict-bySchool-PassibilityofStandardSx.png")
-        .span6
-          br
-          h3 Information
-          ol
-            li How well does any school performs for any specicic Sx standard
-          h3 Conclusions
-          ol
-            li School 4 will need to improve its ability to pass standard Sx
-            li School 3 can properly teacher standard Sx 
-          h3 Actions 
-          ol
-            li Create groups of teachers well performing teahcers with poorly performing teachers for a specific standard
-            li Allow School 3 to describe why it think they did well for a specific standard
-
-
-
-  hr
-
-
-
-!= renderScriptsTags(myscripts)
-script
-  $(document).ready(function () {
-    $('#myCarousel').carousel({
-      interval:6000
+extends layout
+
+
+
+block content
+
+  include partials/_TopBar
+  .container
+    .hero-unit
+      h1 Correct and Analyze Tests
+      p Tired of grading simple tests? Want detailed information on the results?
+      p Your teaching experince can expand furhter than you 
+      p Your experience teaching can be transformed to be understood by others
+      p Experiences you learn from, availble to others
+      p Grade and Score paper tests
+      br
+      a.btn.btn-primary.btn-large(href='/register') Create Account
+    ul#myTab.nav.nav-tabs
+      li.active
+        a(href='#Overview', data-toggle='tab') Overview
+      li
+        a(href='#Teachers', data-toggle='tab') Teachers
+      li
+        a(href='#Admins', data-toggle='tab') Administrators
+      li
+        a(href='#Districts', data-toggle='tab') School Districts
+    .tab-content
+      #Overview.tab-pane.active
+        .row
+          .span12
+            h1.well(align='left') For Teachers: 
+        .row
+          .span6
+            h3 Raise the quality of your teaching 
+            br
+            ol
+              li Automatic grading and scoring
+              li Statistics by question and student
+              li View what the students have and have not understood
+              li See question response distribution
+              li Randomize question and selection order
+              li Track performance of your curriculum
+              li View how well individual students perform by subject standards
+              li Export what you learn and make it accessible to others 
+              li construct year end reports
+          .span6
+            #myCarousel.carousel.slide
+              .carousel-inner
+                .active.item 
+                  img(src = "images/im4.png")
+                .item
+                  img(src = "images/im3.png")
+                .item
+                  img(src = "images/im5.png")
+                .item
+                  img(src = "images/im6.png")
+                .item
+                  img(src = "images/im7.png")
+              a.carousel-control.left(href='#myCarousel', data-slide='prev') ‹
+              a.carousel-control.right(href='#myCarousel', data-slide='next') ›
+        .row
+          .span12
+            h1.well(align='left') For School Administrators:
+        .row
+          .span6
+            #myCarousel2.carousel.slide
+              .carousel-inner
+                .active.item 
+                  img(src = "images/SchoolAdmin-byTeacher-RawTotalStandards.png")
+                .item
+                  img(src = "images/SchoolAdmin-byTeacher-PercentStandadsPassed.png")
+                .item
+                  img(src = "images/SchoolAdmin-byTeacher-PassibilityofStandardSx.png")
+              a.carousel-control.left(href='#myCarousel2', data-slide='prev') ‹
+              a.carousel-control.right(href='#myCarousel2', data-slide='next') ›
+          .span5
+            h3  Data to improve school performance at a weekly level
+            br
+            ol
+              li Yearly state practice test information at a weekly level
+              li Aggregate data accross subjects to observe trends
+              li Manage school performance across teachers and subjects
+              li Create year end statistic reports by (Standard, Teacher, Student etc.)
+              li Prioritize resources to help poorly perofming teachers
+        .row
+          .span12
+            h1.well(align='left') For School Districts:
+        .row
+          .span6
+            h3 Data for grants made accessible
+            br
+            ol
+              li Classify schools based on performance metrics      
+              li Easily aggregate data accross your district 
+              li Monitor school performance at a weekly level
+              li Prioritize resources to assist poorly performing schools
+          .span6
+            #myCarousel3.carousel.slide
+              .carousel-inner
+                .active.item 
+                  img(src = "images/SchoolDistrict-bySchool-RawTotalStandards.png")
+                .item
+                  img(src = "images/SchoolDistrict-bySchool-PercentStandardsPassed.png")
+                .item
+                  img(src = "images/SchoolDistrict-bySchool-PassibilityofStandardSx.png")
+              a.carousel-control.left(href='#myCarousel3', data-slide='prev') ‹
+              a.carousel-control.right(href='#myCarousel3', data-slide='next') ›
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      #Teachers.tab-pane
+        .row
+          .span12
+            h1.well(align='left') Available Graphs
+        .row
+          .span6
+            img.imggraphs(src = "images/Teacher-byQuestion-TotCorInc.png")
+          .span6
+            br
+            h3 Information
+            ol
+              li Describes the frequency a specific question is answered correctly
+              li Responses are either correct or incorrect (multiple choice problems)
+            h3 Conclusions
+            ol
+              li Question 1 is well understood
+              li Question 2 needs impormvent
+              li Question 3 can be improved
+              li Question 4 is poorly understood
+            h3 Actions
+            ol
+              li What did i do to get good results on question 1? 
+              li How do i transform that type of understanding to the other questions?
+              li Did i cover question 4 well enough?
+        .row
+          .span6
+            br
+            br
+            br
+            img.imggraphs(src = "images/Teacher-byQuestion-MeanScores.png")
+          .span6
+            br
+            br
+            br
+            br
+            h3 Information
+            ol
+              li Scored questions that have a range (Example: max points = 5)
+              li Describes the distribution of scores around mean
+            h3 Conclusions
+            ol
+              li Question 3 has worst response
+              li Question 4 distirbution is large. Kids must guessing
+            h3 Actions 
+            ol
+              li Ask kids about question 4, something was misunderstood
+              li Quick review about question 3 
+
+        .row
+          .span6
+            br
+            br
+            br
+            img.imggraphs(src = "images/Teacher-byStandard-StandardPerformance.png")
+          .span6
+            br
+            br
+            br
+            br
+            h3 Information
+            ol
+              li Test can track number of standards associated with test questions
+              li Tracks correctly answered questions and sums passing
+            h3 Conclusions
+            ol
+              li Should this test include more tests?
+              li Question 4 has alriht score, but distirbution is large. Kids must guessing
+            h3 Actions 
+            ol
+              li Possibly add standards
+              li Reorganize test by adding or removing questions 
+
+
+        .row
+          .span6
+            br
+            br
+            br
+            img.imggraphs(src = "images/Teacher-byStudent-MeanScoresAcrossTests.png")
+          .span6
+            br
+            br
+            br
+            br
+            h3 Information
+            ol
+              li Describes the mean score for each student for a specific test
+              li Track student progress through your tests 
+            h3 Conclusions
+            ol
+              li Student 1 is consistent, but doing poorly
+              li Student 3 is inconsistent, but managable
+            h3 Actions 
+            ol
+              li Bring up issues with student 1 at next group teacher meeting (with data)
+              li Speak with student 3's parents to find out cause of inconsistency 
+
+
+        .row
+          .span6
+            br
+            br
+            br
+            img.imggraphs(src = "images/Teacher-byStudent-TotalPassedStandards.png")
+          .span6
+            br
+            br
+            br
+            br
+            h3 Information
+            ol
+              li Describes the number of standards for all tests
+              li Describes sum of the correctly questions associated standards 
+            h3 Conclusions
+            ol
+              li Student 2 may not be responding to curriculum well
+            h3 Actions 
+            ol
+              li Think of ways to engage student 2
+              li My teaching strategy is good for stuents similar to student 3 
+
+        .row
+          .span6
+            br
+            br
+            br
+            img.imggraphs(src = "images/Teacher-byStudent-TotCorInc.png")
+          .span6
+            br
+            br
+            br
+            br
+            h3 Information
+            ol
+              li Describes the number of correclty and incorrectly answered questions 
+            h3 Conclusions
+            ol
+              li Questions 2,3,4 performed well
+              li Question 1 was not understood well
+            h3 Actions 
+            ol
+              li Review question 1 with students
+              li Think about my actions that possibly caused students 2-4 to respond well 
+
+        .row
+          .span6
+            br
+            br
+            br
+            img.imggraphs(src = "images/Teacher-byTest-RawTotalStandardsInTest.png")
+          .span6
+            br
+            br
+            br
+            br
+            h3 Information
+            ol
+              li Describes number of standards that exist for your tests 
+            h3 Conclusions
+            ol
+              li Test 4 has too few standards
+            h3 Actions 
+            ol
+              li Possibly add standard questions to test 4
+
+
+
+
+        .row
+          .span6
+            br
+            br
+            br
+            img.imggraphs(src = "images/Teacher-byTest-TestMeanScores.png")
+          .span6
+            br
+            br
+            br
+            br
+            h3 Information
+            ol
+              li Mean scores for any tests with distributions
+            h3 Conclusions
+            ol
+              li Test 1-3 have normal distributions
+              li Test 4 has homogenous understanding for all students
+            h3 Actions 
+            ol
+              li Review test 4 questions with student to understand what they missed
+
+
+        .row
+          .span6
+            br
+            br
+            br
+            img.imggraphs(src = "images/Teacher-byTest-TestPercentages.png")
+          .span6
+            br
+            br
+            br
+            br
+            h3 Information
+            ol
+              li Percentage of Mean scores for any tests with distributions
+            h3 Conclusions
+            ol
+              li Test 1-3 have normal distributions
+              li Test 4 has homogenous understanding for all students
+            h3 Actions 
+            ol
+              li Review test 4 questions with student to understand what they missed
+              li review questions, they may have been too narrow
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      #Admins.tab-pane
+        .row
+          .span12
+            h1.well(align='left') Available Graphs
+        .row
+          .span6
+            img.imggraphs(src = "images/SchoolAdmin-byTeacher-RawTotalStandards.png")
+          .span6
+            br
+            h3 Information
+            ol
+              li Depitcs the raw total number of standards the teacher is exposing to students
+            h3 Conclusions
+            ol
+              li Teacher 1 may need to include more standards, but she has high passing rate
+              li Teacher 2 seems to be doing poorly despite high standard exposure
+            h3 Actions 
+            ol
+              li Review course with teacher 1 to address possible increase in standard exposur count 
+              li Review course with teacher 2 to address problems she may be having
+
+
+
+        .row
+          .span6
+            br
+            br
+            br
+            img.imggraphs(src = "images/SchoolAdmin-byTeacher-PercentStandadsPassed.png")
+          .span6
+            br
+            br
+            br
+            br
+            h3 Information
+            ol
+              li Percentage of exposed standards that are passed by teachers
+            h3 Conclusions
+            ol
+              li Teachers 1,3,4 have decent passing rate 
+              li Test 4 has homogenous understanding for all students
+            h3 Actions 
+            ol
+              li Discuss with Teachers 1,3,4 on what they think they are doing properly
+              li Have discussion with Teacher 2 to help improve her scores
+
+
+
+        .row
+          .span6
+            br
+            br
+            br
+            img.imggraphs(src = "images/SchoolAdmin-byTeacher-PassibilityofStandardSx.png")
+          .span6
+            br
+            br
+            br
+            br
+            h3 Information
+            ol
+              li Sx is a specific standard that is address by your teachers
+              li Addresses how well a teacher can is performing on a specic standard
+              li Passibility = [sum(Sx in teacher tests)/(sum(Sx passed in teacher tests)]
+            h3 Conclusions
+            ol
+              li Teachers 1 is consistent
+              li Teacher 3 has large distributions for passiblity
+                ul
+                  li May have a large distirbution of student abilitie
+            h3 Actions 
+            ol
+              li Review with teacher 1 on what she does to get consistentcy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      #Districts.tab-pane
+        .row
+          .span12
+            h1.well(align='left') Available Graphs
+        .row
+          .span6
+            img.imggraphs(src = "images/SchoolDistrict-bySchool-RawTotalStandards.png")
+          .span6
+            br
+            h3 Information
+            ol
+              li Depitcs the raw total number of standards the teacher is exposing to students
+            h3 Conclusions
+            ol
+              li Schools 1,3,4 have met our 4000 standard goal 
+              li Schools 2 has not 
+            h3 Actions 
+            ol
+              li Congradualte schools for meeting exposure metric 
+              li Speak with school 2 principal on raising standard exposure
+
+
+        .row
+          .span6
+            img.imggraphs(src = "images/SchoolDistrict-bySchool-PercentStandardsPassed.png")
+          .span6
+            br
+            h3 Information
+            ol
+              li Percentage of standards that are passed by schools
+            h3 Conclusions
+            ol
+              li Schools 1-3 have decent standard passing percentages
+              li Schools 4 has unfavorable percentage value
+            h3 Actions 
+            ol
+              li Congradulate schools 1-3 for having favorable percentages 
+              li Speak with school 4 principal on raising standard passing percentages
+
+
+
+
+        .row
+          .span6
+            img(src = "images/SchoolDistrict-bySchool-PassibilityofStandardSx.png")
+          .span6
+            br
+            h3 Information
+            ol
+              li How well does any school performs for any specicic Sx standard
+            h3 Conclusions
+            ol
+              li School 4 will need to improve its ability to pass standard Sx
+              li School 3 can properly teacher standard Sx 
+            h3 Actions 
+            ol
+              li Create groups of teachers well performing teahcers with poorly performing teachers for a specific standard
+              li Allow School 3 to describe why it think they did well for a specific standard
+
+
+
+    hr
+
+
+
+append footer
+  script
+    $(document).ready(function () {
+      $('#myCarousel').carousel({
+        interval:6000
+      });
+      $('#myCarousel2').carousel({
+        interval:6000
+      });
+      $('#myCarousel3').carousel({
+        interval:6000
+      });
+      // $('#myTab').tab('show');
     });
-    $('#myCarousel2').carousel({
-      interval:6000
-    });
-    $('#myCarousel3').carousel({
-      interval:6000
-    });
-    // $('#myTab').tab('show');
-  });
   
 
 
