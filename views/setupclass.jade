@@ -1,0 +1,99 @@
+#DeleteClassModal.modal.hide.fade	
+	.modal-header
+		a.close(href='#', data-dismiss='modal') ×
+		h3 Delete Class Setup
+	.modal-body
+		p.person Class will be removed Permanently
+	.modal-footer
+		form.confirmdelete.control-group(action='', method='post')
+			button.btn(data-dismiss='modal') No!
+			input(type='hidden', name='_method', value='delete')
+			input.hiddentest(type='hidden', name='setuptodelete')
+			button.btn.btn-danger(type='submit') Remove Class Setup
+
+!=partial('partials/_TopBarLoggedIn')
+	.container
+		.row
+			.span2
+				include partials/_SideBar
+			.span8
+				h1 Create class
+				form.createclass.form-horizontal.well(method='post', action='')
+					fieldset
+						.control-group
+							label.control-label Class name
+							.controls
+								input.span3.classname(type='text', name='ClassName', placeholder = 'Class Name') 
+						.control-group
+							label.control-label Grade year
+							.controls
+								input.span3.classgrade(type='text', name='ClassGrade' ,placeholder = 'Class Grade')
+						.control-group
+							label.control-label Subject
+							.controls
+								input.span3.classsubject(type='text', name='ClassSubject', placeholder = 'Class Subject')
+						.control-group
+							label.control-label Number of students
+							.controls
+								input.span3.numberofstudents(type='text', name='NumOfStudents' ,placeholder = 'Number of Students')
+								input.Editing(type='hidden', name='Edit_Class', value='')
+								input.reqtype(type='hidden', name='_method', value='POST')
+						button.btn.btn-primary.submitform(type='submit') Create Class
+				
+				- if(typeof(valerrors) != 'undefined')
+					each err in valerrors
+						each val,key in err
+							- if(key == 'msg')
+								.alert.alert-error.alert-block
+									a.close(data-dismiss='alert', href='#') ×
+									h4.alert-heading Error!
+									p #{val}
+				- if(typeof(classinfo) != 'undefined')
+					each item in classinfo
+						.alert.alert-success.alert-block
+							.row
+								.span4
+									h2.alert-heading.classnametext #{item.ClassName}
+									input.classroomid(type='hidden', name='classid', value='#{item._id}') 
+									table.table.table-condensed.tableclass
+										thread
+											th Subject
+											th Grade year
+											th Students
+										tbody
+											td.subject #{item.Subject}
+											td.grade #{item.Gradeyear}
+											td.NOS #{item.NumberOfStudents}
+								.span3
+									.btn-group.pull-right
+										button.btn.btn-success.dropdown-toggle(data-toggle='dropdown') Actions
+											.span.caret
+										ul.dropdown-menu
+											li 
+												a.editclass(href='#') Edit
+											li.divider
+											li
+												a(data-classid='#{item._id}', data-userid='#{userID}', data-toggle='modal', data-target='#DeleteClassModal') Delete Class			
+			
+
+!= renderScriptsTags(myscripts)
+
+script
+	$(document).ready(function () {
+		$('.editclass').click(function(e){
+			var nam = $(this).closest('.row').find('.classnametext').text()             
+			var sub = $(this).closest('.row').find('.subject').text()
+			var gr = $(this).closest('.row').find('.grade').text()
+			var nos = $(this).closest('.row').find('.NOS').text()
+			$('.classname').val(nam)           
+			$('.classsubject').val(sub)
+			$('.classgrade').val(gr)
+			$('.numberofstudents').val(nos)
+			$('.submitform').text('Edit Class')
+			var CRID = $(this).closest('.row').find('.classroomid').val()
+			$('.Editing').prop('value', CRID)
+			$('.reqtype').prop('value', 'PUT')
+		})
+	});//end of docment ready
+
+

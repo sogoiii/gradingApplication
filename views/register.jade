@@ -1,0 +1,25 @@
+if(DynsessionLoggedIn != true)
+  !=partial('partials/_TopBar')
+else
+  !=partial('partials/_TopBarLoggedIn')
+.container
+  .row
+    .span4
+      h2 Register
+      form.well.form(action='/register', method='post')
+        input.span3(type='text', name='email', placeholder = 'Email')
+        input.span3(type='text', name='confirmemail', placeholder = 'Confirm Email')
+        input.span3(type='password', name='password' ,placeholder = 'Password')
+        .span1 
+        button.btn(type='submit') Register
+       - if(message != '' && message != 'Email exists: please log in')
+         .alert.alert-error.alert-block
+           a.close(data-dismiss='alert', href='#') ×
+           h4.alert-heading Error!
+           p #{message}
+       - if(message =='Email exists: please log in')
+          .alert.alert-info.alert-block
+           a.close(data-dismiss='alert', href='#') ×
+           h4.alert-heading You already registered
+           button.btn.btn-info(href='/login') Login 
+!= renderScriptsTags(myscripts)

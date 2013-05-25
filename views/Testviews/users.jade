@@ -1,0 +1,10 @@
+if(DynsessionLoggedIn == false)
+  !=partial('partials/_TopBar')
+else
+  !=partial('partials/_TopBarLoggedIn')
+.container
+  .row
+    .span8
+      h2 users
+      ul#users
+        -  each teacher in teachers

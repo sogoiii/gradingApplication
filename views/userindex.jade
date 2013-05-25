@@ -1,0 +1,38 @@
+!=partial('partials/_TopBarLoggedIn')
+  .container
+    .row
+      .span2
+        include partials/_SideBar
+      .span8
+        h1 Create Test
+          - if(typeof(setupclass) != 'undefined')
+            .alert.alert-warning.alert-block
+              a.close(data-dismiss='alert', href='#') ×
+              h4.alert-heading Welcome! 
+              p Please setup your classes
+              a.btn.btn-warning(href='/user/#{userID}/setupclass') Setup
+        fieldset.well.form-inline
+          form.control-group(action='/user/#{userID}/createtest', method='post')
+            .span3
+              .control-group
+                .controls
+                  input.span3(type='text', name='TestName', placeholder = 'Enter Test Name') 
+            .span2
+              .control-group
+                .controls
+                  select.span2(name='ClassName', size='1')
+                    option Select Class
+                    - if(typeof(classinfo) != 'undefined')
+                      each val,key in classinfo
+                          option #{val.ClassName}
+            .span2
+              button.btn.btn-success.span2(type='submit') Create Test        
+        - if(typeof(CreateTestErrors) != 'undefined')
+          each err in CreateTestErrors
+            each val,key in err
+              - if(key == 'msg')
+                .alert.alert-error.alert-block
+                  a.close(data-dismiss='alert', href='#') ×
+                  h4.alert-heading Error!
+                  p #{val}
+!= renderScriptsTags(myscripts)

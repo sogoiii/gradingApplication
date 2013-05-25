@@ -1,87 +1,50 @@
-
 /**
  * Module dependencies.
  */
 
-var express = require('express')
-  , routes = require('./routes')
-  , util = require('util')
+var express = require('express');
+var routes = require('./routes');
+var util = require('util');
+var fs = require('fs');
 
-var passport = require('passport')
-  , LocalStrategy = require('passport-local').Strategy;
-
-//justtotestinitialcommit
-
-var users = [
-    { id: 1, username: 'bob', password: 'secret', email: 'bob@example.com' }
-  , { id: 2, username: 'joe', password: 'birthday', email: 'joe@example.com' }
-];
-
-function findById(id, fn) {
-  var idx = id - 1;
-  if (users[idx]) {
-    fn(null, users[idx]);
-  } else {
-    fn(new Error('User ' + id + ' does not exist'));
-  }
-}
-
-function findByUsername(username, fn) {
-  for (var i = 0, len = users.length; i < len; i++) {
-    var user = users[i];
-    if (user.username === username) {
-      return fn(null, user);
-    }
-  }
-  return fn(null, null);
-}
+var expressValidator = require('express-validator');
 
 
-// Passport session setup.
-//   To support persistent login sessions, Passport needs to be able to
-//   serialize users into and deserialize users out of the session.  Typically,
-//   this will be as simple as storing the user ID when serializing, and finding
-//   the user by ID when deserializing.
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
+var gridfs = require("./gridfs"); //this line may not be required here
+
+var mongoose = require('mongoose');
+var mongoStore = require('session-mongoose');
+var mongooseTypes = require('mongoose-types');
+mongooseTypes.loadTypes(mongoose);
+
+var amqp = require('amqp');
+var rabbitMQ = amqp.createConnection({ host: '127.0.0.1' });
+var rpc = new (require('./amqprpc'))(rabbitMQ);
+
+
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
+var DB = require('./DBfunctions');
+
+
+//load all the model files for mongoose(Mongodb);
+var models_path = __dirname + '/models';
+var model_files = fs.readdirSync(models_path);
+model_files.forEach(function(file){
+    require(models_path+'/'+file);
 });
-
-passport.deserializeUser(function(id, done) {
-  findById(id, function (err, user) {
-    done(err, user);
-  });
-});
-
-
-// Use the LocalStrategy within Passport.
-//   Strategies in passport require a `verify` function, which accept
-//   credentials (in this case, a username and password), and invoke a callback
-//   with a user object.  In the real world, this would query a database;
-//   however, in this example we are using a baked-in set of users.
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
-      
-      // Find the user by username.  If there is no user with the given
-      // username, or the password is not correct, set the user to `false` to
-      // indicate failure and set a flash message.  Otherwise, return the
-      // authenticated `user`.
-      findByUsername(username, function(err, user) {
-        if (err) { return done(err); }
-        if (!user) { return done(null, false, { message: 'Unkown user ' + username }); }
-        if (user.password != password) { return done(null, false, { message: 'Invalid password' }); }
-        return done(null, user);
-      })
-    });
-  }
-));
-
-
-
 
 
 var app = module.exports = express.createServer();
+var io = require('socket.io').listen(app);
+
+//Database
+var dbloc = 'mongodb://localhost/ecomm_database';
+mongoose.connect(dbloc);
+
+
+
 // Configuration
 
 app.configure(function(){
@@ -89,78 +52,211 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.set(express.logger());
   app.use(express.cookieParser());
+  //app.use(express.limit('2mb')); //limit file accepted here for testing only
   app.use(express.bodyParser());
- /* app.use(express.session({secret: "thesecretcode"}));
-  app.use(passport.initialize());
-  app.use(passport.session());*/
+  app.use(expressValidator);
   app.use(express.methodOverride());
-  app.use(express.session({ secret: 'keyboard cat' }));
-  // Initialize Passport!  Also use passport.session() middleware, to support
-  // persistent login sessions (recommended).
+
+
+    var mongooseSessionStore = new mongoStore({
+      url: "mongodb://localhost/mv",
+      interval: 3600000
+  });
+
+
+  app.use(express.session( {cookie: {maxAge: 3600000}, store: mongooseSessionStore, secret: "mv secret" }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
   app.use(express.static(__dirname + '/public'));
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
-/*
+
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
+  app.use(express.errorHandler());
 });
-*/
 
-//testing code
 /*
-var users = [
-	{name: 'henry', email: 'henry@email.com' }
-, {name: 'gio', email: 'giovanni@email.com' }
-, {name: 'scott', email: 'isnotalone@email.com' }
-, {name: 'denise', email: 'hadababy@email.com' }
-, {name: 'rej', email: 'isfun@email.com' }
+app.dynamicHelpers({
+  scripts: function(req, res){
+    return ['javascripts/jQuery.js', 'javascripts/bootstrap.min.js'];
+  }
+});
 
-];
+app.helpers({
+  name: function(first, last){ return first + ', ' + last }
+  , firstName: 'javascripts/jQuery.js'
+  , lastName: 'javascripts/bootstrap.min.js'
+});
+
+*/
+
+app.helpers({
+  renderScriptsTags: function (all) {
+    if (all != undefined) {
+      return all.map(function(script) {
+        return '<script src="/javascripts/' + script + '"></script>';
+      }).join('\n ');
+    }
+  }
+});
+
+app.dynamicHelpers({
+  myscripts: function() {
+      //scripts to load on every page
+      //return ['jQuery.js','wymeditor/jquery.wymeditor.min.js' ,'bootstrap.min.js'];
+      return ['jQuery.min.js','bootstrap.js'];
+      //return ['jQuery.js','bootstrap.min.js'];
+  }
+});
+
+app.dynamicHelpers({
+  DynsessionLoggedIn: function(req,res) {
+      return req.session.loggedIn;
+  }
+});
+
+
+app.dynamicHelpers({
+  userID: function(req,res) {
+      return req.params.id;
+  }
+});
+
+
+
+
+
+var db = new DB.startup(dbloc);
+
+
+//Load all the route files
+var controllers_path = __dirname + '/routes';
+var controller_files = fs.readdirSync(controllers_path);
+controller_files.forEach(function(file){
+  require(controllers_path+'/'+file);
+});
+
+
+require('./routes')(app);
+
+
+
+
+
+
+
+/*
+
+
+SOCKET IO STUFF!!!
+
+
 */
 
 
+io.set('log level', 1);
+io.sockets.on('connection', function (socket) {
+
+
+  //this function is called from the browser
+  socket.on('RPC_request', function (data){//grading a document in the backend
+    console.log('Received request to send an RPC Command');
+      rpc.makeRequest('image', data, function respond(err, response){
+        if(err)
+          console.error('error = ' + err);
+        else{
+          console.log("response = '" + response.data + "' To browser = '" + response.data.cool);
+          socket.emit('RPC_response_Graded', 'the RPC function has returned go check statistics page');
+          //console.log("response = '" + response.data + "' is of type = '" + response.contentType+"'");
+        }
+      });//end of rpc.makerequest
+  });//end of RPC_request
+
+
+  //this function is called for creating a pdf file
+  socket.on('RPC_PrintPDF', function(data){
+    console.log('recieved request to create pdf');
+    rpc.makeRequest('createPDF', data, function respond(err,response){
+      if(!err){
+        console.log('Returned from java');
+        response.createdid = response.data;
+        var out = response.createdid.toString();
+        console.log('response = ' + out);
+        response.textreply = 'Click the download button';
+        socket.emit('RPC_Print_response', out);
+      }//end of if
+      else{
+        console.log('Failed RPC');
+
+      }//end of else
+    });//end of rpc.makerequest
+  });//end of socket.on
+
+
+  //for statistics page//currently in testing mode //NO LONGER USED
+  socket.on("BuildStats_req", function(data){
+    console.log("recived request to build chart!");
+    // var cool = "1";
+    console.log("Client wants to get info on test = " + data.tesid);
+    // DB.grabTestResultstest(cool, function(err,result){
+    //   if(!err){
+    //      // console.log("Results = " + result);
+    //     socket.emit("BuildStats_res",result);
+    //   }//end of !err if
+    //   else{
+    //     console.log("No results " );
+    //   }//end of !err else
+    // });//end of grabTestResults
 
 
 
-// Routes
-app.get('/', routes.index);
+    // socket.on("getresults", function(data,fn){
+    //   console.log('data from client= ' + data);
+    //   var cool = "1";
+    //   DB.grabTestResultstest(cool, function(err,result){
+    //     if(!err){
+    //       // console.log("Results = " + result)
+    //       fn(result);
+    //     }//end of !err if
+    //     else{
+    //       console.log("No results ");
+    //       fn('woot');
+    //     }//end of !err else
+    //   });//end of grabTestResults
+    // });
 
-app.get('/about', routes.about);
-
-//app.get('/login', routes.login); //removed for now
-app.get('/loginfailed', routes.loginfailed);
-
-app.get('/userlist', ensureAuthenticated,  routes.userlist);
-
-app.get('/login', routes.getlogin);
-
-app.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
-  routes.postlogin);
-
-
-
+  });//end of buildstats socket.on
 
 
-app.get('/users', function(req,res){
-	res.render('users',{users:users, title: 'USERLIST!!!!!'})
-});
+
+
+
+
+});//end of socket.io
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
-
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login')
-}
-
-
-
-

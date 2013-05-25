@@ -1,0 +1,29 @@
+!=partial('partials/_TopBarLoggedIn')
+.container
+  .row
+    .span6
+      h1 Teachers by Question
+      br
+      #Teacher-temp(style='height: 300px; width: 400px;')
+      br
+      #Teacher-TotalCorrectIncorrectbyquestion(style='height: 300px; width: 400px;')
+      br
+      #Teacher-Scoresbyquestion(style='height: 300px; width: 400px;')
+      br
+    .span6
+      h1 Teachers by students
+      br
+      #Teacher-Standardsbystudent(style='height: 300px; width: 400px;')
+      br
+      #Teacher-TotalCorrectIncorrectbystudent(style='height: 300px; width: 400px;')
+      br
+      #Teacher-MeanScoresAcrossTests(style='height: 300px; width: 400px;')
+
+- myscripts.push('jqplot/jquery.jqplot.min.js')
+- myscripts.push('jqplot/plugins/jqplot.canvasTextRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.barRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.categoryAxisRenderer.min.js')
+- myscripts.push('jqplot/plugins/jqplot.pointLabels.min.js')
+- myscripts.push('testscripts/jqplot_tests_teachers.js')
+!= renderScriptsTags(myscripts)

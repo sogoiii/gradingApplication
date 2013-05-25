@@ -1,0 +1,51 @@
+!=partial('partials/_TopBarLoggedIn')
+	.container-fluid
+		.row-fluid
+			.span2
+				include partials/_SideBar
+			.span8
+				h1 This is the user Tests page
+				p #{title}
+				form.form-horizontal(method='post', action='')
+					fieldset
+						.control-group
+							.span2
+								select.span2(name='Class', size='1')
+									option class 1
+							.span2
+								select.span2(name='Grade', size='1')
+									option grade 1
+									option grade 2
+							.span2
+								select.span2(name='Subject', size='1')
+									option subject 1
+									option subject 2
+						.control-group			
+							textarea.wymeditor(name='QuestionHTML')			
+						.control-group.success
+							label.control-label(for='focusedInput') Correct Answer
+							.controls
+								input(type='text', name= 'CorrectAnswer')
+						.control-group.error
+							label.control-label(for='inputError') Wrong Answer
+							.controls
+								input(type='text', name= 'WrongAnswer1')
+						.control-group.error
+							label.control-label(for='inputWarning') Wrong Answer
+							.controls
+								input(type='text', name= 'WrongAnswer2')
+						.control-group.error
+							label.control-label(for='inputWarning') Wrong Answer
+							.controls
+								input(type='text', name= 'WrongAnswer3') Add Question
+					button.btn.btn-primary.wymupdate(type='submit') Add Question
+				if(message)		
+					.alert.alert-error.alert-block
+						a.close(data-dismiss='alert', href='#') ×
+						h4.alert-heading Question
+						p #{message}
+			.span2 
+				h3 Mearly test content
+				p #{title}
+
+

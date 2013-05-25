@@ -1,0 +1,73 @@
+!=partial('partials/_TopBarLoggedIn')
+	.container
+		.row
+			.span2
+				include partials/_SideBar
+			.span10
+				h1.center Add questions to test
+				form.form-horizontal(method='post', action='')
+					fieldset
+						h2 1) Question
+						br
+						.control-group
+							textarea.wymeditor(name='QuestionHTML')
+						h2 2) Possible Responses
+						br
+						.control-group.success
+							label.control-label(for='CorrectAnswer') Correct Answer
+							.controls
+								input#CorrectAnswer(type='text', name= 'CorrectAnswer')
+						.control-group.error
+							label.control-label(for='WrongAnswer1') Wrong Answer
+							.controls
+								input#WrongAnswer1(type='text', name= 'WrongAnswer1')
+						.control-group.error
+							label.control-label(for='WrongAnswer2') Wrong Answer
+							.controls
+								input#WrongAnswer2(type='text', name= 'WrongAnswer2')
+						.control-group.error
+							label.control-label(for='WrongAnswer3') Wrong Answer
+							.controls
+								input#WrongAnswer3(type='text', name= 'WrongAnswer3') Add Question
+						h2 3) Score Weight
+						br
+						.control-group#scoreError
+							label.control-label(for='Score') Score
+							.controls
+								input#Score.span1(type='text', name= 'Score') Score
+								span.help-inline#scorehelp Decimals allowed
+						h2 4) Associate Standards (INCOMPLETE)
+						br
+						p#testscorechange
+						input(type='hidden', name='_method', value='put')
+					button.btn.btn-primary.wymupdate(type='submit') Add Question
+				- if(typeof(message) != 'undefined')
+					.alert.alert-error.alert-block
+						a.close(data-dismiss='alert', href='#') ×
+						h4.alert-heading Question
+						p #{message}
+				- if(typeof(Questions) != 'undefined')
+					each elm in Questions
+						.alert.alert-success.alert-block
+							strong Question: 
+							|  !{elm.Questionhtml}
+							br
+							br
+							table.table.table-condensed.tableclass
+								thread
+									th Correct
+									th Wrong Answer 1
+									th Wrong Answer 2
+									th Wrong Answer 3
+									th Score
+								tbody
+									td #{elm.CorrectAnswertext}
+									each WA in elm.WrongAnswers
+										each val, key in WA
+											- if(key == 'WrongAnswertext')
+												td #{val}
+									td #{elm.Score}
+- myscripts.push('wymeditor/jquery.wymeditor.min.js')
+- myscripts.push('wymeditorandvalidation.js')
+!= renderScriptsTags(myscripts)
+

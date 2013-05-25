@@ -1,0 +1,44 @@
+#FindAddStandard.modal.hide.fade
+  .modal-header
+    a.close(href='#', data-dismiss='modal') ×
+    h3 Add Standard
+  .modal-body
+    .row
+      .span6
+        div.ul.breadcrumb#BCbar
+          li
+            a(href='#') English
+            span.divider /
+          li
+            a(href='#') Level
+            span.divider /
+           li.active Topic
+    .row
+      .span6
+        btn.btn.btn-primary.span2#MathSubject(href='#') Math
+        span#testclick
+
+
+
+  .modal-footer
+      a.btn.btn-primary#PDFURL() Add Standards
+
+
+!=partial('partials/_TopBarLoggedIn')
+  .container
+    .row
+      .span2
+
+      .span10
+        h1 add Standard  
+        br
+        button.btn.btn-info(href='#', data-toggle='modal', data-target='#FindAddStandard') Add Standard
+
+
+- myscripts.push('addstandards.js')
+!= renderScriptsTags(myscripts)
+script(src='/socket.io/socket.io.js')
+
+
+
+                
