@@ -1,54 +1,4 @@
 
-#DeleteTest.modal.hide.fade	
-	.modal-header
-		a.close(href='#', data-dismiss='modal') ×
-		h3 Delete URL
-		p.person old text .person
-	.modal-body
-		p.person old person text that i should not see EVER EVER EVER
-		a.btn(href='something') .person
-		a.testid(href='linktotestwithtestid') testinformation that should not be seen
-		a.alink(href='alink') alink
-	.modal-footer
-		form.confirmdelete.control-group(action='', method='post')
-			button.btn(data-dismiss='modal') No!
-			input(type='hidden', name='_method', value='delete')
-			input.hiddentest(type='hidden', name='testtodelete')
-			button.btn.btn-primary(type='submit') Yes Delete
-
-#UploadFileModal.modal.hide.fade	
-	.modal-header
-		a.close(href='#', data-dismiss='modal') ×
-		h3 Upload PDF of Test!
-	.modal-body
-		p.uploadComment Do not refresh page
-		p.person Please select the correct file!
-	.modal-footer
-		form.UploadFile.control-group(action='', method='POST',enctype="multipart/form-data")
-			input(type="file", name="PDFTest") Select File
-			input.hiddentest(type='hidden', name='testtoupload')
-			button.btn.btn-primary(type='submit') Start Upload
-
-
-#GradingModal.modal.hide.fade	
-	.modal-header
-		a.close(href='#', data-dismiss='modal') ×
-		h3 Get some coffee, grading has begun!
-	.modal-body
-		p.gradeComment Please wait while the grading is comenced
-		#Spinner.Spinner
-	.modal-footer
-
-
-#CreatePDF.modal.hide.fade
-	.modal-header
-		a.close(href='#', data-dismiss='modal') ×
-		h3 Get some coffee, grading has begun!
-	.modal-body
-		p.createpdfComment Please wait while the pdf is generated
-		#CreatePDFSpinner.Spinner
-	.modal-footer
-			a.btn.btn-primary#PDFURL() Open PDF
 
 
 
@@ -56,14 +6,83 @@
 
 
 
-!=partial('partials/_TopBarLoggedIn')
+
+extends layout
+
+
+
+block content
+	#DeleteTest.modal.hide.fade	
+		.modal-header
+			a.close(href='#', data-dismiss='modal') ×
+			h3 Delete URL
+			p.person old text .person
+		.modal-body
+			p.person old person text that i should not see EVER EVER EVER
+			a.btn(href='something') .person
+			a.testid(href='linktotestwithtestid') testinformation that should not be seen
+			a.alink(href='alink') alink
+		.modal-footer
+			form.confirmdelete.control-group(action='', method='post')
+				button.btn(data-dismiss='modal') No!
+				input(type='hidden', name='_method', value='delete')
+				input.hiddentest(type='hidden', name='testtodelete')
+				button.btn.btn-primary(type='submit') Yes Delete
+
+	#UploadFileModal.modal.hide.fade	
+		.modal-header
+			a.close(href='#', data-dismiss='modal') ×
+			h3 Upload PDF of Test!
+		.modal-body
+			p.uploadComment Do not refresh page
+			p.person Please select the correct file!
+			p
+		.modal-footer
+			form.UploadFile.control-group(action='', method='POST',enctype="multipart/form-data")
+				input(type="file", name="PDFTest") Select File
+				input.hiddentest(type='hidden', name='testtoupload')
+				button.btn.btn-primary(type='submit') Start Upload
+
+
+	#GradingModal.modal.hide.fade	
+		.modal-header
+			a.close(href='#', data-dismiss='modal') ×
+			h3 Get some coffee, grading has begun!
+		.modal-body
+			p.gradeComment Please wait while the grading is comenced
+			#Spinner.Spinner
+		.modal-footer
+
+
+	#CreatePDF.modal.hide.fade
+		.modal-header
+			a.close(href='#', data-dismiss='modal') ×
+			h3 Get some coffee, Creating pdf
+		.modal-body
+			p.createpdfComment Please wait while the pdf is generated
+			#CreatePDFSpinner.Spinner
+		.modal-footer
+				a.btn.btn-primary#PDFURL() Open PDF
+
+	#myModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+		.modal-header
+			button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+			h3#myModalLabel Modal header
+		.modal-body
+			p One fine body…
+		.modal-footer
+			button.btn(data-dismiss='modal', aria-hidden='true') Close
+			button.btn.btn-primary Save changes
+
+	include partials/_TopBarLoggedIn
 	.container
 		.row
 			.span2
 				include partials/_SideBar
-			.span8
+			.span10
 				h1 Your Tests
 				br
+				ul.dropdown-menu
 				- if(pageerror == 'File must be a PDF!' )
 					.alert.alert-error.alert-block
 						a.close(data-dismiss='alert', href='#') ×
@@ -86,33 +105,34 @@
 											td.subject #{test.Subject}
 											td.grade #{test.Gradeyear}
 											td.NOS #{test.NumberOfStudents}
-								.span3
+								.span5
 									.btn-group.pull-right
-										button.btn.btn-info.dropdown-toggle(data-toggle='dropdown')
-											| Actions
-											.span.caret
+										a.btn.dropdown-toggle.btn-info(data-toggle='dropdown', href="#") Actions
+											span.caret
 										ul.dropdown-menu
 											li
-												a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#CreatePDF') Create PDF	
+												a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', href="#CreatePDF") Create PDF	
+												//- a.btn(href='#myModal', role='button', data-toggle='modal') Launch demo modal
 											- if(test.CreatedPDF.length == '1')
 												li
 													a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#UploadFileModal') Upload 
 											- else
 												li
-													a.notavailable(href='#') Upload
+													//- a(href='#') Upload
+													a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#UploadFileModal') Upload 
 
 											- if(test.PDFTest.length == '1')
 												li
 													a(data-testid='#{test._id}', data-userid='#{userID}', data-toggle='modal', data-target='#GradingModal') Grade
 											- else
-												li
-													a.notavailable(href='#') Grade
+												li.disabled
+													a(href='#') Grade
 											- if(test.TestGraded.WasGraded == '1')
 												li
 													a(href='/user/#{userID}/statistics/#{test._id}') Statistics
 											- else
-												li
-													a.notavailable(href='#') Statistics												
+												li.disabled
+													a(href='#') Statistics								
 											li 
 												a(href='/user/#{userID}/edittest/#{test._id}') Edit
 											li.divider
@@ -121,11 +141,17 @@
 				
 
 
+append footer
+	script(src='/js/spin.min.js')
+	script(src='/js/testindex.js')
+	script(src='/socket.io/socket.io.js')
 
-- myscripts.push('spin.min.js')
-- myscripts.push('testindex.js')
-!= renderScriptsTags(myscripts)
-script(src='/socket.io/socket.io.js')
+
+
+//- - myscripts.push('spin.min.js')
+//- - myscripts.push('testindex.js')
+//- != renderScriptsTags(myscripts)
+//- script(src='/socket.io/socket.io.js')
 
 
 

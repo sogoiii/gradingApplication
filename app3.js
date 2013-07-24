@@ -3,19 +3,23 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
   , http = require('http')
   , path = require('path');
+var expressValidator = require('express-validator');
+var routes = require('./routes');
 
-
-
-var gridfs = require("./gridfs"); //this line may not be required here
+// var gridfs = require("./gridfs"); //this line may not be required here
 
 var mongoose = require('mongoose');
 var mongoStore = require('session-mongoose');
 
+
+var url_amqp = 'amqp://zlyagioc:C__NIu8bZv5GJi_KVNh-ZIvH766YLMGK@lemur.cloudamqp.com/zlyagioc';
 var amqp = require('amqp');
-var rabbitMQ = amqp.createConnection({ host: '127.0.0.1' });
+var rabbitMQ = amqp.createConnection({ host: '127.0.0.1' }); //local computer
+// var rabbitMQ = amqp.createConnection({url: url_amqp})
+
+
 var rpc = new (require('./amqprpc'))(rabbitMQ);
 
 var passport = require('passport');
@@ -50,7 +54,7 @@ mongoose.connect(dbloc);
  */
 
 
-var port = process.env.PORT || 4000;
+var port = process.env.PORT || 4444;
 var app = express();
 var server = http.createServer(app).listen(port);
 
@@ -67,15 +71,17 @@ var server = http.createServer(app).listen(port);
 
 
 app.configure(function() {
-  app.set('port', process.env.PORT || 5000);
+  app.set('port', process.env.PORT || 4444);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon());
   app.use(express.logger('dev'));
+  app.use(express.cookieParser('your secret here'));
   app.use(express.bodyParser());
+  app.use(expressValidator);//i am using version 0.2.0 because if i get a newere one i ahve to do expressValidator() and i get an error in my route
   app.use(express.methodOverride());
 
-  app.use(express.cookieParser('your secret here'));
+ 
   app.use(express.session());
   app.use(passport.initialize());
   app.use(passport.session());
@@ -92,12 +98,12 @@ app.configure(function() {
  */
 
 
-//v1
+// // v1
 // app.get('/', function(req, res){
 //   res.render('index', { title: 'Express' });
 // });
 
-//v2
+// //v2
 app.get('/', routes.index);
 app.get('/about', routes.about);
 
@@ -105,35 +111,35 @@ app.get('/about', routes.about);
 
 
 
-/*
+// /*
   
-    Loging in and Registering
+//     Loging in and Registering
 
-*/
+// */
 
 
 app.get('/register', routes.getregister);
-app.post('/register', routes.postregister, passport.authenticate('local', { failureRedirect: '/register' , failureFlash: true }), routes.postregister2);
+app.post('/register', routes.postregister, passport.authenticate('local', { failureRedirect: '/register' }), routes.postregister2);
 
 app.get('/login', routes.getlogin);
 app.post('/login',
-  passport.authenticate('local', { failureRedirect: '/login' , failureFlash: true }),
+  passport.authenticate('local', { failureRedirect: '/login'}),
   routes.postlogin
 );
 app.get('/logout', routes.getlogout);
 
 
+app.get('/testview', routes.testview)
 
 
 
 
 
-
-/*
+// /*
   
-    USER OVERVIEW - TESTS - QUESTIONS - STATISTICS
+//     USER OVERVIEW - TESTS - QUESTIONS - STATISTICS
 
-*/
+// */
 app.get('/user/:id/setupclass', routes.getsetup);
 app.post('/user/:id/setupclass',  routes.postsetup);//put and post are nearly identical.
 app.put('/user/:id/setupclass', routes.putsetup); //put and post are nearly identical.
@@ -148,7 +154,7 @@ app.del('/user/:id/testdelete/:testid', routes.deltest);
 app.get('/pdffile/:fileid',  routes.pdffile);
 
 
-// app.get('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.getusercreatetest);
+app.get('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.getusercreatetest);
 // app.post('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.postusercreatetest);
 
 
@@ -165,17 +171,17 @@ app.get('/user/:id/performance',  routes.getselfperformance);
 
 
 
-/*
+// /*
   
-    USER UPLOADING
+//     USER UPLOADING
 
-*/
+// */
 
-//uploading a file examples
-app.get('/uploadtest', routes.getupload);
-app.post('/uploadnew',routes.postupload);
-app.get('/file/:id', routes.getshowfile2);
-app.get('/filePDF/:id', routes.getshowfile3);
+// //uploading a file examples
+// app.get('/uploadtest', routes.getupload);
+// app.post('/uploadnew',routes.postupload);
+// app.get('/file/:id', routes.getshowfile2);
+// app.get('/filePDF/:id', routes.getshowfile3);
 
 
 
@@ -239,7 +245,7 @@ var handler = function(socket) {
   //this function is called from the browser
   socket.on('RPC_request', function (data){//grading a document in the backend
     console.log('Received request to send an RPC Command');
-      rpc.makeRequest('image', data, function respond(err, response){
+      rpc.makeRequest('image', data, function respond(err, response){ //use test_RPC to test if working properly
         if(err)
           console.error('error = ' + err);
         else{
@@ -324,3 +330,25 @@ var handler = function(socket) {
 server.listen(function() {
   console.log("APP: http server listening on port %d in %s mode", server.address().port, app.settings.env);
 });
+
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  console.log('the user is not Authenticated');
+  res.redirect('/login');
+}
+
+function RestirctAccess(req,res,next){
+  req.session.loggedIn = true; //can only get to this function if this is true
+  //req.session.passport.user
+  //console.log('RA: session.passport.user = ' + req.session.passport.user);
+  //console.log('RA: req.param.id = ' + req.params.id);
+  //console.log('RA: req.user.id = ' + req.user.id);
+
+  if(req.params.id == req.session.passport.user){//if authen
+    next();
+  }
+  else{
+    res.redirect('/loginfailed');
+  }
+}

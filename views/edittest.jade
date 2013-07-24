@@ -1,4 +1,9 @@
-!=partial('partials/_TopBarLoggedIn')
+extends layout
+
+
+
+block content
+	include partials/_TopBarLoggedIn
 	.container
 		.row
 			.span2
@@ -67,7 +72,11 @@
 											- if(key == 'WrongAnswertext')
 												td #{val}
 									td #{elm.Score}
-- myscripts.push('wymeditor/jquery.wymeditor.min.js')
-- myscripts.push('wymeditorandvalidation.js')
-!= renderScriptsTags(myscripts)
+
+append footer
+	script(src='/js/wymeditor/jquery.wymeditor.min.js')
+	script(src='/js/wymeditorandvalidation.js')
+//- - myscripts.push('wymeditor/jquery.wymeditor.min.js')
+//- - myscripts.push('wymeditorandvalidation.js')
+//- != renderScriptsTags(myscripts)
 

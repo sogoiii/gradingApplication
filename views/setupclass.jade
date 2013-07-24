@@ -11,12 +11,17 @@
 			input.hiddentest(type='hidden', name='setuptodelete')
 			button.btn.btn-danger(type='submit') Remove Class Setup
 
-!=partial('partials/_TopBarLoggedIn')
+extends layout
+
+
+
+block content
+	include partials/_TopBarLoggedIn
 	.container
 		.row
 			.span2
 				include partials/_SideBar
-			.span8
+			.span10
 				h1 Create class
 				form.createclass.form-horizontal.well(method='post', action='')
 					fieldset
@@ -40,7 +45,7 @@
 								input.reqtype(type='hidden', name='_method', value='POST')
 						button.btn.btn-primary.submitform(type='submit') Create Class
 				
-				- if(typeof(valerrors) != 'undefined')
+				- if(typeof(valerrors) != 'undefined' && typeof(valerrors) != 'null')
 					each err in valerrors
 						each val,key in err
 							- if(key == 'msg')
@@ -48,7 +53,7 @@
 									a.close(data-dismiss='alert', href='#') ×
 									h4.alert-heading Error!
 									p #{val}
-				- if(typeof(classinfo) != 'undefined')
+				- if(typeof(classinfo) != 'undefined' )
 					each item in classinfo
 						.alert.alert-success.alert-block
 							.row
@@ -76,24 +81,24 @@
 												a(data-classid='#{item._id}', data-userid='#{userID}', data-toggle='modal', data-target='#DeleteClassModal') Delete Class			
 			
 
-!= renderScriptsTags(myscripts)
-
-script
-	$(document).ready(function () {
-		$('.editclass').click(function(e){
-			var nam = $(this).closest('.row').find('.classnametext').text()             
-			var sub = $(this).closest('.row').find('.subject').text()
-			var gr = $(this).closest('.row').find('.grade').text()
-			var nos = $(this).closest('.row').find('.NOS').text()
-			$('.classname').val(nam)           
-			$('.classsubject').val(sub)
-			$('.classgrade').val(gr)
-			$('.numberofstudents').val(nos)
-			$('.submitform').text('Edit Class')
-			var CRID = $(this).closest('.row').find('.classroomid').val()
-			$('.Editing').prop('value', CRID)
-			$('.reqtype').prop('value', 'PUT')
-		})
-	});//end of docment ready
+//- != renderScriptsTags(myscripts)
+append footer
+	script
+		$(document).ready(function () {
+			$('.editclass').click(function(e){
+				var nam = $(this).closest('.row').find('.classnametext').text()             
+				var sub = $(this).closest('.row').find('.subject').text()
+				var gr = $(this).closest('.row').find('.grade').text()
+				var nos = $(this).closest('.row').find('.NOS').text()
+				$('.classname').val(nam)           
+				$('.classsubject').val(sub)
+				$('.classgrade').val(gr)
+				$('.numberofstudents').val(nos)
+				$('.submitform').text('Edit Class')
+				var CRID = $(this).closest('.row').find('.classroomid').val()
+				$('.Editing').prop('value', CRID)
+				$('.reqtype').prop('value', 'PUT')
+			})
+		});//end of docment ready
 
 

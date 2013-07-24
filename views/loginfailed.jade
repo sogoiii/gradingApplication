@@ -1,9 +1,13 @@
-!=partial('partials/_TopBar')
+extends layout
+
+
+
+block content
+
+  include partials/_TopBar
   .container
     .row
       .span3
         .well_sidebar-nav
           .nav_nav-list
           p Your login failed!
-
-!= renderScriptsTags(myscripts)

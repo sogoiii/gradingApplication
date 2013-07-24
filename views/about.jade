@@ -1,15 +1,19 @@
-if(DynsessionLoggedIn != true)
-  !=partial('partials/_TopBar')
-else
-  !=partial('partials/_TopBarLoggedIn')
-.container
-  h1 Moving forward
-  p
-    | Continuing through my gradu
-  p
-    a.btn.btn-primary.btn-large Learn more »
+
+
+extends layout
+
+
+
+block content
+  include partials/_TopBar
+  .container
+    h1 Moving forward
+    p
+      | Continuing through my gradu
+    p
+      a.btn.btn-primary.btn-large Learn more »
   
 
 
-  hr
-!= renderScriptsTags(myscripts)
+    hr
+//- != renderScriptsTags(myscripts)

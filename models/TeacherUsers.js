@@ -65,11 +65,11 @@ TeacherUserSchema.static('authenticate', function(username, password,  callback)
 
 
 TeacherUserSchema.method('verifyPassword', function(password, callback) {
-  // console.log('going to authenticate user now veri 1');
-  // console.log("password = " + password)
-  // console.log("hash = " + this.hash);
+  console.log('going to authenticate user now veri 1');
+  console.log("password = " + password)
+  console.log("hash = " + this.hash);
   bcrypt.compare(password, this.hash, callback);
-  // console.log('going to authenticate user now veri 2');
+  console.log('going to authenticate user now veri 2');
 });
 
 
@@ -82,8 +82,10 @@ TeacherUserSchema.static('authenticateEmail', function(email, password, callback
   // console.log('going to authenticate user now 4');
   this.findOne({ email: email}, function(err, user, messageresult ) {
       if (err) { 
-// console.log('going to authenticate user now 5');
-        return callback(err); }
+      // console.log('going to authenticate user now 5');
+      return callback(err); 
+      }
+      // console.log(user)
       if (!user) { 
         // console.log('going to authenticate user now 6');
         return callback(null, false, 'incorrect user'); 

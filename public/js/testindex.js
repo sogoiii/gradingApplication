@@ -26,6 +26,7 @@ $(document).ready(function () {
 	$('#UploadFileModal').on('show', function (event){
 		var test = $(this).data('modal').options.testid;
 		var user = $(this).data('modal').options.userid;
+		console.log('upload test data = ' + test)
 		$('.UploadFile').prop('action', '/user/' + user + '/tests/upload');
 		$('.hiddentest').prop('value', test);
 	});
@@ -40,6 +41,7 @@ $(document).ready(function () {
 		$('.gradeComment').text('Please wait while the grading is comenced');
 	});
 	$('#CreatePDF').on('show', function (event){
+		console.log('CreatePDF was called/clicked!!!!!!')
 		$('#CreatePDFSpinner').spin({radius: 9, length: 7,className: 'Spinner'});
 		$('#PDFURL').addClass('disabled');
 		var test = $(this).data('modal').options.testid;

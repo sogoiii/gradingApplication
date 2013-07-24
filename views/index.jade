@@ -4,7 +4,12 @@ extends layout
 
 block content
 
+
   include partials/_TopBar
+
+
+
+
   .container
     .hero-unit
       h1 Correct and Analyze Tests
@@ -15,6 +20,7 @@ block content
       p Grade and Score paper tests
       br
       a.btn.btn-primary.btn-large(href='/register') Create Account
+    
     ul#myTab.nav.nav-tabs
       li.active
         a(href='#Overview', data-toggle='tab') Overview
@@ -24,6 +30,8 @@ block content
         a(href='#Admins', data-toggle='tab') Administrators
       li
         a(href='#Districts', data-toggle='tab') School Districts
+    
+
     .tab-content
       #Overview.tab-pane.active
         .row
@@ -524,6 +532,11 @@ append footer
       $('#myCarousel3').carousel({
         interval:6000
       });
+
+
+
+
+
       // $('#myTab').tab('show');
     });
   
