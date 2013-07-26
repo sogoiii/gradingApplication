@@ -1,4 +1,9 @@
-!=partial('partials/_TopBarLoggedIn')
+extends layout
+
+
+
+block content
+  include partials/_TopBarLoggedIn
   .container
     .row
       .span2
@@ -7,4 +12,4 @@
         h1 Page is under Construction.
         h2 Do you have a suggestion? 
 
-!= renderScriptsTags(myscripts)
+//- != renderScriptsTags(myscripts)

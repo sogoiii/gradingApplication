@@ -65,11 +65,11 @@ TeacherUserSchema.static('authenticate', function(username, password,  callback)
 
 
 TeacherUserSchema.method('verifyPassword', function(password, callback) {
-  // console.log('going to authenticate user now veri 1');
-  // console.log("password = " + password)
-  // console.log("hash = " + this.hash);
+  console.log('going to authenticate user now veri 1');
+  console.log("password = " + password)
+  console.log("hash = " + this.hash);
   bcrypt.compare(password, this.hash, callback);
-  // console.log('going to authenticate user now veri 2');
+  console.log('going to authenticate user now veri 2');
 });
 
 
@@ -77,12 +77,15 @@ TeacherUserSchema.method('verifyPassword', function(password, callback) {
 //authenticate the teacher user 
 TeacherUserSchema.static('authenticateEmail', function(email, password, callback) {
   // console.log('going to authenticate user now 3');
-  var messageresult = new String();
+  var messageresult = '';
+  // var messageresult = new String();
   // console.log('going to authenticate user now 4');
   this.findOne({ email: email}, function(err, user, messageresult ) {
       if (err) { 
-// console.log('going to authenticate user now 5');
-        return callback(err); }
+      // console.log('going to authenticate user now 5');
+      return callback(err); 
+      }
+      // console.log(user)
       if (!user) { 
         // console.log('going to authenticate user now 6');
         return callback(null, false, 'incorrect user'); 
@@ -100,8 +103,6 @@ TeacherUserSchema.static('authenticateEmail', function(email, password, callback
           // console.log('going to authenticate user now 11');
           return callback(null, user, 'user was found and authenticated');
         });
-
-
       //if(user.password != password){return callback(null, false, { message: 'Invalid password' });}
       //return callback(null,user);
       });

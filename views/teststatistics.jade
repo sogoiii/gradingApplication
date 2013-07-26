@@ -16,7 +16,12 @@ mixin QuestionData(data, i)
     mixin resulttable(data.TRbyQuestions[i])
 
 
-!=partial('partials/_TopBarLoggedIn')
+extends layout
+
+
+
+block content
+  include partials/_TopBarLoggedIn
   .container
     .row
       .span2
@@ -61,14 +66,27 @@ mixin QuestionData(data, i)
                   else
                     .alert.alert-success.span4
                       mixin QuestionData(Statdata, i)  
-- myscripts.push('jqplot/jquery.jqplot.min.js')
-- myscripts.push('jqplot/plugins/jqplot.canvasTextRenderer.min.js')
-- myscripts.push('jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js')
-- myscripts.push('jqplot/plugins/jqplot.barRenderer.min.js')
-- myscripts.push('jqplot/plugins/jqplot.categoryAxisRenderer.min.js')
-- myscripts.push('jqplot/plugins/jqplot.pointLabels.min.js')
-- myscripts.push('myjqplotscripts.js')
-!= renderScriptsTags(myscripts)
+
+
+
+
+append footer
+  script(src='/js/jqplot/jquery.jqplot.min.js')
+  script(src='/js/jqplot/plugins/jqplot.canvasTextRenderer.js')
+  script(src='/js/jqplot/plugins/jqplot.canvasAxisLabelRenderer.js')
+  script(src='/js/jqplot/plugins/jqplot.barRenderer.min.js')
+  script(src='/js/jqplot/plugins/jqplot.categoryAxisRenderer.js')
+  script(src='/js/jqplot/plugins/jqplot.pointLabels.min.js')
+  script(src='/js/myjqplotscripts.js')
+                      
+//- - myscripts.push('jqplot/jquery.jqplot.min.js')
+//- - myscripts.push('jqplot/plugins/jqplot.canvasTextRenderer.min.js')
+//- - myscripts.push('jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js')
+//- - myscripts.push('jqplot/plugins/jqplot.barRenderer.min.js')
+//- - myscripts.push('jqplot/plugins/jqplot.categoryAxisRenderer.min.js')
+//- - myscripts.push('jqplot/plugins/jqplot.pointLabels.min.js')
+//- - myscripts.push('myjqplotscripts.js')
+//- != renderScriptsTags(myscripts)
 
 
 

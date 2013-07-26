@@ -1,9 +1,14 @@
-!=partial('partials/_TopBarLoggedIn')
+extends layout
+
+
+
+block content
+  include partials/_TopBarLoggedIn
   .container
     .row
       .span2
         include partials/_SideBar
-      .span8
+      .span10
         h1 Create Test
           - if(typeof(setupclass) != 'undefined')
             .alert.alert-warning.alert-block
@@ -35,4 +40,4 @@
                   a.close(data-dismiss='alert', href='#') ×
                   h4.alert-heading Error!
                   p #{val}
-!= renderScriptsTags(myscripts)
+//- != renderScriptsTags(myscripts)

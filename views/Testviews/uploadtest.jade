@@ -1,45 +1,52 @@
-!=partial('partials/_TopBar')
-.container-fluid
-  .row-fluid
-    .span2
-      include partials/_SideBar
-    .span8
-      fieldset
-        legend Upload Test 
-          span.label.label-warning PDF Only 
-        form.well(method="post", action="/uploadnew", enctype="multipart/form-data")
-          .control-group
-            label Name
-            .input: input(name="name", type="text")
-          .control-group
-            label File
-            .input: input(type="file", name="file")
-          .actions
-          input.btn(type="submit") 
-      if(message == 'wrong file type')     
-        .alert.alert-error.alert-block
-          h4.alert-heading Warning!
-            | Please upload a PDF. 
-      if(message == 'Thank you for uploading PDF')
-        .alert.alert-success.alert-block
-          h4.alert-heading Complete!
-            | The file will be processed. 
-      table.table.bordered-table
-        thead
-          tr
-            th Name
-            th Filename
-            th Type
-            th Upload Date
-        - each app in applications
-          tr
-            td= app.name
-            td
-              img(src = "/file/#{app.files[0]._id}")
-            td= app.files[0].contentType
-            td= app.files[0].uploadDate
-  if(message)
-    p #{message}
+
+extends ../layout
 
 
-!= renderScriptsTags(myscripts)
+
+block content
+  .container-fluid
+    .row-fluid
+      .span2
+        //include ../partials/_SideBar
+      .span8
+        fieldset
+          legend Upload Test 
+            span.label.label-warning PDF Only 
+          form.well(method="post", action="/uploadnew", enctype="multipart/form-data")
+            .control-group
+              label Name
+              .input: input(name="name", type="text")
+            .control-group
+              label File
+              .input: input(type="file", name="file")
+            .actions
+            input.btn(type="submit") 
+        if(message == 'wrong file type')     
+          .alert.alert-error.alert-block
+            h4.alert-heading Warning!
+              | Please upload a PDF. 
+        if(message == 'Thank you for uploading PDF')
+          .alert.alert-success.alert-block
+            h4.alert-heading Complete!
+              | The file will be processed. 
+        table.table.bordered-table
+          thead
+            tr
+              th Name
+              th Filename
+              th Type
+              th Upload Date
+          - each app in applications
+            tr
+              td= app.name
+              td
+                img(src = "/file/#{app.files[0]._id}")
+              td= app.files[0].contentType
+              td= app.files[0].uploadDate
+    if(message)
+      p #{message}
+
+append footer
+  script(src='/js/spin.min.js')
+  script(src='/js/testindex.js')
+  script(src='/socket.io/socket.io.js')

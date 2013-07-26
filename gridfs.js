@@ -53,19 +53,19 @@
 
 
 
-  exports.put = function() {
-    var buf, db, fn, name, options, _i;
-    buf = arguments[0], name = arguments[1], options = 4 <= arguments.length ? __slice.call(arguments, 2, _i = arguments.length - 1) : (_i = 2, []), fn = arguments[_i++];
-    db = mongoose.connection.db;
-    options = parse(options);
-    options.metadata.filename = name;
-    return new GridStore(db, name, "w", options).open(function(err, file) {
-      if (err) {
-        return fn(err);
-      }
-      return file.write(buf, true, fn);
-    });
-  };
+  // exports.put = function() {
+  //   var buf, db, fn, name, options, _i;
+  //   buf = arguments[0], name = arguments[1], options = 4 <= arguments.length ? __slice.call(arguments, 2, _i = arguments.length - 1) : (_i = 2, []), fn = arguments[_i++];
+  //   db = mongoose.connection.db;
+  //   options = parse(options);
+  //   options.metadata.filename = name;
+  //   return new GridStore(db, name, "w", options).open(function(err, file) {
+  //     if (err) {
+  //       return fn(err);
+  //     }
+  //     return file.write(buf, true, fn);
+  //   });
+  // };
 
   exports.putFile = function(path, name, options, fn) {
     var db;

@@ -33,24 +33,56 @@ passport.use(new LocalStrategy(
 */
 
 
+// //Passport Local Strategy for email authentication
+// passport.use(new LocalStrategy( {usernameField: 'email'},
+//   function(email, password, done) {
+//    // asynchronous verification, for effect...
+//    // console.log('going to authenticate user now 1');
+//     process.nextTick(function () {
+//       // console.log('going to authenticate user now 2');
+//       var messageresult = null;
+//       TeacherUsers.authenticateEmail(email, password, function(err, user, messageresult){ //before: 'user' was 'email'
+//         // console.log('returning to user');
+//         // console.log(messageresult); //this does return the right thing to console
+//         if(messageresult == 'incorrect user') {return done(null, false, { message: 'Unkown user'});} //left side is the output of the teacher users function, the right side is what is sent to the login page
+//         if(messageresult == 'wrong password') {return done(null, false, { message: 'Invalid password' });}
+//         return done(err,user); //i use to return 'email' not 'user'
+//       });//end authenticate
+//     });
+//   }//end username password done
+// ));
+
+
 //Passport Local Strategy for email authentication
-passport.use(new LocalStrategy( {usernameField: 'email'},
-  function(email, password, done) {
-   // asynchronous verification, for effect...
-   // console.log('going to authenticate user now 1');
-    process.nextTick(function () {
-      // console.log('going to authenticate user now 2');
-      var messageresult = null;
-      TeacherUsers.authenticateEmail(email, password, function(err, user, messageresult){ //before: 'user' was 'email'
-        // console.log('returning to user');
-        // console.log(messageresult); //this does return the right thing to console
-        if(messageresult == 'incorrect user') {return done(null, false, { message: 'Unkown user'});} //left side is the output of the teacher users function, the right side is what is sent to the login page
-        if(messageresult == 'wrong password') {return done(null, false, { message: 'Invalid password' });}
-        return done(err,user); //i use to return 'email' not 'user'
-      });//end authenticate
-    });
-  }//end username password done
+passport.use(new LocalStrategy({
+  usernameField: 'email'
+}, function(email, password, done) {
+  // asynchronous verification, for effect...
+   // console.log('DB: passport: going to authenticate user now 1');
+  process.nextTick(function() {
+     // console.log('DB: passport: going to authenticate user now 2');
+    var messageresult = null;
+    TeacherUsers.authenticateEmail(email, password, function(err, user, messageresult) { //before: 'user' was 'email'
+      //  console.log('DB: passport: returning to user');
+      // console.log(messageresult); //this does return the right thing to console
+      if(messageresult == 'incorrect user') {
+        return done(null, false, {
+          message: 'Unkown user'
+        });
+      } //left side is the output of the teacher users function, the right side is what is sent to the login page
+      if(messageresult == 'wrong password') {
+        return done(null, false, {
+          message: 'Invalid password'
+        });
+      }
+      return done(err, user); //i use to return 'email' not 'user'
+    }); //end authenticate
+  });
+} //end username password done
 ));
+
+
+
 
 //serialize user login
 passport.serializeUser(function(user, done) {
@@ -178,7 +210,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
 
 
 
-    TeacherUsers.findById(pageinfo.userID, ['classroom', 'ActiveTests'], function(err,user){
+    TeacherUsers.findById(pageinfo.userID, 'classroom ActiveTests', function(err,user){
       if(!err){
 
         //console.log('returned from search = ' + user.classroom[0].ClassName)
@@ -277,7 +309,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
     var AllTests = [];
     var testexist = [];
     //console.log('about to enter find teacher')
-    TeacherUsers.find({_id: userinfo}, ['ActiveTests']).execFind(function(err, AT) {
+    TeacherUsers.find({_id: userinfo}, 'ActiveTests').execFind(function(err, AT) {
       //console.log('going to check if err exists')
       if(!err){
           //console.log('!err hence ill look at each value in AT[0]')
@@ -291,7 +323,7 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
                           //console.log('in !err, i guess if found something')
                           //console.warn('active tests element = ' + element)
                           //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
-                          Test.find({_id: element},['TestName', 'Gradeyear', 'Subject', 'ClassName', 'NumberOfStudents', 'PDFTest', 'CreatedPDF', 'TestGraded']).execFind(function(secerr, atest){ //get only PDFCreated[0].filename ???
+                          Test.find({_id: element},'TestName Gradeyear Subject ClassName NumberOfStudents PDFTest CreatedPDF TestGraded').execFind(function(secerr, atest){ //get only PDFCreated[0].filename ???
                             //console.log('found test = ' + atest)
                             //console.log('pdftest inside = ' + atest[0].PDFTest.length);
                             AllTests.push(atest[0]);
@@ -331,7 +363,8 @@ function GetWholeTeacherUserByID(userinfo, callback){ //name is misleading
 
   exports.GetClassInfo =  function(userinfo, callback){ //called from getuserindex
     //userinfo = userid
-    TeacherUsers.findById(userinfo,['classroom.ClassName'], function(err,result){
+    console.log('getClassinfo userInfo = ' + JSON.stringify(userinfo))
+    TeacherUsers.findById(userinfo, 'classroom.ClassName', function(err,result){
         if(!err){
           //console.log('Found User ID for GetClassInfo');
           //console.log('classes = ' + result.classroom)
@@ -423,7 +456,7 @@ exports.ReturnTestQuestions = function(userinfo, callback){
       //console.log('questions = ' + questions.Questions)
       // console.log('size of questions = ' + questions.Questions.length);
       if(questions.Questions.length != 0){
-          callback(null,questions.Questions);
+          callback(null, questions.Questions);
       }//end of length if
       else{ //if questions.Questions.length == 0
           callback('No Questions Exist!', null);
@@ -621,7 +654,7 @@ exports.EditAClass = function(userinfo, callback){
   //userinfo will have ClassName,Grade, Subject, NumberOfStudents, userid, Edit_Class
   
   var index = null;
-  TeacherUsers.findById(userinfo.userid, ['classroom'],function(err,result){
+  TeacherUsers.findById(userinfo.userid, 'classroom',function(err,result){
     if(!err){
       //console.log('found the class to edit')
       //console.log('result = ' + result)
@@ -663,8 +696,8 @@ exports.EditAClass = function(userinfo, callback){
 
 exports.GetClasses = function(userinfo, callback){ //for setup class page (getsetup)
 //userinfo = userid
-
-  TeacherUsers.findById(userinfo, ['classroom'], function(err,result){
+  console.log(userinfo)
+  TeacherUsers.findById(userinfo, 'classroom', function(err,result){
     if(!err){
       //console.log(result);
       callback(null, result.classroom);
@@ -776,7 +809,7 @@ exports.getMultiTestStatistics = function(userinfo,callback){//self performance
   var AllTests = [];
   var numtestschecked = 0;
   // var theid = "4fda1af52f910cc6200000d3";
-    TeacherUsers.find({_id: userinfo}, ['ActiveTests']).execFind(function(err, AT) {
+    TeacherUsers.find({_id: userinfo}, 'ActiveTests').execFind(function(err, AT) {
       //console.log('going to check if err exists')
       if(!err){
           //console.log('!err hence ill look at each value in AT[0]')
@@ -790,7 +823,7 @@ exports.getMultiTestStatistics = function(userinfo,callback){//self performance
                           //console.log('in !err, i guess if found something')
                           //console.warn('active tests element = ' + element)
                           //console.warn('size of AT[0] = ' + AT[0].ActiveTests.length)
-                          Test.find({_id: element},['TestGraded', 'TRbyTest','TestName']).execFind(function(secerr, atest){ //check TestGraded.GradedOn = 1, else do not push
+                          Test.find({_id: element},'TestGraded TRbyTest TestName').execFind(function(secerr, atest){ //check TestGraded.GradedOn = 1, else do not push
                             //console.log('found test = ' + atest)
                             //console.log('pdftest inside = ' + atest[0].PDFTest.length);
                             // console.log("was graded = " + atest[0].TestGraded.WasGraded);

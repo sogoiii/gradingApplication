@@ -4,8 +4,18 @@ var gridfs = require("../gridfs");
 var passport = require('passport');
 // var check = require('express-validator').check,
 //     sanitize = require('express-validator').sanitize
+
+
+var Validator = require('validator').Validator;
 var check = require('validator').check,
-    sanitize = require('validator').sanitize;
+  sanitize = require('validator').sanitize
+  Validator.prototype.error = function(msg) {
+    this._errors.push(msg);
+    return this;
+  }
+Validator.prototype.getErrors = function() {
+  return this._errors;
+}
 
 //var scripts = ['javascripts/jQuery.js', 'javascripts/bootstrap.min.js']
 
@@ -53,7 +63,11 @@ function ensureAuthenticated(req, res, next) {
 
 
 
+exports.testview = function(req, res){
 
+  res.render('Testviews/stats.jade',{title: 'stats'})
+
+}
 
 
 
@@ -63,10 +77,12 @@ function ensureAuthenticated(req, res, next) {
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Home', user: req.user});
+  console.log('index jade file is requested')
+  res.render('index.jade', { title: 'Home'});
 };
 
 exports.about = function(req, res){
+  console.log('about jade file is requested')
 	res.render('about', { title: 'About'});
 };
 
@@ -83,7 +99,7 @@ exports.about = function(req, res){
 */
 
 exports.getregister = function(req,res){ //add a modal frame of the term of service
-  res.render('register', {title: 'Register', message: req.flash('error')});
+  res.render('register', {title: 'Register', message: ''});
 };
 
 //add user to the databse...aka register
@@ -91,7 +107,7 @@ exports.postregister = function(req,res,next){
   var TeacherUserSchema = mongoose.model('TeacherUserSchema');
     var TeacherUser = new TeacherUserSchema({
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password //virtual that has a function called on it
   });
 
   TeacherUser.save(function (err) {
@@ -111,7 +127,6 @@ exports.postregister = function(req,res,next){
         else{
             //console.log('err has returned and this means the entry was not an email.')
             res.render('register', {title: 'Register', message: 'Not a valid email address'}); //input was not an email
-        
         }
 
       }//end of !err else
@@ -129,17 +144,17 @@ exports.postregister2 = function(req, res){
 
 exports.getsetup = function(req,res){
 //user will create or edit class information
-
+  
   db.GetClasses(req.params.id,function(err,results){
     if(!err){
       // console.log('initial = ' + results)
       // console.log('second = ' + results.classroom)
       var temperr = req.session.errors;
       req.session.errors = '';
-      res.render('setupclass', {title: 'Class Setup', classinfo: results, valerrors: temperr});
+      res.render('setupclass', {title: 'Class Setup', classinfo: results, valerrors: temperr, userID: req.params.id});
     }//end of if
     else{
-      res.render('setupclass', {title: 'Class Setup'});
+      res.render('setupclass', {title: 'Class Setup', userID: req.params.id});
     }//end of else
   });//end of Get Classes
 };//end of getsetup
@@ -165,10 +180,10 @@ exports.postsetup = function(req,res){ //this is called even for editing a class
   //console.log('classname = "' + req.body.ClassName + '"')
 
   var errors = req.validationErrors();
-  //console.log('errors = ' + errors[0]);
+  console.log('errors = ' + errors);
   //console.log('error lenght = ' + errors.length)
   req.session.errors = errors;
-  if(errors.length){
+  if(errors != null){
     //console.log('errors = ' + errors[0].param);
     // console.log('errors = ' + errors[0].msg);
     // console.log('errors = ' + errors[0].value);
@@ -194,14 +209,14 @@ exports.putsetup = function(req,res){ //this is called even for editing a class 
   //console.log('req.body.classroom ID = ' + req.body.Edit_Class);
   //console.log('you called the put version of class setup.')
 
-  req.sanitize('ClassName').ltrim();
-  req.sanitize('ClassSubject').ltrim();
-  req.sanitize('ClassGrade').ltrim();
-  req.sanitize('NumOfStudents').ltrim();
-  req.sanitize('ClassName').rtrim();
-  req.sanitize('ClassSubject').rtrim();
-  req.sanitize('ClassGrade').rtrim();
-  req.sanitize('NumOfStudents').rtrim();
+  // req.sanitize('ClassName').ltrim();
+  // req.sanitize('ClassSubject').ltrim();
+  // req.sanitize('ClassGrade').ltrim();
+  // req.sanitize('NumOfStudents').ltrim();
+  // req.sanitize('ClassName').rtrim();
+  // req.sanitize('ClassSubject').rtrim();
+  // req.sanitize('ClassGrade').rtrim();
+  // req.sanitize('NumOfStudents').rtrim();
   req.assert('ClassName', 'Class Name only accepts alphanumeric').regex(/^[a-zA-Z0-9 -]+$/); //classname
 
   req.assert('ClassSubject', 'Class Subject only accepts alphanumeric ').regex(/^[a-zA-Z0-9 -]+$/); //subject
@@ -265,7 +280,7 @@ exports.delsetup = function(req,res){
 
 
 exports.getlogin = function(req,res){
-	res.render('login', {title: 'Login', user: req.user, message: req.flash('error') });
+	res.render('login', {title: 'Login', user: req.user, message: 'getlogin error' });
 };//end getlogin
 
 exports.postlogin = function(req, res){ //save session to cookie
@@ -313,15 +328,16 @@ exports.getuserindex = function(req,res){ //make this the overview?
       //console.log('the get index first IF ')
       var testerr = req.session.CTE;
       req.session.CTE = '';
-      res.render('userindex', {title: 'Overview', CreateTestErrors: testerr, classinfo: classinfo});
+      console.log('userID = ' + req.params.id)
+      res.render('userindex.jade', {title: 'Overview', CreateTestErrors: testerr, classinfo: classinfo, userID: req.params.id});
     }//end of !err and setup !null
     else if(err && setup == 'setup'){
-      res.render('userindex', {title: 'Overview', setupclass: true});
+      res.render('userindex.jade', {title: 'Overview', setupclass: true, userID: req.params.id});
     }//end of !err and setup == 'setup'
     else{
       //do something with
       console.log('the get index else ');
-      res.render('userindex', {title: 'Overview'}); //temporary...seems like a hole at the momment
+      res.render('userindex.jade', {title: 'Overview', userID: req.params.id}); //temporary...seems like a hole at the momment
     }
   });//end of GetClassInfo
 };//end of getuserhome
@@ -398,13 +414,13 @@ exports.getedittest = function(req,res){ //i know the test ID, i should have ass
     if(!err){
       results = decodeQuestionHtml(results); //i encoded the html so i can now decode it. (SERCURITY ISSUE POSSIBLE!!!!)
       results = removehtml(results);
-      res.render('edittest',{title: 'Edit Test', Questions: results});
+      res.render('edittest',{title: 'Edit Test', Questions: results, userID: req.params.id});
     }//if
     else if(err == 'No Questions Exist!'){
-      res.render('edittest',{title: 'Edit Test', message: err});
+      res.render('edittest',{title: 'Edit Test', message: err, userID: req.params.id});
     }
     else{
-      res.render('edittest',{title: 'Edit Test', message: 'Unexpected Error'});
+      res.render('edittest',{title: 'Edit Test', message: 'Unexpected Error', userID: req.params.id});
     }//end of else
   });//end of ReturnTestQuestions
 };//end of getedittest
@@ -449,64 +465,64 @@ exports.putedittest = function(req,res){//user is looking at test and adds quest
 
 
 
-// exports.getusercreatetest = function(req, res){ // was removed in routes
-//     var TeacherUserSchema = mongoose.model('TeacherUserSchema');
-//     TeacherUserSchema.findById(req.params.id, function(err,user){
-//       if(err){
-//         console.log('GET USER error = ' + user.Tests._id);
-//         res.render('TestViews/createtest',{title: 'Create Tests',  message: 'DID not find user by ID'});
-//       }
-//       else{
-//         console.log('GET USER no errror = ' + user.Tests._id);
-//         res.render('TestViews/createtest',{title: 'Create Tests',  message: 'User Exists in DB'});
-//       }
-//     });//end of findbyID
-//   //res.render('createtest',{title: 'Create Tests', wymeditor: true})
-// };
+exports.getusercreatetest = function(req, res){ // was removed in routes
+    var TeacherUserSchema = mongoose.model('TeacherUserSchema');
+    TeacherUserSchema.findById(req.params.id, function(err,user){
+      if(err){
+        console.log('GET USER error = ' + user.Tests._id);
+        res.render('TestViews/createtest',{title: 'Create Tests',  message: 'DID not find user by ID'});
+      }
+      else{
+        console.log('GET USER no errror = ' + user.Tests._id);
+        res.render('TestViews/createtest',{title: 'Create Tests',  message: 'User Exists in DB'});
+      }
+    });//end of findbyID
+  //res.render('createtest',{title: 'Create Tests', wymeditor: true})
+};
 
 
 
 
 
-// exports.postusercreatetest = function(req, res){
-//   //req.body.CorrectAnswer QuestionHTML WrongAnswer1,2,3 //user text input names
+exports.postusercreatetest = function(req, res){
+  //req.body.CorrectAnswer QuestionHTML WrongAnswer1,2,3 //user text input names
 
-//   // //Remove XSS from user input
-//   // req.body.QuestionHTML = req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
-//   // //console.log('XSS - QHTML = ' + req.body.QuestionHTML)
-//   // //encode the now XSS sanitized variable
-//   // req.body.EncodedQuestionHTML = sanitize(req.body.QuestionHTML).entityEncode(); //entitiy.Decode() for dispalying later
-//   // console.log('Encoded 1 = ' + req.body.EncodedQuestionHTML);
-
-
-//   //Remove XSS from user input
-//   req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
-//   //console.log('XSS - QHTML = ' + req.body.QuestionHTML)
-//   //encode the now XSS sanitized variable
-//   req.sanitize('QuestionHTML').entityEncode(); //entitiy.Decode() for dispalying later
-//   //console.log('Encoded 1 = ' + req.body.QuestionHTML);
+  // //Remove XSS from user input
+  // req.body.QuestionHTML = req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
+  // //console.log('XSS - QHTML = ' + req.body.QuestionHTML)
+  // //encode the now XSS sanitized variable
+  // req.body.EncodedQuestionHTML = sanitize(req.body.QuestionHTML).entityEncode(); //entitiy.Decode() for dispalying later
+  // console.log('Encoded 1 = ' + req.body.EncodedQuestionHTML);
 
 
+  //Remove XSS from user input
+  req.sanitize('QuestionHTML').xss(); //QuestionHTML //NOTE req.body.QuestionHTML seems to be sanitized by wymeditor (MAYBE)
+  //console.log('XSS - QHTML = ' + req.body.QuestionHTML)
+  //encode the now XSS sanitized variable
+  req.sanitize('QuestionHTML').entityEncode(); //entitiy.Decode() for dispalying later
+  //console.log('Encoded 1 = ' + req.body.QuestionHTML);
 
 
-//   // req.assert('CorrectAnswer', 'CorrectAnwer alphanumeric').isAlphanumeric();
-//   // var errors = req.validationErrors();
-//   // console.log('error lenght = ' + errors.length)
-//   // if(errors.length){
-//   //    console.log('errors = ' + errors[0].param);
-//   //   // console.log('errors = ' + errors[0].msg);
-//   //   // console.log('errors = ' + errors[0].value);
-//   // }//end of if
-
-//   req.body.userID = req.params.id;
-//   db.InsertQuestion(req.body, function(err,done){
-
-//   });//end of insertQuestion
 
 
-//   res.redirect('/user/' + req.params.id +'/createtest');
-//   //res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'just came from post'})
-// }
+  // req.assert('CorrectAnswer', 'CorrectAnwer alphanumeric').isAlphanumeric();
+  // var errors = req.validationErrors();
+  // console.log('error lenght = ' + errors.length)
+  // if(errors.length){
+  //    console.log('errors = ' + errors[0].param);
+  //   // console.log('errors = ' + errors[0].msg);
+  //   // console.log('errors = ' + errors[0].value);
+  // }//end of if
+
+  req.body.userID = req.params.id;
+  db.InsertQuestion(req.body, function(err,done){
+
+  });//end of insertQuestion
+
+
+  res.redirect('/user/' + req.params.id +'/createtest');
+  //res.render('createtest',{title: 'Create Tests', wymeditor: true, message: 'just came from post'})
+}
 
 
 
@@ -527,15 +543,16 @@ exports.getusertests = function(req, res){ //i want this to show all current and
     if(!err){
       res.render('usertests',{title: 'Tests',
                              pageerror: uploaderr,
-                             AllTests: result});
+                             AllTests: result,
+                             userID: req.params.id});
     }//end of if
     else if(err == 'NoTests'){
       console.log('no test found');
-      res.render('usertests',{title: 'Tests'});
+      res.render('usertests',{title: 'Tests',pageerror: null, userID: req.params.id});
     }
     else {
       console.log('get all tests error');
-      res.render('usertests',{title: 'Tests'});
+      res.render('usertests',{title: 'Tests', pageerror: null, userID: req.params.id});
     }//end of else
   });//end of GetAllTests
 
@@ -569,7 +586,7 @@ else{
     }//end of if
     else{
       console.log('error sending file to gridfs');
-      req.flash('FileType', 'wrong file type');
+      // req.flash('FileType', 'wrong file type');
       res.redirect('back');
     }//end of else
   });//end of sendpdftogridfs
@@ -590,7 +607,7 @@ exports.pdffile = function(req,res){
 
   gridfs.getnew( req.params.fileid , function(err,file) {
     res.writeHead('200', {'Content-Type': 'application/pdf'});
-     res.end(file,'binary');
+    res.end(file,'binary');
   });
 
 };//end of pdffile
@@ -689,11 +706,11 @@ exports.getselfperformance = function(req, res){//compute performance of the tea
       // console.log("result[0].TRbyTest = " + result[0].TRbyTest);
       // console.log("  ");
       // console.log("result[0].TRbyTest.Mean = " + result[0].TRbyTest.Mean);
-      res.render('selfperformance', {title: 'Performance', Statdata: result});
+      res.render('selfperformance', {title: 'Performance', Statdata: result, userID: req.params.id});
     }//end of !err if
     else{
       console.log("error has occured pelase refresh");
-      res.render('selfperformance', {title: 'Performance'});
+      res.render('selfperformance', {title: 'Performance', userID: req.params.id});
     }//end of !err else
   });//end of getMultiTestStatistics
 };//end of getselfperformance
@@ -717,7 +734,7 @@ exports.getupload = function(req,res){
       res.render("Testviews/uploadtest", {
         title: "GridFS Example",
         applications: applications,
-        message: req.flash('myerror')
+        message: 'get upload error'
       });
     });
 
@@ -729,7 +746,7 @@ exports.getupload = function(req,res){
     console.log(req.files.file.type);
     console.log(req.files.file.size);
     if(req.files.file.type != 'application/pdf'){
-      req.flash('myerror', 'wrong file type');
+      // req.flash('myerror', 'wrong file type');
       res.redirect("back"); //back is the upload page
     }
     else{
@@ -740,7 +757,7 @@ exports.getupload = function(req,res){
         content_type: req.files.file.type
       };
       application.addFile(req.files.file, opts, function(err, result) {
-        req.flash('myerror', 'Thank you for uploading PDF');
+        // req.flash('myerror', 'Thank you for uploading PDF');
         res.redirect("back");
       });
     }//end of else
@@ -759,7 +776,7 @@ exports.getupload = function(req,res){
 exports.getshowfile2 = function(req, res){
   //file was read from the response url ???
   gridfs.getnew( req.params.id , function(err,file) {
-    res.writeHead('200', {'Content-Type': 'image/png'});
+     res.writeHead('200', {'Content-Type': 'image/png'});
      res.end(file,'binary');
   });
 };
@@ -903,7 +920,7 @@ exports.gettestplotteacher2 = function(req, res){
 
 exports.getaddstandard = function(req, res){
 
-  res.render("Testviews/addstandards",{title: 'addstandard', message: req.flash('error')});
+  res.render("Testviews/addstandards",{title: 'addstandard', message: 'getaddstandard ERRROR'});
 
 };//end of getaddstandard
 
@@ -1076,3 +1093,15 @@ res.render('Testviews/AddStandardTest', {title: 'addstandard'});
 //     })//end of find
 // }//end postaddheadline
 
+
+
+
+
+exports.rabbitmq = function(req, res){
+
+
+res.render('./Testviews/rabbitMQ.jade', {title: 'rabbitmq'})
+
+
+
+};//endo f rabbitmq
