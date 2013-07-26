@@ -776,7 +776,7 @@ exports.getupload = function(req,res){
 exports.getshowfile2 = function(req, res){
   //file was read from the response url ???
   gridfs.getnew( req.params.id , function(err,file) {
-    res.writeHead('200', {'Content-Type': 'image/png'});
+     res.writeHead('200', {'Content-Type': 'image/png'});
      res.end(file,'binary');
   });
 };
