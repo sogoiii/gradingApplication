@@ -5,7 +5,7 @@
 
   mongoose = require("mongoose");
 
-  request = require("request");
+  // request = require("request");
 
   GridStore = mongoose.mongo.GridStore;
 
