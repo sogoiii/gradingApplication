@@ -2,182 +2,250 @@
  * Module dependencies.
  */
 
-var express = require('express');
+var express = require('express')
+  , http = require('http')
+  , path = require('path');
+var expressValidator = require('express-validator');
 var routes = require('./routes');
-var util = require('util');
-var fs = require('fs');
 
-// var expressValidator = require('express-validator');
-
-
-var gridfs = require("./gridfs"); //this line may not be required here
+// var gridfs = require("./gridfs"); //this line may not be required here
 
 var mongoose = require('mongoose');
 var mongoStore = require('session-mongoose');
-var mongooseTypes = require('mongoose-types');
-mongooseTypes.loadTypes(mongoose);
 
+
+var url_amqp = 'amqp://zlyagioc:C__NIu8bZv5GJi_KVNh-ZIvH766YLMGK@lemur.cloudamqp.com/zlyagioc';
 var amqp = require('amqp');
-var rabbitMQ = amqp.createConnection({ host: '127.0.0.1' });
-var rpc = new (require('./amqprpc'))(rabbitMQ);
+var rabbitMQ = amqp.createConnection({ host: '127.0.0.1' }); //local computer
+// var rabbitMQ = amqp.createConnection({url: url_amqp})
 
+
+var rpc = new (require('./amqprpc'))(rabbitMQ);
 
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 var DB = require('./DBfunctions');
-
-
-//load all the model files for mongoose(Mongodb);
-var models_path = __dirname + '/models';
-var model_files = fs.readdirSync(models_path);
-model_files.forEach(function(file){
-    require(models_path+'/'+file);
-});
-
-
-
-//v1
-// var app = module.exports = express.createServer();
-// var io = require('socket.io').listen(app);
-
-
-//v2
-var http = require('http');
-var port = process.env.PORT || 4000;
-var app = express();
-var server = http.createServer(app).listen(port);
-var io = require('socket.io')(server);
-
-//Database
 var dbloc = 'mongodb://localhost/ecomm_database';
 mongoose.connect(dbloc);
 
 
+/** 
+ * external files
+ */
 
-// Configuration
 
-app.configure(function(){
+
+/*
+ * ******************************************** Functions !!!! ***************************
+ */
+
+
+
+
+/*
+ * ******************************************** SETUP !!!! ***************************
+ */
+
+
+
+/**
+ * SETUP of Node application
+ */
+
+
+var port = process.env.PORT || 4444;
+var app = express();
+var server = http.createServer(app).listen(port);
+
+
+
+// production only
+
+  console.log('APP: in production')
+ var io = require('socket.io').listen(server);
+
+
+
+
+
+
+app.configure(function() {
+  app.set('port', process.env.PORT || 4444);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-  app.set(express.logger());
-  app.use(express.cookieParser());
-  //app.use(express.limit('2mb')); //limit file accepted here for testing only
+  app.use(express.favicon());
+  app.use(express.logger('dev'));
+  app.use(express.cookieParser('your secret here'));
   app.use(express.bodyParser());
-  // app.use(expressValidator);
+  app.use(expressValidator);//i am using version 0.2.0 because if i get a newere one i ahve to do expressValidator() and i get an error in my route
   app.use(express.methodOverride());
 
-
-    var mongooseSessionStore = new mongoStore({
-      url: "mongodb://localhost/mv",
-      interval: 3600000
-  });
-
-
-  app.use(express.session( {cookie: {maxAge: 3600000}, store: mongooseSessionStore, secret: "mv secret" }));
+ 
+  app.use(express.session());
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
+  app.use(express.static(path.join(__dirname, 'public')));
+}); //end of configure
 
-
-app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
-
-app.configure('production', function(){
-  app.use(express.errorHandler());
-});
-
-/*
-app.dynamicHelpers({
-  scripts: function(req, res){
-    return ['javascripts/jQuery.js', 'javascripts/bootstrap.min.js'];
-  }
-});
-
-app.helpers({
-  name: function(first, last){ return first + ', ' + last }
-  , firstName: 'javascripts/jQuery.js'
-  , lastName: 'javascripts/bootstrap.min.js'
-});
-
-*/
-
-// app.helpers({
-//   renderScriptsTags: function (all) {
-//     if (all != undefined) {
-//       return all.map(function(script) {
-//         return '<script src="/javascripts/' + script + '"></script>';
-//       }).join('\n ');
-//     }
-//   }
-// });
-
-// app.dynamicHelpers({
-//   myscripts: function() {
-//       //scripts to load on every page
-//       //return ['jQuery.js','wymeditor/jquery.wymeditor.min.js' ,'bootstrap.min.js'];
-//       return ['jQuery.min.js','bootstrap.js'];
-//       //return ['jQuery.js','bootstrap.min.js'];
-//   }
-// });
-
-// app.dynamicHelpers({
-//   DynsessionLoggedIn: function(req,res) {
-//       return req.session.loggedIn;
-//   }
-// });
-
-
-// app.dynamicHelpers({
-//   userID: function(req,res) {
-//       return req.params.id;
-//   }
-// });
-
-
-
-
-
-var db = new DB.startup(dbloc);
-
-
-//Load all the route files
-var controllers_path = __dirname + '/routes';
-var controller_files = fs.readdirSync(controllers_path);
-controller_files.forEach(function(file){
-  require(controllers_path+'/'+file);
-});
-
-
-require('./routes')(app);
-
-
-
-
+// var db = new DB.startup(dbloc);
 
 
 
 /*
+ * ******************************************** ROUTES !!!! ***************************
+ */
 
 
-SOCKET IO STUFF!!!
+// // v1
+// app.get('/', function(req, res){
+//   res.render('index', { title: 'Express' });
+// });
+
+// //v2
+app.get('/', routes.index);
+app.get('/about', routes.about);
 
 
-*/
 
 
-io.set('log level', 1);
-io.sockets.on('connection', function (socket) {
+
+// /*
+  
+//     Loging in and Registering
+
+// */
+
+
+app.get('/register', routes.getregister);
+app.post('/register', routes.postregister, passport.authenticate('local', { failureRedirect: '/register' }), routes.postregister2);
+
+app.get('/login', routes.getlogin);
+app.post('/login',
+  passport.authenticate('local', { failureRedirect: '/login'}),
+  routes.postlogin
+);
+app.get('/logout', routes.getlogout);
+
+
+app.get('/testview', routes.testview)
+
+
+
+
+
+// /*
+  
+//     USER OVERVIEW - TESTS - QUESTIONS - STATISTICS
+
+// */
+app.get('/user/:id/setupclass', routes.getsetup);
+app.post('/user/:id/setupclass',  routes.postsetup);//put and post are nearly identical.
+app.put('/user/:id/setupclass', routes.putsetup); //put and post are nearly identical.
+app.del('/user/:id/setupclass', routes.delsetup );
+
+app.get('/user/:id',  routes.getuserindex);
+
+app.post('/user/:id/createtest',  routes.postcreatetest);
+app.get('/user/:id/edittest/:testid',  routes.getedittest);
+app.put('/user/:id/edittest/:testid',  routes.putedittest);
+app.del('/user/:id/testdelete/:testid', routes.deltest);
+app.get('/pdffile/:fileid',  routes.pdffile);
+
+
+app.get('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.getusercreatetest);
+// app.post('/user/:id/createtest', ensureAuthenticated, RestirctAccess, routes.postusercreatetest);
+
+
+app.get('/user/:id/tests',  routes.getusertests);
+app.post('/user/:id/tests/upload',  routes.uploadatest);
+
+
+app.get('/user/:id/questions',  routes.getuserquestions);
+app.get('/user/:id/statistics/:testid', routes.getTeststatistics);
+app.get('/user/:id/performance',  routes.getselfperformance);
+
+
+
+
+
+
+// /*
+  
+//     USER UPLOADING
+
+// */
+
+// //uploading a file examples
+// app.get('/uploadtest', routes.getupload);
+// app.post('/uploadnew',routes.postupload);
+// app.get('/file/:id', routes.getshowfile2);
+// app.get('/filePDF/:id', routes.getshowfile3);
+
+
+
+app.get('/rabbitmq', routes.rabbitmq);
+
+
+/*
+ * ******************************************** SOCKET IO ***************************
+ */
+
+
+/**
+ * Socket IO
+ */
+
+  io.configure(function() {
+    // io.enable('browser client minification');  // send minified client
+    // io.enable('browser client etag');          // apply etag caching logic based on version number
+    // io.enable('browser client gzip');          // gzip the file
+    io.set("transports", ["xhr-polling"]);
+    io.set("polling duration", 10);
+    io.set('log level', 1);
+
+  }); //end of setup socket.io
+
+
+
+
+
+var handler = function(socket) {
+  /**
+   * connected
+   */
+  socket.on('connected', function(data) {
+    console.log('SOCKET: connected: data = ' + JSON.stringify(data, null, '\t'));
+    console.log('SOCKET: connected: socket id = ' + socket.id);
+    // data.cookie = parseCookie(data.headers.cookie);
+    // data.sessionID = data.cookie['connect.sid'];
+    // console.log(JSON.stringify( socket.handshake.headers.cookie,null ,'\t')) 
+    // socket.join(socket.handshake.sessionID);
+  }); //end of connected
+
+
+  socket.on('rpc_test', function(data){
+    console.log('rpc_test called');
+
+    rpc.makeRequest('test_RPC', data, function respond(err, response){
+
+
+
+
+    });//end of makeRequest
+
+
+  });
+
+
+
 
 
   //this function is called from the browser
   socket.on('RPC_request', function (data){//grading a document in the backend
     console.log('Received request to send an RPC Command');
-      rpc.makeRequest('image', data, function respond(err, response){
+      rpc.makeRequest('image', data, function respond(err, response){ //use test_RPC to test if working properly
         if(err)
           console.error('error = ' + err);
         else{
@@ -245,30 +313,42 @@ io.sockets.on('connection', function (socket) {
 
 
 
+} //end of all socket.io functions 
 
 
 
-});//end of socket.io
+/*
+ * ******************************************** SERVER CREATIN END !!!! ***************************
+ */
 
 
+  io.sockets.on('connection', handler); //end of socket.io
 
-
-
-
-
-
-
-
-
-
-
-
+// console.log('APP: app.settings.evn = ' +app.settings.env )
+// console.log('process.env.NODE_ENV = ' + process.env.NODE_ENV)
 
 server.listen(function() {
   console.log("APP: http server listening on port %d in %s mode", server.address().port, app.settings.env);
 });
 
 
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  console.log('the user is not Authenticated');
+  res.redirect('/login');
+}
 
-// app.listen(3000);
-// console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+function RestirctAccess(req,res,next){
+  req.session.loggedIn = true; //can only get to this function if this is true
+  //req.session.passport.user
+  //console.log('RA: session.passport.user = ' + req.session.passport.user);
+  //console.log('RA: req.param.id = ' + req.params.id);
+  //console.log('RA: req.user.id = ' + req.user.id);
+
+  if(req.params.id == req.session.passport.user){//if authen
+    next();
+  }
+  else{
+    res.redirect('/loginfailed');
+  }
+}
